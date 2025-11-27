@@ -1,5 +1,5 @@
-#ifndef MAC_PLATFORM_HPP
-#define MAC_PLATFORM_HPP
+#ifndef MACOS_HPP
+#define MACOS_HPP
 
 #include "event.hpp"
 #include "iplatform.hpp"
@@ -19,4 +19,4 @@ class MacOS : public IPlatform {
     auto sendEvent(const Event &e) -> void;
 };
 
-#endif // MAC_PLATFORM_HPP
+#endif // MACOS_HPP
