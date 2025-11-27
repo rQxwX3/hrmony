@@ -8,12 +8,12 @@
 #include <CoreGraphics/CoreGraphics.h>
 #include <unordered_map>
 
-class MacPlatform : public IPlatform {
+class MacOS : public IPlatform {
   private:
     std::unordered_map<Key, CGKeyCode> m_keyCodeMap;
 
   public:
-    MacPlatform();
+    MacOS();
 
     [[nodiscard]] auto convertKey(const Key &k) const -> CGKeyCode;
     auto sendEvent(const Event &e) -> void;
