@@ -1,21 +1,17 @@
-#include "./app/include/app.hpp"
-#include "./platform/linux/include/linuxPlatform.hpp"
-#include "./platform/mac/include/macPlatform.hpp"
-#include "./platform/win/include/winPlatform.hpp"
+#include "include/event.hpp"
+#include "include/iplatform.hpp"
+#include "include/macPlatform.hpp"
 
-#include <iostream>
 #include <memory>
+#include <unistd.h>
 
 auto main() -> int {
-    // std::unique_ptr<IPlatform> platform = nullptr;
+    Event aDown{Key::A, true};
+    Event aUp{Key::A, false};
 
-    // #ifdef _WIN32
-    //     platform = new WinPlatform();
-    // #elif __APPLE__
-    //     platform = std::make_unique<MacPlatform>();
-    // #elif __linux__
-    //     platform = new LinuxPlatform();
-    // #endif
+    std::unique_ptr<IPlatform> platform{std::make_unique<MacPlatform>()};
 
-    std::cout << "hello, hrmony\n";
+    platform->sendEvent(aDown);
+    usleep(500);
+    platform->sendEvent(aUp);
 }

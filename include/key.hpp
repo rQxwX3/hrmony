@@ -3,8 +3,8 @@
 
 #include <cstdint>
 
-enum class keyName : uint8_t {
-    A,
+enum class Key : uint8_t {
+    A = 0,
     B,
     C,
     D,
@@ -30,15 +30,6 @@ enum class keyName : uint8_t {
     X,
     Y,
     Z,
-    Command,
-    Option,
-    Control,
-    Shift,
-};
-
-struct Key {
-    keyName name;
-    bool isMod;
 };
 
 #endif // KEY_HPP
