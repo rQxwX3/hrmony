@@ -12,6 +12,6 @@ auto main() -> int {
     std::unique_ptr<IPlatform> platform{std::make_unique<MacOS>()};
 
     platform->sendEvent(aDown);
-    usleep(500);
+    usleep(1000);
     platform->sendEvent(aUp);
 }

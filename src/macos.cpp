@@ -1,10 +1,39 @@
+#include "../include/macos.hpp"
 #include "../include/event.hpp"
 #include "../include/key.hpp"
-#include "../include/macos.hpp"
 
 #include <ApplicationServices/ApplicationServices.h>
 
+auto MacOS::tapCallBack(CGEventTapProxy proxy, CGEventType type,
+                        CGEventRef event, void *refcon) -> CGEventRef {
+    return event;
+}
+
+auto MacOS::startListening() -> void {
+    CGEventMask eventMask{CGEventMaskBit(kCGEventKeyDown) |
+                          CGEventMaskBit(kCGEventKeyUp) |
+                          CGEventMaskBit(kCGEventFlagsChanged)};
+
+    CFMachPortRef machPortRef{CGEventTapCreate(
+        kCGSessionEventTap, kCGHeadInsertEventTap, kCGEventTapOptionDefault,
+        eventMask, tapCallBack, nullptr)};
+
+    if (nullptr == machPortRef) {
+        exit(1);
+    }
+
+    CFRunLoopSourceRef runLoopSourceRef{
+        CFMachPortCreateRunLoopSource(kCFAllocatorDefault, machPortRef, 0)};
+
+    CFRunLoopAddSource(CFRunLoopGetCurrent(), runLoopSourceRef,
+                       kCFRunLoopCommonModes);
+    CGEventTapEnable(machPortRef, true);
+    CFRunLoopRun();
+}
+
 MacOS::MacOS() {
+    startListening();
+
     m_keyCodeMap[Key::A] = (CGKeyCode)0;
     m_keyCodeMap[Key::S] = (CGKeyCode)1;
 }
