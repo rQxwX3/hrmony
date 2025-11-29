@@ -4,8 +4,14 @@
 
 #include <ApplicationServices/ApplicationServices.h>
 
-auto MacOS::tapCallBack(CGEventTapProxy proxy, CGEventType type,
+auto MacOS::tapCallback(CGEventTapProxy proxy, CGEventType type,
                         CGEventRef event, void *refcon) -> CGEventRef {
+    CGEventFlags flags{CGEventGetFlags(event)};
+
+    if ((flags & kCGEventFlagMaskCommand) == kCGEventFlagMaskCommand) {
+        sHRMModeEnterCallback();
+    }
+
     return event;
 }
 
@@ -16,7 +22,7 @@ auto MacOS::startListening() -> void {
 
     CFMachPortRef machPortRef{CGEventTapCreate(
         kCGSessionEventTap, kCGHeadInsertEventTap, kCGEventTapOptionDefault,
-        eventMask, tapCallBack, nullptr)};
+        eventMask, tapCallback, nullptr)};
 
     if (nullptr == machPortRef) {
         exit(1);
@@ -31,11 +37,8 @@ auto MacOS::startListening() -> void {
     CFRunLoopRun();
 }
 
-MacOS::MacOS() {
-    startListening();
-
-    m_keyCodeMap[Key::A] = (CGKeyCode)0;
-    m_keyCodeMap[Key::S] = (CGKeyCode)1;
+MacOS::MacOS(const HRMModeToggleCallback &callback) {
+    sHRMModeEnterCallback = [callback]() -> void { callback(); };
 }
 
 auto MacOS::convertKey(const Key &k) const -> CGKeyCode {

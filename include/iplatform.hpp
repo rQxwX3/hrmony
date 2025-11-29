@@ -3,9 +3,10 @@
 
 #include "event.hpp"
 
-struct IPlatform {
-    virtual void sendEvent(const Event &e) = 0;
-    virtual void startListening() = 0;
+class IPlatform {
+  public:
+    virtual auto sendEvent(const Event &e) -> void = 0;
+    virtual auto startListening() -> void = 0;
 
     IPlatform() = default;
 

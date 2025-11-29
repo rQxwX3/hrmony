@@ -1,14 +1,14 @@
 #ifndef APP_HPP
 #define APP_HPP
 
-#include "../include/iplatform.hpp"
+#include "../include/baseplatform.hpp"
 #include <memory>
 
 class App {
   private:
     bool m_running;
     bool m_HRMMode;
-    std::unique_ptr<IPlatform> m_platform;
+    std::unique_ptr<BasePlatform> m_platform;
 
   public:
     App();
