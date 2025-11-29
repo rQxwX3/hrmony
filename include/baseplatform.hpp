@@ -6,7 +6,7 @@
 
 class BasePlatform : public IPlatform {
   public:
-    static inline HRMModeToggleCallback sHRMModeEnterCallback{nullptr};
+    static inline HRMModeToggleCallback sHRMModeToggleCallback{nullptr};
 
     BasePlatform() = default;
 };
