@@ -5,6 +5,7 @@
 
 struct IPlatform {
     virtual void sendEvent(const Event &e) = 0;
+    virtual void startListening() = 0;
 
     IPlatform() = default;
 
