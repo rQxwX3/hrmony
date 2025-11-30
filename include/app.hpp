@@ -2,9 +2,7 @@
 #define APP_HPP
 
 #include "core.hpp"
-#include "event.hpp"
 #include "iplatform.hpp"
-#include "types.hpp"
 
 #include <memory>
 
@@ -17,8 +15,7 @@ class App {
     std::unique_ptr<Core> m_core;
 
   public:
-    App(const sendEventCallback &coreToPlatform,
-        const sendEventCallback &platformToCore);
+    App();
 
     auto run() -> void;
 

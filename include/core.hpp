@@ -5,10 +5,13 @@
 
 class Core {
   private:
-    sendEventCallback m_coreToPlatform;
+    sendEventCallback m_coreToPlatform{nullptr};
 
   public:
-    Core(sendEventCallback coreToPlatform);
+    Core();
+
+    auto setEventCallback(sendEventCallback callback) -> void;
+    auto eventCallback(const Event &event) -> void;
 };
 
 #endif // CORE_HPP

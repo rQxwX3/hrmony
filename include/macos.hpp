@@ -20,10 +20,11 @@ class MacOS : public IPlatform {
                                           void *refcon) -> CGEventRef;
 
   public:
-    MacOS(const sendEventCallback &platformToCore);
+    MacOS();
 
     [[nodiscard]] auto convertKey(const Key &k) const -> CGKeyCode;
-    auto sendEvent(const Event &e) -> void override;
+    auto postEvent(const Event &e) -> void override;
+    auto setEventCallback(sendEventCallback callback) -> void override;
 };
 
 #endif // MACOS_HPP

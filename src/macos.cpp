@@ -5,8 +5,13 @@
 
 #include <ApplicationServices/ApplicationServices.h>
 
-MacOS::MacOS(const sendEventCallback &platformToCore) {
-    splatformToCore = platformToCore;
+MacOS::MacOS() {
+    m_keyCodeMap[Key::A] = (CGKeyCode)0;
+    m_keyCodeMap[Key::S] = (CGKeyCode)1;
+}
+
+auto MacOS::setEventCallback(sendEventCallback callback) -> void {
+    splatformToCore = callback;
 }
 
 auto MacOS::tapCallback(CGEventTapProxy proxy, CGEventType type,
@@ -19,7 +24,7 @@ auto MacOS::tapCallback(CGEventTapProxy proxy, CGEventType type,
 
 auto MacOS::startListening() -> void {
     CGEventMask eventMask{CGEventMaskBit(kCGEventKeyDown) |
-                          CGEventMaskBit(kCGEventKeyUp) |
+                          // CGEventMaskBit(kCGEventKeyUp) |
                           CGEventMaskBit(kCGEventFlagsChanged)};
 
     CFMachPortRef machPortRef{CGEventTapCreate(
@@ -43,7 +48,7 @@ auto MacOS::convertKey(const Key &k) const -> CGKeyCode {
     return m_keyCodeMap.at(k);
 }
 
-auto MacOS::sendEvent(const Event &e) -> void {
+auto MacOS::postEvent(const Event &e) -> void {
     CGEventRef eventRef{CGEventCreateKeyboardEvent(
         nullptr, convertKey(e.getKey()), e.isDown())};
 

@@ -1,8 +1,13 @@
 #include <utility>
 
-#include "../include/app.hpp"
 #include "../include/core.hpp"
-#include "../include/event.hpp"
 
-Core::Core(sendEventCallback coreToPlatform)
-    : m_coreToPlatform{std::move(coreToPlatform)} {}
+Core::Core() = default;
+
+auto Core::setEventCallback(sendEventCallback callback) -> void {
+    m_coreToPlatform = std::move(callback);
+}
+
+auto Core::eventCallback(const Event &event) -> void {
+    m_coreToPlatform(event);
+}

@@ -9,8 +9,9 @@ class IPlatform {
     static inline sendEventCallback splatformToCore{nullptr};
 
   public:
-    virtual auto sendEvent(const Event &e) -> void = 0;
+    virtual auto postEvent(const Event &e) -> void = 0;
     virtual auto startListening() -> void = 0;
+    virtual auto setEventCallback(sendEventCallback callback) -> void = 0;
 
     IPlatform() = default;
 
