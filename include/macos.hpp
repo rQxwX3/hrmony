@@ -1,15 +1,14 @@
 #ifndef MACOS_HPP
 #define MACOS_HPP
 
-#include "baseplatform.hpp"
 #include "event.hpp"
+#include "iplatform.hpp"
 #include "key.hpp"
-#include "types.hpp"
 
 #include <CoreGraphics/CoreGraphics.h>
 #include <unordered_map>
 
-class MacOS : public BasePlatform {
+class MacOS : public IPlatform {
   private:
     std::unordered_map<Key, CGKeyCode> m_keyCodeMap;
 
@@ -20,7 +19,7 @@ class MacOS : public BasePlatform {
                                           void *refcon) -> CGEventRef;
 
   public:
-    MacOS(const HRMModeToggleCallback &callback);
+    MacOS();
 
     [[nodiscard]] auto convertKey(const Key &k) const -> CGKeyCode;
     auto sendEvent(const Event &e) -> void override;

@@ -6,12 +6,6 @@
 
 auto MacOS::tapCallback(CGEventTapProxy proxy, CGEventType type,
                         CGEventRef event, void *refcon) -> CGEventRef {
-    CGEventFlags flags{CGEventGetFlags(event)};
-
-    if ((flags & kCGEventFlagMaskCommand) == kCGEventFlagMaskCommand) {
-        sHRMModeToggleCallback();
-    }
-
     return event;
 }
 
@@ -37,9 +31,7 @@ auto MacOS::startListening() -> void {
     CFRunLoopRun();
 }
 
-MacOS::MacOS(const HRMModeToggleCallback &callback) {
-    sHRMModeToggleCallback = [callback]() -> void { callback(); };
-}
+MacOS::MacOS() = default;
 
 auto MacOS::convertKey(const Key &k) const -> CGKeyCode {
     return m_keyCodeMap.at(k);
