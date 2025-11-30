@@ -1,10 +1,15 @@
 #include "include/app.hpp"
 
+#include <iostream>
 #include <unistd.h>
 
+auto dummyEventSend(const Event &event) {
+    std::cout << "hello from dummy!\n";
+    return;
+}
+
 auto main() -> int {
-    // platform->sendEvent(aDown);
-    // usleep(1000);
-    // platform->sendEvent(aUp);
-    App app = App();
+    App app{App(dummyEventSend, dummyEventSend)};
+
+    app.run();
 }

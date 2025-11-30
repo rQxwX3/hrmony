@@ -1,11 +1,19 @@
 #include "../include/macos.hpp"
 #include "../include/event.hpp"
 #include "../include/key.hpp"
+#include "../include/types.hpp"
 
 #include <ApplicationServices/ApplicationServices.h>
 
+MacOS::MacOS(const sendEventCallback &platformToCore) {
+    splatformToCore = platformToCore;
+}
+
 auto MacOS::tapCallback(CGEventTapProxy proxy, CGEventType type,
                         CGEventRef event, void *refcon) -> CGEventRef {
+    const Event ev{Key::A, true};
+
+    splatformToCore(ev);
     return event;
 }
 
@@ -30,8 +38,6 @@ auto MacOS::startListening() -> void {
     CGEventTapEnable(machPortRef, true);
     CFRunLoopRun();
 }
-
-MacOS::MacOS() = default;
 
 auto MacOS::convertKey(const Key &k) const -> CGKeyCode {
     return m_keyCodeMap.at(k);

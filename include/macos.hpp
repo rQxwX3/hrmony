@@ -4,6 +4,7 @@
 #include "event.hpp"
 #include "iplatform.hpp"
 #include "key.hpp"
+#include "types.hpp"
 
 #include <CoreGraphics/CoreGraphics.h>
 #include <unordered_map>
@@ -19,7 +20,7 @@ class MacOS : public IPlatform {
                                           void *refcon) -> CGEventRef;
 
   public:
-    MacOS();
+    MacOS(const sendEventCallback &platformToCore);
 
     [[nodiscard]] auto convertKey(const Key &k) const -> CGKeyCode;
     auto sendEvent(const Event &e) -> void override;

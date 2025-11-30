@@ -2,8 +2,12 @@
 #define IPLATFORM_HPP
 
 #include "event.hpp"
+#include "types.hpp"
 
 class IPlatform {
+  protected:
+    static inline sendEventCallback splatformToCore{nullptr};
+
   public:
     virtual auto sendEvent(const Event &e) -> void = 0;
     virtual auto startListening() -> void = 0;
