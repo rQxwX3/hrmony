@@ -1,5 +1,4 @@
 #include "../include/app.hpp"
-#include "../include/key.hpp"
 #include "../include/macos.hpp"
 #include "../include/types.hpp"
 
@@ -11,8 +10,9 @@ App::App()
       m_core{std::make_unique<Core>()} {
 
     m_platform->setEventCallback([&](const Event &event) -> void {
-        std::cout << "hello from platform\n";
-        m_core->eventCallback(event);
+        if (event.getKey() == Key::A) {
+            std::cout << "A was hit\n";
+        }
     });
 
     m_core->setEventCallback(

@@ -1,24 +1,10 @@
 #include "../include/macos.hpp"
-#include "../include/event.hpp"
-#include "../include/key.hpp"
-#include "../include/types.hpp"
 
 #include <ApplicationServices/ApplicationServices.h>
 
-MacOS::MacOS() {
-    m_keyCodeMap[Key::A] = (CGKeyCode)0;
-    m_keyCodeMap[Key::S] = (CGKeyCode)1;
-}
-
-auto MacOS::setEventCallback(sendEventCallback callback) -> void {
-    splatformToCore = callback;
-}
-
 auto MacOS::tapCallback(CGEventTapProxy proxy, CGEventType type,
                         CGEventRef event, void *refcon) -> CGEventRef {
-    const Event ev{Key::A, true};
-
-    splatformToCore(ev);
+    splatformToCore({Key::A, true});
     return event;
 }
 
@@ -44,13 +30,9 @@ auto MacOS::startListening() -> void {
     CFRunLoopRun();
 }
 
-auto MacOS::convertKey(const Key &k) const -> CGKeyCode {
-    return m_keyCodeMap.at(k);
-}
-
-auto MacOS::postEvent(const Event &e) -> void {
+auto MacOS::postEvent(const Event &event) -> void {
     CGEventRef eventRef{CGEventCreateKeyboardEvent(
-        nullptr, convertKey(e.getKey()), e.isDown())};
+        nullptr, key2Native(event.getKey()), event.isDown())};
 
     CGEventPost(kCGHIDEventTap, eventRef);
 

@@ -1,30 +1,22 @@
 #ifndef MACOS_HPP
 #define MACOS_HPP
 
-#include "event.hpp"
-#include "iplatform.hpp"
-#include "key.hpp"
-#include "types.hpp"
+#include "baseplatform.hpp"
 
 #include <CoreGraphics/CoreGraphics.h>
-#include <unordered_map>
 
-class MacOS : public IPlatform {
+class MacOS : public BasePlatform {
   private:
-    std::unordered_map<Key, CGKeyCode> m_keyCodeMap;
-
     auto startListening() -> void override;
 
     [[nodiscard]] static auto tapCallback(CGEventTapProxy proxy,
                                           CGEventType type, CGEventRef event,
                                           void *refcon) -> CGEventRef;
 
-  public:
-    MacOS();
+    auto postEvent(const Event &event) -> void override;
 
-    [[nodiscard]] auto convertKey(const Key &k) const -> CGKeyCode;
-    auto postEvent(const Event &e) -> void override;
-    auto setEventCallback(sendEventCallback callback) -> void override;
+  public:
+    MacOS() = default;
 };
 
 #endif // MACOS_HPP

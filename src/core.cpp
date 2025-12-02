@@ -4,7 +4,7 @@
 
 Core::Core() = default;
 
-auto Core::setEventCallback(sendEventCallback callback) -> void {
+auto Core::setEventCallback(::eventCallback callback) -> void {
     m_coreToPlatform = std::move(callback);
 }
 

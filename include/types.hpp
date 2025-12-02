@@ -3,8 +3,13 @@
 
 #include "event.hpp"
 
+#include <ApplicationServices/ApplicationServices.h>
 #include <functional>
 
-using sendEventCallback = std::function<void(const Event &event)>;
+using eventCallback = std::function<void(const Event &event)>;
+
+#ifdef __APPLE__
+using NativeKeyCode = CGKeyCode;
+#endif
 
 #endif // TYPES_HPP
