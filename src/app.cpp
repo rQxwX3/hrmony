@@ -1,13 +1,18 @@
 #include "../include/app.hpp"
 #include "../include/macos.hpp"
+#include "../include/macosKeyCodes.hpp"
 #include "../include/types.hpp"
 
 #include <iostream>
 #include <memory>
 
 App::App()
-    : m_running{true}, m_HRMMode{false}, m_platform{std::make_unique<MacOS>()},
-      m_core{std::make_unique<Core>()} {
+    : m_running{true}, m_HRMMode{false}, m_core{std::make_unique<Core>()} {
+
+    MacOS::setKey2NativeMap(MacOSKeyCodes::key2Native);
+    MacOS::setNative2KeyMap(MacOSKeyCodes::native2Key);
+
+    m_platform = std::make_unique<MacOS>();
 
     m_platform->setEventCallback([&](const Event &event) -> void {
         if (event.getKey() == Key::A) {
