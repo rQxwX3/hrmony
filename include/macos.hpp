@@ -7,16 +7,16 @@
 
 class MacOS : public BasePlatform {
   private:
-    auto startListening() -> void override;
+    auto run() -> void override;
+
+    auto postEventToOS(const Event &event) -> void override;
 
     [[nodiscard]] static auto tapCallback(CGEventTapProxy proxy,
                                           CGEventType type, CGEventRef event,
                                           void *refcon) -> CGEventRef;
 
-    auto postEvent(const Event &event) -> void override;
-
   public:
-    MacOS() = default;
+    MacOS();
 };
 
 #endif // MACOS_HPP

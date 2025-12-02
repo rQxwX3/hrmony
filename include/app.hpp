@@ -8,11 +8,11 @@
 
 class App {
   private:
-    bool m_running;
-    bool m_HRMMode;
+    bool m_running{false};
+    bool m_HRMMode{false};
 
-    std::unique_ptr<IPlatform> m_platform;
-    std::unique_ptr<Core> m_core;
+    std::unique_ptr<IPlatform> m_platform{nullptr};
+    std::unique_ptr<Core> m_core{nullptr};
 
   public:
     App();

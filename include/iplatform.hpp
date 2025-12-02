@@ -2,13 +2,14 @@
 #define IPLATFORM_HPP
 
 #include "event.hpp"
-#include "types.hpp"
 
 class IPlatform {
   public:
-    virtual auto postEvent(const Event &event) -> void = 0;
-    virtual auto startListening() -> void = 0;
-    virtual auto setEventCallback(eventCallback platformToCore) -> void = 0;
+    virtual auto run() -> void = 0;
+    virtual auto postEventToOS(const Event &event) -> void = 0;
+
+    // TODO:
+    // virtual auto sendEventToCore(const Event &event) -> void = 0;
 
     IPlatform() = default;
 

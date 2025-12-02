@@ -1,6 +1,15 @@
 #include "../include/macos.hpp"
 
 #include <ApplicationServices/ApplicationServices.h>
+#include <iostream>
+
+MacOS::MacOS() {
+    MacOS::setEventCallback([](const Event &event) -> void {
+        if (event.getKey() == Key::A) {
+            std::cout << "A was hit\n";
+        }
+    });
+}
 
 auto MacOS::tapCallback(CGEventTapProxy proxy, CGEventType type,
                         CGEventRef event, void *refcon) -> CGEventRef {
@@ -8,7 +17,7 @@ auto MacOS::tapCallback(CGEventTapProxy proxy, CGEventType type,
     return event;
 }
 
-auto MacOS::startListening() -> void {
+auto MacOS::run() -> void {
     CGEventMask eventMask{CGEventMaskBit(kCGEventKeyDown) |
                           // CGEventMaskBit(kCGEventKeyUp) |
                           CGEventMaskBit(kCGEventFlagsChanged)};
@@ -30,7 +39,7 @@ auto MacOS::startListening() -> void {
     CFRunLoopRun();
 }
 
-auto MacOS::postEvent(const Event &event) -> void {
+auto MacOS::postEventToOS(const Event &event) -> void {
     CGEventRef eventRef{CGEventCreateKeyboardEvent(
         nullptr, key2Native(event.getKey()), event.isDown())};
 
