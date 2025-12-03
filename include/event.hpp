@@ -9,7 +9,7 @@ class Event {
     bool m_down;
 
   public:
-    Event(Key k, bool down) : m_key{k}, m_down{down} {};
+    Event(Key key, bool down);
 
     [[nodiscard]] auto getKey() const -> Key;
     [[nodiscard]] auto isDown() const -> bool;

@@ -2,7 +2,7 @@
 
 #include "../include/core.hpp"
 
-Core::Core() = default;
+Core::Core(const App *appPtr) { Core::sApp = appPtr; }
 
 auto Core::setEventCallback(::eventCallback callback) -> void {
     m_coreToPlatform = std::move(callback);

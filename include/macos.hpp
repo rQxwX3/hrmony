@@ -1,6 +1,7 @@
 #ifndef MACOS_HPP
 #define MACOS_HPP
 
+#include "app.hpp"
 #include "baseplatform.hpp"
 
 #include <CoreGraphics/CoreGraphics.h>
@@ -16,7 +17,7 @@ class MacOS : public BasePlatform {
                                           void *refcon) -> CGEventRef;
 
   public:
-    MacOS();
+    MacOS(const App *appRef);
 };
 
 #endif // MACOS_HPP

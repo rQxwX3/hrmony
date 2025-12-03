@@ -1,3 +1,4 @@
+#include "app.hpp"
 #include "iplatform.hpp"
 #include "macosKeyCodes.hpp"
 #include "types.hpp"
@@ -5,6 +6,7 @@
 class BasePlatform : public IPlatform {
   protected:
     static inline eventCallback splatformToCore{nullptr};
+    static inline const App *sApp{nullptr};
 
   private:
     static inline Native2KeyMap snative2KeyMap{

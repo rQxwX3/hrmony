@@ -3,7 +3,9 @@
 #include <ApplicationServices/ApplicationServices.h>
 #include <iostream>
 
-MacOS::MacOS() {
+MacOS::MacOS(const App *app) {
+    MacOS::sApp = app;
+
     MacOS::setEventCallback([](const Event &event) -> void {
         if (event.getKey() == Key::A) {
             std::cout << "A was hit\n";
