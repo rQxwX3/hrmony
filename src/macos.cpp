@@ -1,21 +1,12 @@
 #include "../include/macos.hpp"
 
 #include <ApplicationServices/ApplicationServices.h>
-#include <iostream>
 
-MacOS::MacOS(const App *app) {
-    MacOS::sApp = app;
-
-    MacOS::setEventCallback([](const Event &event) -> void {
-        if (event.getKey() == Key::A) {
-            std::cout << "A was hit\n";
-        }
-    });
-}
+MacOS::MacOS(const App *app) { MacOS::sApp = app; }
 
 auto MacOS::tapCallback(CGEventTapProxy proxy, CGEventType type,
                         CGEventRef event, void *refcon) -> CGEventRef {
-    splatformToCore({Key::A, true});
+    sPlatformToCore({Key::A, true});
     return event;
 }
 

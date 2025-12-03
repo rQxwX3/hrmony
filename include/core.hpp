@@ -7,14 +7,11 @@ class App;
 
 class Core {
   private:
-    eventCallback m_coreToPlatform{nullptr};
     static inline const App *sApp{nullptr};
+    static inline const eventCallback sCoreToPlatform{nullptr};
 
   public:
     Core(const App *app);
-
-    auto setEventCallback(eventCallback callback) -> void;
-    auto eventCallback(const Event &event) -> void;
 };
 
 #endif // CORE_HPP

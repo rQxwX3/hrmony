@@ -1,21 +1,15 @@
 #include "../include/app.hpp"
 #include "../include/macos.hpp"
-#include "../include/types.hpp"
 
-#include <iostream>
 #include <memory>
 
 App::App() {
     m_platform = std::make_unique<MacOS>(this);
     m_core = std::make_unique<Core>(this);
-
-    m_core->setEventCallback(
-        [&](const Event &event) -> void { std::cout << "hello from core\n"; });
 }
 
 auto App::run() -> void {
     m_platform->run();
-
     m_running = true;
 }
 

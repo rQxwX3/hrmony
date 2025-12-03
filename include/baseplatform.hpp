@@ -5,18 +5,16 @@
 
 class BasePlatform : public IPlatform {
   protected:
-    static inline eventCallback splatformToCore{nullptr};
     static inline const App *sApp{nullptr};
+    static inline const eventCallback sPlatformToCore{nullptr};
 
   private:
-    static inline Native2KeyMap snative2KeyMap{
+    static inline Native2KeyMap sNative2KeyMap{
         MacOSKeyCodes::createNative2KeyMap()};
-    static inline Key2NativeMap skey2NativeMap{
+    static inline Key2NativeMap sKey2NativeMap{
         MacOSKeyCodes::createKey2NativeMap()};
 
   public:
     [[nodiscard]] static auto key2Native(Key key) -> NativeKeyCode;
     [[nodiscard]] static auto native2Key(NativeKeyCode nativeKey) -> Key;
-
-    static auto setEventCallback(eventCallback platformToCore) -> void;
 };
