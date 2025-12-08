@@ -1,13 +1,8 @@
 #include "../include/macos.hpp"
 
 #include <ApplicationServices/ApplicationServices.h>
-#include <iostream>
 
-MacOS::MacOS(App *app) { MacOS::sApp = app; }
-
-auto MacOS::sendEventToCore(const Event &event) -> void {
-    std::cout << "hello from macos\n";
-}
+MacOS::MacOS(App *appPtr) : BasePlatform(appPtr) {}
 
 auto MacOS::postEventToOS(const Event &event) -> void {
     CGEventRef eventRef{CGEventCreateKeyboardEvent(

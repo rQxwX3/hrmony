@@ -23,6 +23,7 @@ class App {
     [[nodiscard]] auto isHRMModeActive() const -> bool;
 
     auto sendEventToCore(const Event &event) -> void;
+    auto sendEventToPlatform(const Event &event) -> void;
 };
 
 #endif // APP_HPP

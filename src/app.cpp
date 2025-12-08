@@ -1,6 +1,7 @@
 #include "../include/app.hpp"
 #include "../include/macos.hpp"
 
+#include <iostream>
 #include <memory>
 
 App::App() {
@@ -18,5 +19,11 @@ auto App::isRunning() const -> bool { return m_running; }
 auto App::isHRMModeActive() const -> bool { return m_HRMMode; }
 
 auto App::sendEventToCore(const Event &event) -> void {
+    std::cout << "hello from platform\n";
     m_core->onPlatformEvent(event);
+}
+
+auto App::sendEventToPlatform(const Event &event) -> void {
+    std::cout << "hello from core\n";
+    m_platform->onCoreEvent(event);
 }

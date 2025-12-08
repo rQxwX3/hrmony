@@ -7,10 +7,10 @@ class App;
 
 class Core {
   private:
-    App *sApp{nullptr};
+    App *m_appPtr{nullptr};
 
   public:
-    Core(App *app);
+    Core(App *appPtr);
 
     auto onPlatformEvent(const Event &event) -> void;
 };
