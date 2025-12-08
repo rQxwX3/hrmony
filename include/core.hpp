@@ -1,9 +1,7 @@
 #ifndef CORE_HPP
-
 #define CORE_HPP
 
 #include "types.hpp"
-
 #include <unordered_map>
 
 class App;

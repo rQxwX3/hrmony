@@ -4,6 +4,10 @@
 
 Platform::Platform(App *appPtr) : m_appPtr{appPtr} {};
 
+[[nodiscard]] auto Platform::getAppPtr() const -> const App * {
+    return m_appPtr;
+}
+
 auto Platform::sendEventToCore(const Event &event) -> void {
     m_appPtr->sendEventToCore(event);
 }

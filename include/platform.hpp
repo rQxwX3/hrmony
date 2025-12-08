@@ -4,8 +4,11 @@
 #include "types.hpp"
 
 class Platform : public IPlatform {
-  protected:
+  private:
     App *m_appPtr{nullptr};
+
+  protected:
+    [[nodiscard]] auto getAppPtr() const -> const App *;
 
   private:
     const inline static Native2KeyMap sNative2KeyMap{
