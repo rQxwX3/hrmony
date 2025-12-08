@@ -1,4 +1,5 @@
 #include "../include/baseplatform.hpp"
+
 #include <iostream>
 
 BasePlatform::BasePlatform(App *appPtr) : m_appPtr{appPtr} {};
@@ -16,5 +17,7 @@ auto BasePlatform::native2Key(NativeKeyCode nativeKey) -> Key {
 }
 
 auto BasePlatform::onCoreEvent(const Event &event) -> void {
+    postEventToOS(event);
+
     std::cout << "received hello from core\n";
 }

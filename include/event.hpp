@@ -3,16 +3,17 @@
 
 #include "key.hpp"
 
+#include <vector>
+
 class Event {
   private:
-    Key m_key;
-    bool m_down;
+    std::vector<Key> m_keys;
 
   public:
-    Event(Key key, bool down);
+    Event();
+    Event(const std::vector<Key> &keys);
 
-    [[nodiscard]] auto getKey() const -> Key;
-    [[nodiscard]] auto isDown() const -> bool;
+    [[nodiscard]] auto getKeys() const -> const std::vector<Key> &;
 };
 
 #endif // EVENT_HPP

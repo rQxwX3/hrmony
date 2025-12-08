@@ -8,8 +8,10 @@ class BasePlatform : public IPlatform {
     App *m_appPtr{nullptr};
 
   private:
-    Native2KeyMap sNative2KeyMap{MacOSKeyCodes::createNative2KeyMap()};
-    Key2NativeMap sKey2NativeMap{MacOSKeyCodes::createKey2NativeMap()};
+    const inline static Native2KeyMap sNative2KeyMap{
+        MacOSKeyCodes::createNative2KeyMap()};
+    const inline static Key2NativeMap sKey2NativeMap{
+        MacOSKeyCodes::createKey2NativeMap()};
 
   public:
     BasePlatform(App *appPtr);
@@ -17,6 +19,6 @@ class BasePlatform : public IPlatform {
     auto sendEventToCore(const Event &event) -> void override;
     auto onCoreEvent(const Event &event) -> void override;
 
-    [[nodiscard]] auto key2Native(Key key) -> NativeKeyCode;
-    [[nodiscard]] auto native2Key(NativeKeyCode nativeKey) -> Key;
+    [[nodiscard]] auto static key2Native(Key key) -> NativeKeyCode;
+    [[nodiscard]] auto static native2Key(NativeKeyCode nativeKey) -> Key;
 };

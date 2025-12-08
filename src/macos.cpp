@@ -2,28 +2,19 @@
 
 #include <ApplicationServices/ApplicationServices.h>
 
-MacOS::MacOS(App *appPtr) : BasePlatform(appPtr) {}
-
-auto MacOS::postEventToOS(const Event &event) -> void {
-    CGEventRef eventRef{CGEventCreateKeyboardEvent(
-        nullptr, key2Native(event.getKey()), event.isDown())};
-
-    CGEventPost(kCGHIDEventTap, eventRef);
-
-    CFRelease(eventRef);
-}
-
 auto tapCallback(CGEventTapProxy proxy, CGEventType type, CGEventRef event,
                  void *refcon) -> CGEventRef {
-    const Event newEvent{Key::A, true};
     auto *self{static_cast<MacOS *>(refcon)};
 
-    self->sendEventToCore(newEvent);
+    const auto &eventNativeKeyCode{static_cast<CGKeyCode>(
+        CGEventGetIntegerValueField(event, kCGKeyboardEventKeycode))};
+
+    self->sendEventToCore({{MacOS::native2Key(eventNativeKeyCode)}});
 
     return event;
 }
 
-auto MacOS::run() -> void {
+MacOS::MacOS(App *appPtr) : BasePlatform(appPtr) {
     CGEventMask eventMask{CGEventMaskBit(kCGEventKeyDown) |
                           // CGEventMaskBit(kCGEventKeyUp) |
                           CGEventMaskBit(kCGEventFlagsChanged)};
@@ -39,8 +30,29 @@ auto MacOS::run() -> void {
     CFRunLoopSourceRef runLoopSourceRef{
         CFMachPortCreateRunLoopSource(kCFAllocatorDefault, machPortRef, 0)};
 
-    CFRunLoopAddSource(CFRunLoopGetCurrent(), runLoopSourceRef,
-                       kCFRunLoopCommonModes);
+    m_runLoopRef = CFRunLoopGetCurrent();
+    CFRetain(m_runLoopRef);
+
+    CFRunLoopAddSource(m_runLoopRef, runLoopSourceRef, kCFRunLoopCommonModes);
+
     CGEventTapEnable(machPortRef, true);
     CFRunLoopRun();
+}
+
+MacOS::~MacOS() {
+    CFRunLoopStop(m_runLoopRef);
+    CFRelease(m_runLoopRef);
+}
+
+auto MacOS::postEventToOS(const Event &event) -> void {
+    const std::vector<Key> &eventKeys{event.getKeys()};
+
+    for (const auto &key : eventKeys) {
+        CGEventRef eventRef{
+            CGEventCreateKeyboardEvent(nullptr, key2Native(key), true)};
+
+        CGEventPost(kCGHIDEventTap, eventRef);
+
+        CFRelease(eventRef);
+    }
 }

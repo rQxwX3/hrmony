@@ -1,7 +1,9 @@
 #include "../include/event.hpp"
 
-Event::Event(Key key, bool down) : m_key{key}, m_down{down} {};
+Event::Event() = default;
 
-[[nodiscard]] auto Event::getKey() const -> Key { return m_key; }
+Event::Event(const std::vector<Key> &keys) : m_keys{keys} {};
 
-[[nodiscard]] auto Event::isDown() const -> bool { return m_down; }
+[[nodiscard]] auto Event::getKeys() const -> const std::vector<Key> & {
+    return m_keys;
+}

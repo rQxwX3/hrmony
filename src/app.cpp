@@ -9,10 +9,7 @@ App::App() {
     m_core = std::make_unique<Core>(this);
 }
 
-auto App::run() -> void {
-    m_platform->run();
-    m_running = true;
-}
+auto App::run() -> void { m_running = true; }
 
 auto App::isRunning() const -> bool { return m_running; }
 
