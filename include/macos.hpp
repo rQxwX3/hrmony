@@ -2,11 +2,11 @@
 #define MACOS_HPP
 
 #include "app.hpp"
-#include "baseplatform.hpp"
+#include "platform.hpp"
 
 #include <ApplicationServices/ApplicationServices.h>
 
-class MacOS : public BasePlatform {
+class MacOS : public Platform {
   private:
     auto postEventToOS(const Event &event) -> void override;
 

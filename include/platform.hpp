@@ -3,7 +3,7 @@
 #include "macosKeyCodes.hpp"
 #include "types.hpp"
 
-class BasePlatform : public IPlatform {
+class Platform : public IPlatform {
   protected:
     App *m_appPtr{nullptr};
 
@@ -14,7 +14,7 @@ class BasePlatform : public IPlatform {
         MacOSKeyCodes::createKey2NativeMap()};
 
   public:
-    BasePlatform(App *appPtr);
+    Platform(App *appPtr);
 
     auto sendEventToCore(const Event &event) -> void override;
     auto onCoreEvent(const Event &event) -> void override;

@@ -11,10 +11,14 @@ auto tapCallback(CGEventTapProxy proxy, CGEventType type, CGEventRef event,
 
     self->sendEventToCore({{MacOS::native2Key(eventNativeKeyCode)}});
 
+    if (MacOS::native2Key(eventNativeKeyCode) == Key::A) {
+        return nullptr;
+    }
+
     return event;
 }
 
-MacOS::MacOS(App *appPtr) : BasePlatform(appPtr) {
+MacOS::MacOS(App *appPtr) : Platform(appPtr) {
     CGEventMask eventMask{CGEventMaskBit(kCGEventKeyDown) |
                           // CGEventMaskBit(kCGEventKeyUp) |
                           CGEventMaskBit(kCGEventFlagsChanged)};
