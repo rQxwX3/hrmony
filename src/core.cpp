@@ -1,3 +1,9 @@
 #include "../include/core.hpp"
 
-Core::Core(const App *appPtr) { Core::sApp = appPtr; }
+#include <iostream>
+
+Core::Core(App *appPtr) { Core::sApp = appPtr; }
+
+auto Core::onPlatformEvent(const Event &event) -> void {
+    std::cout << "hello from core\n";
+}

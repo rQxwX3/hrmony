@@ -16,3 +16,7 @@ auto App::run() -> void {
 auto App::isRunning() const -> bool { return m_running; }
 
 auto App::isHRMModeActive() const -> bool { return m_HRMMode; }
+
+auto App::sendEventToCore(const Event &event) -> void {
+    m_core->onPlatformEvent(event);
+}

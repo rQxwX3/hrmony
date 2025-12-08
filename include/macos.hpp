@@ -9,15 +9,15 @@
 class MacOS : public BasePlatform {
   private:
     auto run() -> void override;
-
     auto postEventToOS(const Event &event) -> void override;
+    auto sendEventToCore(const Event &event) -> void override;
 
-    [[nodiscard]] static auto tapCallback(CGEventTapProxy proxy,
-                                          CGEventType type, CGEventRef event,
-                                          void *refcon) -> CGEventRef;
+    // MacOS requires a C-style function as callback, thus friend
+    friend auto tapCallback(CGEventTapProxy proxy, CGEventType type,
+                            CGEventRef event, void *refcon) -> CGEventRef;
 
   public:
-    MacOS(const App *appRef);
+    MacOS(App *appRef);
 };
 
 #endif // MACOS_HPP
