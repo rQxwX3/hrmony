@@ -11,9 +11,9 @@ class Platform : public IPlatform {
     [[nodiscard]] auto getAppPtr() const -> const App *;
 
   private:
-    const inline static Native2KeyMap sNative2KeyMap{
+    constexpr static Native2KeyMap sNative2KeyMap{
         MacOSKeyCodes::createNative2KeyMap()};
-    const inline static Key2NativeMap sKey2NativeMap{
+    constexpr static Key2NativeMap sKey2NativeMap{
         MacOSKeyCodes::createKey2NativeMap()};
 
   public:
@@ -24,4 +24,7 @@ class Platform : public IPlatform {
 
     [[nodiscard]] auto static key2Native(Key key) -> NativeKeyCode;
     [[nodiscard]] auto static native2Key(NativeKeyCode nativeKey) -> Key;
+
+    [[nodiscard]] auto isAppRunning() -> bool;
+    [[nodiscard]] auto isHRMMode() -> bool;
 };

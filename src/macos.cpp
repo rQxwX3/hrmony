@@ -6,15 +6,16 @@ auto tapCallback(CGEventTapProxy proxy, CGEventType type, CGEventRef event,
                  void *refcon) -> CGEventRef {
     auto *self{static_cast<MacOS *>(refcon)};
 
+    if (!self->isHRMMode()) {
+        return event;
+    }
+
     const auto &eventNativeKeyCode{static_cast<CGKeyCode>(
         CGEventGetIntegerValueField(event, kCGKeyboardEventKeycode))};
 
     self->sendEventToCore({{MacOS::native2Key(eventNativeKeyCode)}});
 
-    if (MacOS::native2Key(eventNativeKeyCode) == Key::A) {
-        return nullptr;
-    }
-
+    // TODO return nullptr (Core should send back the remapped event)
     return event;
 }
 
@@ -40,8 +41,9 @@ MacOS::MacOS(App *appPtr) : Platform(appPtr) {
     CFRunLoopAddSource(m_runLoopRef, runLoopSourceRef, kCFRunLoopCommonModes);
 
     CGEventTapEnable(machPortRef, true);
-    CFRunLoopRun();
 }
+
+auto MacOS::run() -> void { CFRunLoopRun(); }
 
 MacOS::~MacOS() {
     CFRunLoopStop(m_runLoopRef);

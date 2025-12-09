@@ -19,6 +19,9 @@ class MacOS : public Platform {
 
   public:
     MacOS(App *appPtr);
+
+    auto run() -> void override;
+
     ~MacOS() override;
 
   public:

@@ -1,7 +1,5 @@
 #include "../include/platform.hpp"
 
-#include <iostream>
-
 Platform::Platform(App *appPtr) : m_appPtr{appPtr} {};
 
 [[nodiscard]] auto Platform::getAppPtr() const -> const App * {
@@ -20,8 +18,12 @@ auto Platform::native2Key(NativeKeyCode nativeKey) -> Key {
     return sNative2KeyMap.at(nativeKey);
 }
 
-auto Platform::onCoreEvent(const Event &event) -> void {
-    postEventToOS(event);
+auto Platform::onCoreEvent(const Event &event) -> void { postEventToOS(event); }
 
-    std::cout << "received hello from core\n";
+[[nodiscard]] auto Platform::isAppRunning() -> bool {
+    return m_appPtr->isRunning();
+}
+
+[[nodiscard]] auto Platform::isHRMMode() -> bool {
+    return m_appPtr->isHRMMode();
 }
