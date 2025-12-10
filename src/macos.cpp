@@ -16,7 +16,7 @@ auto tapCallback(CGEventTapProxy proxy, CGEventType type, CGEventRef event,
     self->sendEventToCore({{MacOS::native2Key(eventNativeKeyCode)}});
 
     // TODO return nullptr (Core should send back the remapped event)
-    return event;
+    return nullptr;
 }
 
 MacOS::MacOS(App *appPtr) : Platform(appPtr) {

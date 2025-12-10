@@ -11,6 +11,9 @@ class Core {
     App *m_appPtr{nullptr};
     std::unordered_map<Key, std::vector<Key>> m_keyMaps;
 
+  private:
+    auto getRemappedKeys(Key key) -> std::vector<Key>;
+
   public:
     Core(App *appPtr);
 
