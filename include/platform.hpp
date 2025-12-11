@@ -5,7 +5,7 @@
 
 class Platform : public IPlatform {
   private:
-    App *m_appPtr{nullptr};
+    App *m_appPtr;
 
   protected:
     [[nodiscard]] auto getAppPtr() const -> const App *;
@@ -17,7 +17,7 @@ class Platform : public IPlatform {
         MacOSKeyCodes::createKey2NativeMap()};
 
   public:
-    Platform(App *appPtr);
+    Platform(App *appPtr = nullptr);
 
     auto sendEventToCore(const Event &event) -> void override;
     auto onCoreEvent(const Event &event) -> void override;

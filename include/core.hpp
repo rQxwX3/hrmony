@@ -8,14 +8,14 @@ class App;
 
 class Core {
   private:
-    App *m_appPtr{nullptr};
+    App *m_appPtr;
     std::unordered_map<Key, std::vector<Key>> m_keyMaps;
 
   private:
     auto getRemappedKeys(Key key) -> std::vector<Key>;
 
   public:
-    Core(App *appPtr);
+    Core(App *appPtr = nullptr);
 
     auto onPlatformEvent(const Event &event) -> void;
 };

@@ -1,7 +1,6 @@
 #include "../include/app.hpp"
 #include "../include/macos.hpp"
 
-#include <iostream>
 #include <memory>
 
 App::App()
@@ -22,7 +21,6 @@ auto App::sendEventToCore(const Event &event) -> void {
 }
 
 auto App::sendEventToPlatform(const Event &event) -> void {
-    // std::cout << "toggling hrm mode\n";
     toggleHRMMode();
     m_platform->onCoreEvent(event);
 }
