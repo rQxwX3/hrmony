@@ -5,10 +5,11 @@
 
 class IPlatform {
   public:
-    virtual auto postEventToOS(const Event &event) -> void = 0;
-    virtual auto sendEventToCore(const Event &event) -> void = 0;
-    virtual auto onCoreEvent(const Event &event) -> void = 0;
     virtual auto run() -> void = 0;
+    virtual auto postEventToOS(const Event &event) -> void = 0;
+
+    virtual auto sendEventToApp(const Event &event) -> void = 0;
+    virtual auto onAppEvent(const Event &event) -> void = 0;
 
   public:
     IPlatform() = default;

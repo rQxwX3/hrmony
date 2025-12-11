@@ -6,8 +6,8 @@ Platform::Platform(App *appPtr) : m_appPtr{appPtr} {};
     return m_appPtr;
 }
 
-auto Platform::sendEventToCore(const Event &event) -> void {
-    m_appPtr->sendEventToCore(event);
+auto Platform::sendEventToApp(const Event &event) -> void {
+    m_appPtr->onPlatformEvent(event);
 }
 
 auto Platform::key2Native(Key key) -> NativeKeyCode {
@@ -18,7 +18,7 @@ auto Platform::native2Key(NativeKeyCode nativeKey) -> Key {
     return sNative2KeyMap.at(nativeKey);
 }
 
-auto Platform::onCoreEvent(const Event &event) -> void { postEventToOS(event); }
+auto Platform::onAppEvent(const Event &event) -> void { postEventToOS(event); }
 
 [[nodiscard]] auto Platform::isAppRunning() -> bool {
     return m_appPtr->isRunning();

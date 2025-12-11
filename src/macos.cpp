@@ -1,19 +1,27 @@
 #include "../include/macos.hpp"
 
 #include <ApplicationServices/ApplicationServices.h>
+#include <chrono>
+#include <iostream>
 
 auto tapCallback(CGEventTapProxy proxy, CGEventType type, CGEventRef event,
                  void *refcon) -> CGEventRef {
+
+    auto start{std::chrono::high_resolution_clock::now()};
+
     auto *self{static_cast<MacOS *>(refcon)};
 
     if (!self->isHRMMode()) {
+        auto end1{std::chrono::high_resolution_clock::now()};
+        std::chrono::duration<double> elapsed = end1 - start;
+        // std::cout << elapsed.count() << '\n';
         return event;
     }
 
     const auto &eventNativeKeyCode{static_cast<CGKeyCode>(
         CGEventGetIntegerValueField(event, kCGKeyboardEventKeycode))};
 
-    self->sendEventToCore({{MacOS::native2Key(eventNativeKeyCode)}});
+    self->sendEventToApp({{MacOS::native2Key(eventNativeKeyCode)}});
 
     // TODO return nullptr (Core should send back the remapped event)
     return nullptr;

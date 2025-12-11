@@ -19,8 +19,8 @@ class Platform : public IPlatform {
   public:
     Platform(App *appPtr = nullptr);
 
-    auto sendEventToCore(const Event &event) -> void override;
-    auto onCoreEvent(const Event &event) -> void override;
+    auto sendEventToApp(const Event &event) -> void override;
+    auto onAppEvent(const Event &event) -> void override;
 
     [[nodiscard]] auto static key2Native(Key key) -> NativeKeyCode;
     [[nodiscard]] auto static native2Key(NativeKeyCode nativeKey) -> Key;
