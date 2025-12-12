@@ -16,15 +16,15 @@ class App {
     KeyBindingArray m_keyBindingArray{AppDefaults::keyBindingArray};
 
   private:
-    auto getRemappedKeys(Key key) -> Key;
+    auto getKeyBinding(Keys::Printables key) -> Keys::Modifiers;
 
   public:
     App();
 
     auto run() -> void;
 
-    auto onPlatformEvent(const Event &event) -> void;
-    auto sendEventToPlatform(const Event &event) -> void;
+    auto onPlatformKey(Keys::Printables key) -> void;
+    auto sendKeyToPlatform(Keys::Modifiers key) -> void;
 
     auto toggleHRMMode() -> void;
 

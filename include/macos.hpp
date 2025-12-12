@@ -14,7 +14,7 @@ class MacOS : public Platform {
     CFRunLoopRef m_runLoopRef;
 
   private:
-    auto postEventToOS(const Event &event) -> void override;
+    // auto postEventToOS(const Event &event) -> void override;
 
   public:
     MacOS(App *appPtr);

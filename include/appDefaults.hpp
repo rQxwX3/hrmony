@@ -5,7 +5,8 @@ namespace AppDefaults {
 constexpr auto createKeyBindingArray() -> KeyBindingArray {
     KeyBindingArray arr{};
 
-    arr[static_cast<size_t>(Key::A)] = Key::S;
+    arr[static_cast<size_t>(Keys::Printables::J)] = Keys::Modifiers::CMD;
+    arr[static_cast<size_t>(Keys::Printables::F)] = Keys::Modifiers::CMD;
 
     return arr;
 };

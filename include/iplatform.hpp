@@ -1,15 +1,14 @@
 #ifndef IPLATFORM_HPP
 #define IPLATFORM_HPP
 
-#include "event.hpp"
+#include "types.hpp"
 
 class IPlatform {
   public:
     virtual auto run() -> void = 0;
-    virtual auto postEventToOS(const Event &event) -> void = 0;
-
-    virtual auto sendEventToApp(const Event &event) -> void = 0;
-    virtual auto onAppEvent(const Event &event) -> void = 0;
+    // virtual auto postEventToOS(const Event &event) -> void = 0;
+    // virtual auto sendEventToApp(const Event &event) -> void = 0;
+    // virtual auto onAppEvent(const Event &event) -> void = 0;
 
   public:
     IPlatform() = default;
