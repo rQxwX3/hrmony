@@ -8,6 +8,7 @@
 
 #ifdef __APPLE__
 using NativeKeyCode = CGKeyCode;
+using NativeModifier = CGEventFlags;
 using Event = CGEventRef;
 
 static constexpr size_t maxKeyCode{127};
@@ -15,8 +16,9 @@ static constexpr size_t maxKeyCode{127};
 
 using eventCallback = std::function<void(const Event &event)>;
 
-// using Native2KeyMap = std::array<Keys::Key, static_cast<size_t>(Key::size)>;
-// using Key2NativeMap = std::array<NativeKeyCode, maxKeyCode>;
+using NativeKey2PrintableArr = std::array<Keys::Printables, maxKeyCode>;
+using Modifier2NativeModifierArr =
+    std::array<CGEventFlags, static_cast<size_t>(Keys::Modifiers::m_size)>;
 
 using KeyBindingArray =
     std::array<Keys::Modifiers, static_cast<size_t>(Keys::Printables::m_size)>;

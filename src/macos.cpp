@@ -1,4 +1,5 @@
 #include "../include/macos.hpp"
+#include "../include/macosDefaults.hpp"
 
 #include <ApplicationServices/ApplicationServices.h>
 
@@ -10,17 +11,24 @@ auto tapCallback(CGEventTapProxy proxy, CGEventType type, CGEventRef event,
         return event;
     }
 
-    const auto &eventNativeKeyCode{static_cast<CGKeyCode>(
+    const auto &nativeKey{static_cast<CGKeyCode>(
         CGEventGetIntegerValueField(event, kCGKeyboardEventKeycode))};
 
-    CGEventSetFlags(event, kCGEventFlagMaskCommand);
+    const auto modifier{
+        self->getKeyBinding(self->nativeKey2Printable(nativeKey))};
 
-    // self->sendEventToApp({{MacOS::native2Key(eventNativeKeyCode)}});
+    if (modifier == Keys::Modifiers::NULLKEY) {
+        return event;
+    }
+
+    CGEventSetFlags(event, self->modifier2NativeModifier(modifier));
 
     return event;
 }
 
-MacOS::MacOS(App *appPtr) : Platform(appPtr) {
+MacOS::MacOS(App *appPtr)
+    : Platform(MacOSDefaults::nativeKey2Printable,
+               MacOSDefaults::modifier2NativeModifier, appPtr) {
     CGEventMask eventMask{CGEventMaskBit(kCGEventKeyDown) |
                           // CGEventMaskBit(kCGEventKeyUp) |
                           CGEventMaskBit(kCGEventFlagsChanged)};

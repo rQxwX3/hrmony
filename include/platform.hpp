@@ -1,30 +1,35 @@
 #include "app.hpp"
 #include "iplatform.hpp"
-#include "macosDefaults.hpp"
 #include "types.hpp"
 
 class Platform : public IPlatform {
   private:
+    NativeKey2PrintableArr m_nativeKey2Printable;
+    Modifier2NativeModifierArr m_modifier2NativeModifier;
+
     App *m_appPtr;
 
   protected:
     [[nodiscard]] auto getAppPtr() const -> const App *;
 
-  private:
-    // constexpr static Native2KeyMap sNative2KeyMap{
-    //     MacOSDefaults::createNative2KeyMap()};
-    // constexpr static Key2NativeMap sKey2NativeMap{
-    //     MacOSDefaults::createKey2NativeMap()};
-
   public:
-    Platform(App *appPtr = nullptr);
+    Platform(const NativeKey2PrintableArr &nk2pa,
+             const Modifier2NativeModifierArr &m2nma, App *appPtr = nullptr);
 
-    // auto sendEventToApp(const Event &event) -> void override;
+    [[nodiscard]] auto getKeyBinding(Keys::Printables key)
+        -> Keys::Modifiers override;
+
+    [[nodiscard]] auto nativeKey2Printable(NativeKeyCode nativeKey)
+        -> Keys::Printables;
+
+    [[nodiscard]] auto modifier2NativeModifier(Keys::Modifiers modifier)
+        -> NativeModifier;
+
+    [[nodiscard]] auto isAppRunning() -> bool;
+
+    [[nodiscard]] auto isHRMMode() -> bool;
+
     // auto onAppEvent(const Event &event) -> void override;
 
     // [[nodiscard]] auto static key2Native(Key key) -> NativeKeyCode;
-    // [[nodiscard]] auto static native2Key(NativeKeyCode nativeKey) -> Key;
-
-    [[nodiscard]] auto isAppRunning() -> bool;
-    [[nodiscard]] auto isHRMMode() -> bool;
 };

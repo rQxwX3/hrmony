@@ -16,8 +16,6 @@ class App {
     KeyBindingArray m_keyBindingArray{AppDefaults::keyBindingArray};
 
   private:
-    auto getKeyBinding(Keys::Printables key) -> Keys::Modifiers;
-
   public:
     App();
 
@@ -25,6 +23,7 @@ class App {
 
     auto onPlatformKey(Keys::Printables key) -> void;
     auto sendKeyToPlatform(Keys::Modifiers key) -> void;
+    [[nodiscard]] auto getKeyBinding(Keys::Printables key) -> Keys::Modifiers;
 
     auto toggleHRMMode() -> void;
 

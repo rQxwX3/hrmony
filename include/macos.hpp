@@ -3,6 +3,7 @@
 
 #include "app.hpp"
 #include "platform.hpp"
+#include "types.hpp"
 
 #include <ApplicationServices/ApplicationServices.h>
 
