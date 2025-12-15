@@ -21,6 +21,9 @@ class MacOS : public Platform {
     ~MacOS() override;
 
   public:
+    auto setEventModifiersToCurrent(Event &event) -> void override;
+
+  public:
     MacOS(const MacOS &other) = delete;
     MacOS(MacOS &&other) = delete;
 

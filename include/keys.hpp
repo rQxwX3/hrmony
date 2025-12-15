@@ -32,6 +32,7 @@ enum class Printables : uint8_t {
     X,
     Y,
     Z,
+    SEMICOLON,
     m_size
 };
 

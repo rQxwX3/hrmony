@@ -3,6 +3,24 @@
 #include "../include/types.hpp"
 
 #include <ApplicationServices/ApplicationServices.h>
+#include <iostream>
+
+auto MacOS::setEventModifiersToCurrent(Event &event) -> void {
+    const auto currentModifiers{getCurrentModifiers()};
+
+    NativeModifier modifierBitMask{0};
+
+    for (const auto &modifier : currentModifiers) {
+        if (modifier == Keys::Modifiers::NULLKEY) {
+            continue;
+        }
+
+        modifierBitMask |= modifier2NativeModifier(modifier);
+    }
+
+    std::cout << modifierBitMask << '\n';
+    CGEventSetFlags(event, modifierBitMask);
+}
 
 auto processKeyPress(CGEventTapProxy proxy, CGEventType type, CGEventRef event,
                      void *refcon) -> CGEventRef {

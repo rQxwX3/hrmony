@@ -4,21 +4,24 @@
 
 class Platform : public IPlatform {
   private:
-    NativeKey2PrintableArr m_nativeKey2Printable;
-    Modifier2NativeModifierArr m_modifier2NativeModifier;
+    NativeKey2PrintableArray m_nativeKey2Printable;
+    Modifier2NativeModifierArray m_modifier2NativeModifier;
 
     App *m_appPtr;
 
     std::array<Keys::Modifiers, maxModifierCnt> m_currentModifiers;
     size_t m_currentModifiersCnt;
 
-  protected:
-    [[nodiscard]] auto getAppPtr() const -> const App *;
+  public:
+    Platform(const NativeKey2PrintableArray &nk2pa,
+             const Modifier2NativeModifierArray &m2nma, App *appPtr = nullptr);
 
   public:
-    Platform(const NativeKey2PrintableArr &nk2pa,
-             const Modifier2NativeModifierArr &m2nma, App *appPtr = nullptr);
+    auto addCurrentModifier(Keys::Modifiers modifier) -> void override;
 
+    auto resetCurrentModifiers() -> void override;
+
+  public:
     [[nodiscard]] auto nativeKey2Printable(NativeKeyCode nativeKey) const
         -> Keys::Printables;
 
@@ -26,11 +29,8 @@ class Platform : public IPlatform {
         -> NativeModifier;
 
   public:
-    auto addCurrentModifier(Keys::Modifiers modifier) -> void;
-
-    auto resetCurrentModifiers() -> void;
-
-    auto setEventModifiersToCurrent(Event &event) -> void;
+    [[nodiscard]] auto getCurrentModifiers() const
+        -> const CurrentModifiersArray &;
 
   public:
     [[nodiscard]] auto isAppRunning() const -> bool;

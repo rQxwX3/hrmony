@@ -7,8 +7,8 @@
 #include <ApplicationServices/ApplicationServices.h>
 
 namespace MacOSConstants {
-constexpr auto createNativeKey2Printable() -> NativeKey2PrintableArr {
-    NativeKey2PrintableArr arr{};
+constexpr auto createNativeKey2Printable() -> NativeKey2PrintableArray {
+    NativeKey2PrintableArray arr{};
 
     arr[0] = ::Keys::Printables::A;
     arr[1] = ::Keys::Printables::S;
@@ -16,23 +16,30 @@ constexpr auto createNativeKey2Printable() -> NativeKey2PrintableArr {
     arr[3] = ::Keys::Printables::F;
     arr[4] = ::Keys::Printables::H;
     arr[12] = ::Keys::Printables::Q;
+    arr[37] = ::Keys::Printables::L;
     arr[38] = ::Keys::Printables::J;
+    arr[40] = ::Keys::Printables::K;
+    arr[41] = ::Keys::Printables::SEMICOLON;
 
     return arr;
 };
 
-constexpr auto createModifier2NativeModifier() -> Modifier2NativeModifierArr {
-    Modifier2NativeModifierArr arr{};
+constexpr auto createModifier2NativeModifier() -> Modifier2NativeModifierArray {
+    Modifier2NativeModifierArray arr{};
 
     arr[static_cast<size_t>(::Keys::Modifiers::CMD)] = kCGEventFlagMaskCommand;
+    arr[static_cast<size_t>(::Keys::Modifiers::CTRL)] = kCGEventFlagMaskControl;
+    arr[static_cast<size_t>(::Keys::Modifiers::SHIFT)] = kCGEventFlagMaskShift;
+    arr[static_cast<size_t>(::Keys::Modifiers::ALT)] =
+        kCGEventFlagMaskAlternate;
 
     return arr;
 }
 
-constexpr NativeKey2PrintableArr nativeKey2Printable{
+constexpr NativeKey2PrintableArray nativeKey2Printable{
     createNativeKey2Printable()};
 
-constexpr Modifier2NativeModifierArr modifier2NativeModifier{
+constexpr Modifier2NativeModifierArray modifier2NativeModifier{
     createModifier2NativeModifier()};
 } // namespace MacOSConstants
 

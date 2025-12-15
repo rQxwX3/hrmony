@@ -6,8 +6,16 @@
 class IPlatform {
   public:
     virtual auto run() -> void = 0;
+
     [[nodiscard]] virtual auto getKeyBinding(Keys::Printables key) const
         -> Keys::Modifiers = 0;
+
+  public:
+    virtual auto addCurrentModifier(Keys::Modifiers modifier) -> void = 0;
+
+    virtual auto resetCurrentModifiers() -> void = 0;
+
+    virtual auto setEventModifiersToCurrent(Event &event) -> void = 0;
 
   public:
     IPlatform() = default;

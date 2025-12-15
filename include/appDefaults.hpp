@@ -7,6 +7,13 @@ constexpr auto createKeyBindingArray() -> KeyBindingArray {
 
     arr[static_cast<size_t>(Keys::Printables::J)] = Keys::Modifiers::CMD;
     arr[static_cast<size_t>(Keys::Printables::F)] = Keys::Modifiers::CMD;
+    arr[static_cast<size_t>(Keys::Printables::K)] = Keys::Modifiers::ALT;
+    arr[static_cast<size_t>(Keys::Printables::D)] = Keys::Modifiers::ALT;
+    arr[static_cast<size_t>(Keys::Printables::L)] = Keys::Modifiers::CTRL;
+    arr[static_cast<size_t>(Keys::Printables::S)] = Keys::Modifiers::CTRL;
+    arr[static_cast<size_t>(Keys::Printables::A)] = Keys::Modifiers::SHIFT;
+    arr[static_cast<size_t>(Keys::Printables::SEMICOLON)] =
+        Keys::Modifiers::SHIFT;
 
     return arr;
 };
