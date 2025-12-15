@@ -1,7 +1,7 @@
 #include "include/app.hpp"
 
 auto main() -> int {
-    App app{App()};
+    App app;
 
     app.run();
 }
