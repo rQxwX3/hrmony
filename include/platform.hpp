@@ -9,6 +9,9 @@ class Platform : public IPlatform {
 
     App *m_appPtr;
 
+    std::array<Keys::Modifiers, maxModifierCnt> m_currentModifiers;
+    size_t m_currentModifiersCnt;
+
   protected:
     [[nodiscard]] auto getAppPtr() const -> const App *;
 
@@ -16,16 +19,24 @@ class Platform : public IPlatform {
     Platform(const NativeKey2PrintableArr &nk2pa,
              const Modifier2NativeModifierArr &m2nma, App *appPtr = nullptr);
 
-    [[nodiscard]] auto getKeyBinding(Keys::Printables key) const
-        -> Keys::Modifiers override;
-
     [[nodiscard]] auto nativeKey2Printable(NativeKeyCode nativeKey) const
         -> Keys::Printables;
 
     [[nodiscard]] auto modifier2NativeModifier(Keys::Modifiers modifier) const
         -> NativeModifier;
 
+  public:
+    auto addCurrentModifier(Keys::Modifiers modifier) -> void;
+
+    auto resetCurrentModifiers() -> void;
+
+    auto setEventModifiersToCurrent(Event &event) -> void;
+
+  public:
     [[nodiscard]] auto isAppRunning() const -> bool;
+
+    [[nodiscard]] auto getKeyBinding(Keys::Printables key) const
+        -> Keys::Modifiers override;
 
     [[nodiscard]] auto isHRMMode() const -> bool;
 };

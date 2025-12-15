@@ -4,24 +4,6 @@
 
 #include <ApplicationServices/ApplicationServices.h>
 
-auto MacOS::setEventModifiersToCurrent(Event &event) -> void {
-    for (const auto &modifier : m_currentModifiers) {
-        if (modifier == Keys::Modifiers::NULLKEY) {
-            continue;
-        }
-
-        CGEventSetFlags(event, modifier2NativeModifier(modifier));
-    }
-}
-
-auto MacOS::resetCurrentModifiers() -> void {
-    m_currentModifiers = {Keys::Modifiers::NULLKEY};
-}
-
-auto MacOS::addCurrentModifier(const Keys::Modifiers modifier) -> void {
-    m_currentModifiers.at(m_currentModifiersCnt) = modifier;
-}
-
 auto processKeyPress(CGEventTapProxy proxy, CGEventType type, CGEventRef event,
                      void *refcon) -> CGEventRef {
     auto *self{static_cast<MacOS *>(refcon)};

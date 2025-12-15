@@ -3,7 +3,28 @@
 Platform::Platform(const NativeKey2PrintableArr &nk2pa,
                    const Modifier2NativeModifierArr &m2nma, App *appPtr)
     : m_nativeKey2Printable{nk2pa}, m_modifier2NativeModifier{m2nma},
-      m_appPtr{appPtr} {};
+      m_appPtr{appPtr}, m_currentModifiers{Keys::Modifiers::NULLKEY},
+      m_currentModifiersCnt{0} {};
+
+auto Platform::setEventModifiersToCurrent(Event &event) -> void {
+    for (const auto &modifier : m_currentModifiers) {
+        if (modifier == Keys::Modifiers::NULLKEY) {
+            continue;
+        }
+
+        CGEventSetFlags(event, modifier2NativeModifier(modifier));
+    }
+}
+
+auto Platform::resetCurrentModifiers() -> void {
+    m_currentModifiers = {Keys::Modifiers::NULLKEY};
+    m_currentModifiersCnt = 0;
+}
+
+auto Platform::addCurrentModifier(const Keys::Modifiers modifier) -> void {
+    m_currentModifiers.at(m_currentModifiersCnt) = modifier;
+    m_currentModifiersCnt++;
+}
 
 [[nodiscard]] auto Platform::getAppPtr() const -> const App * {
     return m_appPtr;
