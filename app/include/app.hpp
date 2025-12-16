@@ -16,7 +16,7 @@ class App {
     KeyBindingArray m_keyBindingArray{AppDefaults::keyBindingArray};
 
   public:
-    App() = default;
+    App();
 
     auto run() -> void;
     auto toggleHRMMode() -> void;

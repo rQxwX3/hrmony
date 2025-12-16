@@ -6,6 +6,8 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 project(hrmony)
 
+find_library(APPLICATION_SERVICES ApplicationServices)
+
 add_library(common INTERFACE)
 target_include_directories(common INTERFACE ${CMAKE_SOURCE_DIR}/common)
 
@@ -15,4 +17,4 @@ add_subdirectory(macos)
 
 add_executable(hrmony main.cpp)
 
-target_link_libraries(hrmony PRIVATE app common)
+target_link_libraries(hrmony PRIVATE app common ${APPLICATION_SERVICES})

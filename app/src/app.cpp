@@ -1,10 +1,12 @@
 #include <app.hpp>
+#include <macos.hpp>
 #include <platform.hpp>
 
 #include <memory>
 
-// App::App(std::unique_ptr<Platform> platform)
-//     : m_platform{std::make_unique<Platform>(this)} {}
+#ifdef __APPLE__
+App::App() : m_platform{std::make_unique<MacOS>(this)} {}
+#endif
 
 auto App::run() -> void {
     m_running = true;

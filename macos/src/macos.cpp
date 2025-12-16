@@ -1,3 +1,4 @@
+#include <app.hpp>
 #include <macos.hpp>
 #include <macosConstants.hpp>
 #include <types.hpp>
