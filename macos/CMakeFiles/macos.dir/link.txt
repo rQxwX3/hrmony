@@ -1,2 +1,0 @@
-/usr/bin/ar qc libmacos.a CMakeFiles/macos.dir/src/macos.cpp.o
-/usr/bin/ranlib libmacos.a
