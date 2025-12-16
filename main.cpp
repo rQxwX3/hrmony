@@ -1,7 +1,7 @@
-#include "include/app.hpp"
+#include <app.hpp>
 
 auto main() -> int {
-    App app;
-
-    app.run();
+    // App app;
+    //
+    // app.run();
 }

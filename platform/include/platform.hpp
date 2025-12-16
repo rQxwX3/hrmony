@@ -1,6 +1,10 @@
-#include "app.hpp"
-#include "iplatform.hpp"
-#include "types.hpp"
+#ifndef PLATFORM_HPP
+#define PLATFORM_HPP
+
+#include <iplatform.hpp>
+#include <types.hpp>
+
+class App;
 
 class Platform : public IPlatform {
   private:
@@ -40,3 +44,5 @@ class Platform : public IPlatform {
 
     [[nodiscard]] auto isHRMMode() const -> bool;
 };
+
+#endif // PLATFORM_HPP

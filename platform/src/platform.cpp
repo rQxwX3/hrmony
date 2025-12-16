@@ -1,4 +1,5 @@
-#include "../include/platform.hpp"
+#include <app.hpp>
+#include <platform.hpp>
 
 Platform::Platform(const NativeKey2PrintableArray &nk2pa,
                    const Modifier2NativeModifierArray &m2nma, App *appPtr)

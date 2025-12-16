@@ -1,8 +1,8 @@
 #ifndef MACOS_CONSTANTS
 #define MACOS_CONSTANTS
 
-#include "keys.hpp"
-#include "types.hpp"
+#include <keys.hpp>
+#include <types.hpp>
 
 #include <ApplicationServices/ApplicationServices.h>
 

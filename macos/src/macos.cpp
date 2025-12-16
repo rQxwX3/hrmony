@@ -1,9 +1,8 @@
-#include "../include/macos.hpp"
-#include "../include/macosConstants.hpp"
-#include "../include/types.hpp"
+#include <macos.hpp>
+#include <macosConstants.hpp>
+#include <types.hpp>
 
 #include <ApplicationServices/ApplicationServices.h>
-#include <iostream>
 
 auto MacOS::setEventModifiersToCurrent(Event &event) -> void {
     const auto currentModifiers{getCurrentModifiers()};
@@ -18,7 +17,6 @@ auto MacOS::setEventModifiersToCurrent(Event &event) -> void {
         modifierBitMask |= modifier2NativeModifier(modifier);
     }
 
-    std::cout << modifierBitMask << '\n';
     CGEventSetFlags(event, modifierBitMask);
 }
 

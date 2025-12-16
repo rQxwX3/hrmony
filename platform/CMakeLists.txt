@@ -1,0 +1,7 @@
+add_library(platform STATIC src/platform.cpp) 
+
+target_include_directories(platform PUBLIC 
+	${CMAKE_CURRENT_SOURCE_DIR}/include 
+	../app/include)
+
+target_link_libraries(platform PUBLIC common)

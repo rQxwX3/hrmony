@@ -1,8 +1,8 @@
 #ifndef MACOS_HPP
 #define MACOS_HPP
 
-#include "app.hpp"
-#include "platform.hpp"
+#include <app.hpp>
+#include <platform.hpp>
 
 #include <ApplicationServices/ApplicationServices.h>
 

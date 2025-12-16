@@ -1,7 +1,7 @@
 #ifndef IPLATFORM_HPP
 #define IPLATFORM_HPP
 
-#include "types.hpp"
+#include <types.hpp>
 
 class IPlatform {
   public:

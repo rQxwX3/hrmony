@@ -1,10 +1,10 @@
 #ifndef TYPES_HPP
 #define TYPES_HPP
 
+#include <keys.hpp>
+
 #include <ApplicationServices/ApplicationServices.h>
 #include <array>
-
-#include "keys.hpp"
 
 #ifdef __APPLE__
 using NativeKeyCode = CGKeyCode;

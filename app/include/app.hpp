@@ -1,8 +1,8 @@
 #ifndef APP_HPP
 #define APP_HPP
 
-#include "appDefaults.hpp"
-#include "iplatform.hpp"
+#include <appDefaults.hpp>
+#include <platform.hpp>
 
 #include <memory>
 
@@ -11,12 +11,12 @@ class App {
     bool m_running{false};
     bool m_HRMMode{true};
 
-    std::unique_ptr<IPlatform> m_platform{nullptr};
+    std::unique_ptr<Platform> m_platform{nullptr};
 
     KeyBindingArray m_keyBindingArray{AppDefaults::keyBindingArray};
 
   public:
-    App();
+    App() = default;
 
     auto run() -> void;
     auto toggleHRMMode() -> void;
