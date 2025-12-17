@@ -26,11 +26,10 @@ class App {
     [[nodiscard]] auto getKeyBinding(Keys::Printables key) const
         -> Keys::Modifiers;
 
+    [[nodiscard]] auto getConfig() const -> Config::Config;
+
     [[nodiscard]] auto isRunning() const -> bool;
     [[nodiscard]] auto isHRMMode() const -> bool;
-
-    [[nodiscard]] auto getLeaderKey() const -> Keys::Modifiers;
-    [[nodiscard]] auto getExitKey() const -> Keys::Printables;
 };
 
 #endif // APP_HPP

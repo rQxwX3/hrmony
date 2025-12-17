@@ -1,6 +1,7 @@
 #ifndef PLATFORM_HPP
 #define PLATFORM_HPP
 
+#include <config.hpp>
 #include <iplatform.hpp>
 #include <types.hpp>
 
@@ -8,17 +9,15 @@ class App;
 
 class Platform : public IPlatform {
   private:
-    NativeKey2PrintableArray m_nativeKey2Printable;
-    Modifier2NativeModifierArray m_modifier2NativeModifier;
-
     App *m_appPtr;
+
+    Config::Config m_config;
 
     std::array<Keys::Modifiers, maxModifierCnt> m_currentModifiers;
     size_t m_currentModifiersCnt;
 
   public:
-    Platform(const NativeKey2PrintableArray &nk2pa,
-             const Modifier2NativeModifierArray &m2nma, App *appPtr = nullptr);
+    Platform(App *appPtr = nullptr);
 
   public:
     auto toggleHRMMode() -> void override;

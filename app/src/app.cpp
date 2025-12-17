@@ -23,16 +23,11 @@ auto App::isRunning() const -> bool { return m_running; }
 
 auto App::isHRMMode() const -> bool { return m_HRMMode; }
 
-// [[nodiscard]] auto App::getLeaderKey() const -> Keys::Modifiers {
-//     return m_leaderKey;
-// }
-// [[nodiscard]] auto App::getExitKey() const -> Keys::Printables {
-//     return m_exitKey;
-// }
-
 [[nodiscard]] auto App::getKeyBinding(const Keys::Printables key) const
     -> Keys::Modifiers {
     return m_keyBindingArray.at(static_cast<size_t>(key));
 }
+
+[[nodiscard]] auto App::getConfig() const -> Config::Config { return m_config; }
 
 auto App::toggleHRMMode() -> void { m_HRMMode = !m_HRMMode; }

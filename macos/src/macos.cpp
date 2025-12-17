@@ -46,9 +46,7 @@ auto processKeyPress(CGEventTapProxy proxy, CGEventType type, CGEventRef event,
     return nullptr;
 }
 
-MacOS::MacOS(App *appPtr)
-    : Platform(MacOSConstants::nativeKey2Printable,
-               MacOSConstants::modifier2NativeModifier, appPtr) {
+MacOS::MacOS(App *appPtr) : Platform(appPtr) {
     CGEventMask eventMask{CGEventMaskBit(kCGEventKeyDown) |
                           // CGEventMaskBit(kCGEventKeyUp) |
                           CGEventMaskBit(kCGEventFlagsChanged)};

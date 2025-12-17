@@ -1,11 +1,9 @@
 #include <app.hpp>
 #include <platform.hpp>
 
-Platform::Platform(const NativeKey2PrintableArray &nk2pa,
-                   const Modifier2NativeModifierArray &m2nma, App *appPtr)
-    : m_nativeKey2Printable{nk2pa}, m_modifier2NativeModifier{m2nma},
-      m_appPtr{appPtr}, m_currentModifiers{Keys::Modifiers::NULLKEY},
-      m_currentModifiersCnt{0} {};
+Platform::Platform(App *appPtr)
+    : m_appPtr{appPtr}, m_config{appPtr->getConfig()},
+      m_currentModifiers{Keys::Modifiers::NULLKEY}, m_currentModifiersCnt{0} {};
 
 [[nodiscard]] auto Platform::getCurrentModifiers() const
     -> const CurrentModifiersArray & {
@@ -30,13 +28,13 @@ auto Platform::addCurrentModifier(const Keys::Modifiers modifier) -> void {
 [[nodiscard]] auto
 Platform::nativeKey2Printable(const NativeKeyCode nativeKey) const
     -> Keys::Printables {
-    return m_nativeKey2Printable.at(static_cast<size_t>(nativeKey));
+    return m_config.m_nativeKey2Printable.at(static_cast<size_t>(nativeKey));
 }
 
 [[nodiscard]] auto
 Platform::modifier2NativeModifier(const Keys::Modifiers modifier) const
     -> NativeModifier {
-    return m_modifier2NativeModifier.at(static_cast<size_t>(modifier));
+    return m_config.m_modifier2NativeModifier.at(static_cast<size_t>(modifier));
 }
 
 [[nodiscard]] auto Platform::isAppRunning() const -> bool {
