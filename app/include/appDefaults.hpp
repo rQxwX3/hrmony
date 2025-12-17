@@ -1,3 +1,6 @@
+#ifndef APPDEFAULTS_HPP
+#define APPDEFAULTS_HPP
+
 #include <types.hpp>
 
 namespace AppDefaults {
@@ -20,3 +23,5 @@ constexpr auto createKeyBindingArray() -> KeyBindingArray {
 
 constexpr KeyBindingArray keyBindingArray{createKeyBindingArray()};
 } // namespace AppDefaults
+
+#endif // APPDEFAULTS_HPP

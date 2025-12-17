@@ -1,19 +1,21 @@
 #ifndef APP_HPP
 #define APP_HPP
 
-#include <appDefaults.hpp>
+#include <config.hpp>
 #include <platform.hpp>
 
 #include <memory>
 
 class App {
   private:
-    bool m_running{false};
-    bool m_HRMMode{true};
+    std::unique_ptr<Platform> m_platform;
 
-    std::unique_ptr<Platform> m_platform{nullptr};
+    bool m_running;
+    bool m_HRMMode;
 
-    KeyBindingArray m_keyBindingArray{AppDefaults::keyBindingArray};
+    KeyBindingArray m_keyBindingArray;
+
+    Config::Config m_config;
 
   public:
     App();
@@ -26,6 +28,9 @@ class App {
 
     [[nodiscard]] auto isRunning() const -> bool;
     [[nodiscard]] auto isHRMMode() const -> bool;
+
+    [[nodiscard]] auto getLeaderKey() const -> Keys::Modifiers;
+    [[nodiscard]] auto getExitKey() const -> Keys::Printables;
 };
 
 #endif // APP_HPP

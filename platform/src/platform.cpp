@@ -46,3 +46,5 @@ Platform::modifier2NativeModifier(const Keys::Modifiers modifier) const
 [[nodiscard]] auto Platform::isHRMMode() const -> bool {
     return m_appPtr->isHRMMode();
 }
+
+auto Platform::toggleHRMMode() -> void { m_appPtr->toggleHRMMode(); }

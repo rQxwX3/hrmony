@@ -21,6 +21,9 @@ class Platform : public IPlatform {
              const Modifier2NativeModifierArray &m2nma, App *appPtr = nullptr);
 
   public:
+    auto toggleHRMMode() -> void override;
+
+  public:
     auto addCurrentModifier(Keys::Modifiers modifier) -> void override;
 
     auto resetCurrentModifiers() -> void override;

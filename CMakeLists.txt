@@ -8,9 +8,7 @@ project(hrmony)
 
 find_library(APPLICATION_SERVICES ApplicationServices)
 
-add_library(common INTERFACE)
-target_include_directories(common INTERFACE ${CMAKE_SOURCE_DIR}/common)
-
+add_subdirectory(common)
 add_subdirectory(app)
 add_subdirectory(platform)
 add_subdirectory(macos)
