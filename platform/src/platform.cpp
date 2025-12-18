@@ -16,13 +16,16 @@ auto Platform::resetCurrentModifiers() -> void {
     m_currentModifiersCnt = 0;
 }
 
-auto Platform::addCurrentModifier(const Keys::Modifiers modifier) -> void {
-    m_currentModifiers.at(m_currentModifiersCnt) = modifier;
-    m_currentModifiersCnt++;
+auto Platform::addModifersArrayToCurrent(const ModifiersArray &modifiersArray)
+    -> void {
+    for (const auto &modifier : modifiersArray) {
+        m_currentModifiers.at(m_currentModifiersCnt) = modifier;
+        m_currentModifiersCnt++;
+    }
 }
 
 [[nodiscard]] auto Platform::getKeyBinding(const Keys::Printables key) const
-    -> Keys::Modifiers {
+    -> ModifiersArray {
     return m_appPtr->getKeyBinding(key);
 }
 

@@ -5,8 +5,10 @@
 #include <types.hpp>
 
 namespace macOS::util {
-auto getBindedModifier(const MacOS *self, const Event &event)
-    -> Keys::Modifiers;
+auto isModifiersArrayEmpty(const ModifiersArray &modifiersArray) -> bool;
+
+auto getBindedModifiers(const MacOS *self, const Event &event)
+    -> ModifiersArray;
 
 auto isHRMModeEnterTriggered(const MacOS *self, const Event &event) -> bool;
 

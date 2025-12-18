@@ -8,10 +8,11 @@ class IPlatform {
     virtual auto run() -> void = 0;
 
     [[nodiscard]] virtual auto getKeyBinding(Keys::Printables key) const
-        -> Keys::Modifiers = 0;
+        -> ModifiersArray = 0;
 
   public:
-    virtual auto addCurrentModifier(Keys::Modifiers modifier) -> void = 0;
+    virtual auto addModifersArrayToCurrent(const ModifiersArray &modifiersArray)
+        -> void = 0;
 
     virtual auto resetCurrentModifiers() -> void = 0;
 

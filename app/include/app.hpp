@@ -23,7 +23,7 @@ class App {
 
   public:
     [[nodiscard]] auto getKeyBinding(Keys::Printables key) const
-        -> Keys::Modifiers;
+        -> ModifiersArray;
 
     [[nodiscard]] auto isRunning() const -> bool;
     [[nodiscard]] auto isHRMMode() const -> bool;

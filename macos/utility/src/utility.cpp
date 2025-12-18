@@ -1,7 +1,19 @@
+#include <keys.hpp>
 #include <macos.hpp>
 #include <utility.hpp>
 
+#include <algorithm>
+
+using Keys::Modifiers;
 using macOS::MacOS;
+
+auto macOS::util::isModifiersArrayEmpty(const ModifiersArray &modifiersArray)
+    -> bool {
+    return std::ranges::all_of(modifiersArray.begin(), modifiersArray.end(),
+                               [](Modifiers modifier) -> bool {
+                                   return modifier == Modifiers::NULLKEY;
+                               });
+}
 
 auto macOS::util::isHRMModeEnterTriggered(const MacOS *self, const Event &event)
     -> bool {
@@ -17,8 +29,8 @@ auto macOS::util::isHRMModeEnterTriggered(const MacOS *self, const Event &event)
     return (nativeModifiers & nativeLeaderKey) != 0U;
 }
 
-auto macOS::util::getBindedModifier(const MacOS *self, const Event &event)
-    -> Keys::Modifiers {
+auto macOS::util::getBindedModifiers(const MacOS *self, const Event &event)
+    -> ModifiersArray {
     const auto nativeKey{static_cast<NativeKeyCode>(
         CGEventGetIntegerValueField(event, kCGKeyboardEventKeycode))};
 
@@ -31,7 +43,7 @@ auto macOS::util::isBindedKeyPressed(const MacOS *self, const Event &event)
         return false;
     }
 
-    return Keys::Modifiers::NULLKEY != getBindedModifier(self, event);
+    return Modifiers::NULLKEY != getBindedModifiers(self, event).at(0);
 }
 
 auto macOS::util::isKeymapFinished(const MacOS *self, const Event &event)
@@ -40,7 +52,7 @@ auto macOS::util::isKeymapFinished(const MacOS *self, const Event &event)
         return false;
     }
 
-    return Keys::Modifiers::NULLKEY == getBindedModifier(self, event);
+    return Modifiers::NULLKEY == getBindedModifiers(self, event).at(0);
 }
 
 auto macOS::util::processKeyPress(CGEventTapProxy proxy, CGEventType type,
@@ -60,9 +72,9 @@ auto macOS::util::processKeyPress(CGEventTapProxy proxy, CGEventType type,
     }
 
     if (isBindedKeyPressed(self, event)) {
-        const auto bindedModifier{getBindedModifier(self, event)};
+        const auto bindedModifier{getBindedModifiers(self, event)};
 
-        self->addCurrentModifier(bindedModifier);
+        self->addModifersArrayToCurrent(bindedModifier);
 
         return nullptr;
     }

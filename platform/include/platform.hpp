@@ -24,7 +24,8 @@ class Platform : public IPlatform {
     auto exitHRMMode() -> void override;
 
   public:
-    auto addCurrentModifier(Keys::Modifiers modifier) -> void override;
+    auto addModifersArrayToCurrent(const ModifiersArray &modifiersArray)
+        -> void override;
 
     auto resetCurrentModifiers() -> void override;
 
@@ -43,7 +44,7 @@ class Platform : public IPlatform {
     [[nodiscard]] auto isAppRunning() const -> bool;
 
     [[nodiscard]] auto getKeyBinding(Keys::Printables key) const
-        -> Keys::Modifiers override;
+        -> ModifiersArray override;
 
     [[nodiscard]] auto getConfig() const -> conf::Config;
 
