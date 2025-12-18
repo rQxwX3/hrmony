@@ -20,7 +20,8 @@ class Platform : public IPlatform {
     Platform(App *appPtr = nullptr);
 
   public:
-    auto toggleHRMMode() -> void override;
+    auto enterHRMMode() -> void override;
+    auto exitHRMMode() -> void override;
 
   public:
     auto addCurrentModifier(Keys::Modifiers modifier) -> void override;

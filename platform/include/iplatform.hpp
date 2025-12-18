@@ -17,7 +17,8 @@ class IPlatform {
 
     virtual auto setEventModifiersToCurrent(Event &event) -> void = 0;
 
-    virtual auto toggleHRMMode() -> void = 0;
+    virtual auto enterHRMMode() -> void = 0;
+    virtual auto exitHRMMode() -> void = 0;
 
   public:
     IPlatform() = default;

@@ -54,7 +54,7 @@ auto macOS::util::processKeyPress(CGEventTapProxy proxy, CGEventType type,
     }
 
     if (isHRMModeEnterTriggered(self, event)) {
-        self->toggleHRMMode();
+        self->enterHRMMode();
 
         return nullptr;
     }
@@ -70,7 +70,7 @@ auto macOS::util::processKeyPress(CGEventTapProxy proxy, CGEventType type,
     if (isKeymapFinished(self, event)) {
         self->setEventModifiersToCurrent(event);
         self->toggleLeaderUpProcessed();
-        self->toggleHRMMode();
+        self->exitHRMMode();
     }
 
     return event;

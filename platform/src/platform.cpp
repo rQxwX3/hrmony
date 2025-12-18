@@ -50,7 +50,9 @@ Platform::modifier2NativeModifier(const Keys::Modifiers modifier) const
     return m_appPtr->isHRMMode();
 }
 
-auto Platform::toggleHRMMode() -> void {
+auto Platform::enterHRMMode() -> void { m_appPtr->toggleHRMMode(); }
+
+auto Platform::exitHRMMode() -> void {
     resetCurrentModifiers();
     m_appPtr->toggleHRMMode();
 }
