@@ -1,8 +1,9 @@
 #include <app.hpp>
+#include <config.hpp>
 #include <platform.hpp>
 
 Platform::Platform(App *appPtr)
-    : m_appPtr{appPtr}, m_config{appPtr->getConfig()},
+    : m_appPtr{appPtr}, m_config{conf::defaultConfig},
       m_currentModifiers{Keys::Modifiers::NULLKEY}, m_currentModifiersCnt{0} {};
 
 [[nodiscard]] auto Platform::getCurrentModifiers() const
@@ -25,16 +26,20 @@ auto Platform::addCurrentModifier(const Keys::Modifiers modifier) -> void {
     return m_appPtr->getKeyBinding(key);
 }
 
+[[nodiscard]] auto Platform::getConfig() const -> conf::Config {
+    return m_config;
+}
+
 [[nodiscard]] auto
 Platform::nativeKey2Printable(const NativeKeyCode nativeKey) const
     -> Keys::Printables {
-    return m_config.m_nativeKey2Printable.at(static_cast<size_t>(nativeKey));
+    return m_config.nativeKey2Printable.at(static_cast<size_t>(nativeKey));
 }
 
 [[nodiscard]] auto
 Platform::modifier2NativeModifier(const Keys::Modifiers modifier) const
     -> NativeModifier {
-    return m_config.m_modifier2NativeModifier.at(static_cast<size_t>(modifier));
+    return m_config.modifier2NativeModifier.at(static_cast<size_t>(modifier));
 }
 
 [[nodiscard]] auto Platform::isAppRunning() const -> bool {
@@ -45,4 +50,7 @@ Platform::modifier2NativeModifier(const Keys::Modifiers modifier) const
     return m_appPtr->isHRMMode();
 }
 
-auto Platform::toggleHRMMode() -> void { m_appPtr->toggleHRMMode(); }
+auto Platform::toggleHRMMode() -> void {
+    resetCurrentModifiers();
+    m_appPtr->toggleHRMMode();
+}

@@ -6,7 +6,7 @@
 
 #include <ApplicationServices/ApplicationServices.h>
 
-namespace MacOSConstants {
+namespace macOS::constants {
 constexpr auto createNativeKey2Printable() -> NativeKey2PrintableArray {
     NativeKey2PrintableArray arr{};
 
@@ -41,6 +41,12 @@ constexpr NativeKey2PrintableArray nativeKey2Printable{
 
 constexpr Modifier2NativeModifierArray modifier2NativeModifier{
     createModifier2NativeModifier()};
-} // namespace MacOSConstants
+
+constexpr CGEventFlags emptyFlags{256};
+
+constexpr auto isEmptyFlags(NativeModifier modifiers) {
+    return emptyFlags == modifiers;
+}
+} // namespace macOS::constants
 
 #endif // MACOS_CONSTANTS

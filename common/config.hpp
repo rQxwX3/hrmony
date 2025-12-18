@@ -2,33 +2,32 @@
 #define CONFIG_HPP
 
 #include <appDefaults.hpp>
+#include <constants.hpp>
 #include <keys.hpp>
-#include <macosConstants.hpp>
 #include <types.hpp>
 
-using Keys::Printables, Keys::Modifiers, MacOSConstants::nativeKey2Printable,
-    MacOSConstants::modifier2NativeModifier;
+using Keys::Printables, Keys::Modifiers, macOS::constants::nativeKey2Printable,
+    macOS::constants::modifier2NativeModifier;
 
-namespace Config {
-
+namespace conf {
 struct Config {
-    Modifiers m_leaderKey;
-    Printables m_exitKey;
+    Modifiers leaderKey;
+    Printables exitKey;
 
-    NativeKey2PrintableArray m_nativeKey2Printable;
-    Modifier2NativeModifierArray m_modifier2NativeModifier;
+    NativeKey2PrintableArray nativeKey2Printable;
+    Modifier2NativeModifierArray modifier2NativeModifier;
 };
 
 constexpr auto loadDefaultConfig() -> Config {
-    Config config{.m_leaderKey = Modifiers::CMD,
-                  .m_exitKey = Printables::ESC,
-                  .m_nativeKey2Printable = nativeKey2Printable,
-                  .m_modifier2NativeModifier = modifier2NativeModifier};
+    Config config{.leaderKey = Modifiers::CMD,
+                  .exitKey = Printables::ESC,
+                  .nativeKey2Printable = nativeKey2Printable,
+                  .modifier2NativeModifier = modifier2NativeModifier};
 
     return config;
 }
 
 constexpr Config defaultConfig{loadDefaultConfig()};
-} // namespace Config
+} // namespace conf
 
 #endif // CONFIG_HPP

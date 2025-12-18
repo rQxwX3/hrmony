@@ -6,22 +6,25 @@
 
 #include <ApplicationServices/ApplicationServices.h>
 
-auto processKeyPress(CGEventTapProxy proxy, CGEventType type, CGEventRef event,
-                     void *refcon) -> CGEventRef;
-
+namespace macOS {
 class MacOS : public Platform {
   private:
     CFRunLoopRef m_runLoopRef;
 
+    bool m_leaderUpProcessed;
+
   public:
     MacOS(App *appPtr);
-
     auto run() -> void override;
-
     ~MacOS() override;
 
   public:
     auto setEventModifiersToCurrent(Event &event) -> void override;
+
+  public:
+    [[nodiscard]] auto isLeaderUpProcessed() const -> bool;
+
+    auto toggleLeaderUpProcessed() -> void;
 
   public:
     MacOS(const MacOS &other) = delete;
@@ -30,5 +33,6 @@ class MacOS : public Platform {
     auto operator=(const MacOS &other) -> MacOS & = delete;
     auto operator=(MacOS &&other) -> MacOS & = delete;
 };
+} // namespace macOS
 
 #endif // MACOS_HPP

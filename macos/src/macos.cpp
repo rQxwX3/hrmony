@@ -1,9 +1,12 @@
 #include <app.hpp>
+#include <constants.hpp>
 #include <macos.hpp>
-#include <macosConstants.hpp>
 #include <types.hpp>
+#include <utility.hpp>
 
 #include <ApplicationServices/ApplicationServices.h>
+
+using macOS::MacOS;
 
 auto MacOS::setEventModifiersToCurrent(Event &event) -> void {
     const auto currentModifiers{getCurrentModifiers()};
@@ -21,39 +24,22 @@ auto MacOS::setEventModifiersToCurrent(Event &event) -> void {
     CGEventSetFlags(event, modifierBitMask);
 }
 
-auto processKeyPress(CGEventTapProxy proxy, CGEventType type, CGEventRef event,
-                     void *refcon) -> CGEventRef {
-    auto *self{static_cast<MacOS *>(refcon)};
-
-    if (!self->isHRMMode()) {
-        return event;
-    }
-
-    const auto nativeKey{static_cast<NativeKeyCode>(
-        CGEventGetIntegerValueField(event, kCGKeyboardEventKeycode))};
-
-    const auto modifier{
-        self->getKeyBinding(self->nativeKey2Printable(nativeKey))};
-
-    if (Keys::Modifiers::NULLKEY == modifier) {
-        self->setEventModifiersToCurrent(event);
-        self->resetCurrentModifiers();
-
-        return event;
-    }
-
-    self->addCurrentModifier(modifier);
-    return nullptr;
+[[nodiscard]] auto MacOS::isLeaderUpProcessed() const -> bool {
+    return m_leaderUpProcessed;
 }
 
-MacOS::MacOS(App *appPtr) : Platform(appPtr) {
+auto MacOS::toggleLeaderUpProcessed() -> void {
+    m_leaderUpProcessed = !m_leaderUpProcessed;
+}
+
+MacOS::MacOS(App *appPtr) : Platform(appPtr), m_leaderUpProcessed{false} {
     CGEventMask eventMask{CGEventMaskBit(kCGEventKeyDown) |
                           // CGEventMaskBit(kCGEventKeyUp) |
                           CGEventMaskBit(kCGEventFlagsChanged)};
 
     CFMachPortRef machPortRef{CGEventTapCreate(
         kCGSessionEventTap, kCGHeadInsertEventTap, kCGEventTapOptionDefault,
-        eventMask, processKeyPress, this)};
+        eventMask, macOS::util::processKeyPress, this)};
 
     if (nullptr == machPortRef) {
         exit(1);

@@ -11,7 +11,7 @@ class Platform : public IPlatform {
   private:
     App *m_appPtr;
 
-    Config::Config m_config;
+    conf::Config m_config;
 
     std::array<Keys::Modifiers, maxModifierCnt> m_currentModifiers;
     size_t m_currentModifiersCnt;
@@ -43,6 +43,8 @@ class Platform : public IPlatform {
 
     [[nodiscard]] auto getKeyBinding(Keys::Printables key) const
         -> Keys::Modifiers override;
+
+    [[nodiscard]] auto getConfig() const -> conf::Config;
 
     [[nodiscard]] auto isHRMMode() const -> bool;
 };

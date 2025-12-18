@@ -15,18 +15,15 @@ class App {
 
     KeyBindingArray m_keyBindingArray;
 
-    Config::Config m_config;
-
   public:
     App();
 
     auto run() -> void;
     auto toggleHRMMode() -> void;
 
+  public:
     [[nodiscard]] auto getKeyBinding(Keys::Printables key) const
         -> Keys::Modifiers;
-
-    [[nodiscard]] auto getConfig() const -> Config::Config;
 
     [[nodiscard]] auto isRunning() const -> bool;
     [[nodiscard]] auto isHRMMode() const -> bool;
