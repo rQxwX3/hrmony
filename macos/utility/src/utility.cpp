@@ -15,6 +15,22 @@ auto macOS::util::isModifiersArrayEmpty(const ModifiersArray &modifiersArray)
                                });
 }
 
+auto macOS::util::isHRMModeExitTriggered(const MacOS *self, const Event &event)
+    -> bool {
+    if (!self->isHRMMode()) {
+        return false;
+    }
+
+    const auto config{self->getConfig()};
+
+    auto const nativeKey{static_cast<NativeKeyCode>(
+        CGEventGetIntegerValueField(event, kCGKeyboardEventKeycode))};
+
+    auto const printableKey{self->nativeKey2Printable(nativeKey)};
+
+    return printableKey == config.exitKey;
+}
+
 auto macOS::util::isHRMModeEnterTriggered(const MacOS *self, const Event &event)
     -> bool {
     if (self->isHRMMode()) {
@@ -67,6 +83,12 @@ auto macOS::util::processKeyPress(CGEventTapProxy proxy, CGEventType type,
 
     if (isHRMModeEnterTriggered(self, event)) {
         self->enterHRMMode();
+
+        return nullptr;
+    }
+
+    if (isHRMModeExitTriggered(self, event)) {
+        self->exitHRMMode();
 
         return nullptr;
     }

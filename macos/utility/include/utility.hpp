@@ -12,6 +12,8 @@ auto getBindedModifiers(const MacOS *self, const Event &event)
 
 auto isHRMModeEnterTriggered(const MacOS *self, const Event &event) -> bool;
 
+auto isHRMModeExitTriggered(const MacOS *self, const Event &event) -> bool;
+
 auto isKeymapFinished(const MacOS *self, const Event &event) -> bool;
 
 auto isBindedKeyPressed(const MacOS *self, const Event &event) -> bool;

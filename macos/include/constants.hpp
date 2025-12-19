@@ -41,12 +41,6 @@ constexpr NativeKey2PrintableArray nativeKey2Printable{
 
 constexpr Modifier2NativeModifierArray modifier2NativeModifier{
     createModifier2NativeModifier()};
-
-constexpr CGEventFlags emptyFlags{256};
-
-constexpr auto isEmptyFlags(NativeModifier modifiers) {
-    return emptyFlags == modifiers;
-}
 } // namespace macOS::constants
 
 #endif // MACOS_CONSTANTS
