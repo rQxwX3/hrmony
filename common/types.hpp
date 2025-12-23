@@ -1,17 +1,11 @@
 #ifndef TYPES_HPP
 #define TYPES_HPP
 
+#include <array>
 #include <keys.hpp>
 
-#include <ApplicationServices/ApplicationServices.h>
-#include <array>
-
 #ifdef __APPLE__
-using NativeKeyCode = CGKeyCode;
-using NativeModifier = CGEventFlags;
-using Event = CGEventRef;
-constexpr size_t maxKeyCode{128};
-constexpr size_t maxModifierCnt{4};
+#include <macosTypes.hpp>
 #endif // __APPLE__
 
 using NativeKey2PrintableArray = std::array<Keys::Printables, maxKeyCode>;
