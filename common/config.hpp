@@ -1,7 +1,6 @@
 #ifndef CONFIG_HPP
 #define CONFIG_HPP
 
-#include <appDefaults.hpp>
 #include <constants.hpp>
 #include <keys.hpp>
 #include <types.hpp>

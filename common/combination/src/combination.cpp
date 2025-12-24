@@ -1,7 +1,23 @@
 #include <combination.hpp>
 
-constexpr Combination::Combination(const CombinationKeys &keys,
-                                   size_t keysCount)
+Combination::Combination()
+    : m_modifiers{Keys::Modifiers::NULLKEY}, m_keys{Keys::Printables::NULLKEY} {
+}
+
+Combination::Combination(const CombinationModifiers &modifiers,
+                         size_t modifiersCount)
+    : Combination() {
+    if (modifiersCount > m_modifiers.size()) {
+        // TODO
+    }
+
+    for (int i{0}; i != modifiersCount; ++i) {
+        m_modifiers[i] = modifiers[i];
+        ++m_modifiersCount;
+    }
+}
+
+Combination::Combination(const CombinationKeys &keys, size_t keysCount)
     : Combination() {
     if (keysCount > m_keys.size()) {
         // TODO
@@ -13,10 +29,9 @@ constexpr Combination::Combination(const CombinationKeys &keys,
     }
 }
 
-constexpr Combination::Combination(const CombinationModifiers &modifiers,
-                                   size_t modifiersCount,
-                                   const CombinationKeys &keys,
-                                   size_t keysCount)
+Combination::Combination(const CombinationModifiers &modifiers,
+                         size_t modifiersCount, const CombinationKeys &keys,
+                         size_t keysCount)
     : Combination(modifiers, modifiersCount) {
     if (keysCount > m_keys.size()) {
         // TODO

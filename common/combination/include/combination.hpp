@@ -12,26 +12,14 @@ class Combination {
     size_t m_keysCount{0};
 
   public:
-    constexpr Combination() = default;
+    Combination();
 
-    constexpr Combination(const CombinationModifiers &modifiers,
-                          size_t modifiersCount)
-        : Combination() {
-        if (modifiersCount > m_modifiers.size()) {
-            // TODO
-        }
+    Combination(const CombinationModifiers &modifiers, size_t modifiersCount);
 
-        for (int i{0}; i != modifiersCount; ++i) {
-            m_modifiers[i] = modifiers[i];
-            ++m_modifiersCount;
-        }
-    }
+    Combination(const CombinationKeys &keys, size_t keysCount);
 
-    constexpr Combination(const CombinationKeys &keys, size_t keysCount);
-
-    constexpr Combination(const CombinationModifiers &modifiers,
-                          size_t modifiersCount, const CombinationKeys &keys,
-                          size_t keysCount);
+    Combination(const CombinationModifiers &modifiers, size_t modifiersCount,
+                const CombinationKeys &keys, size_t keysCount);
 
   public:
     [[nodiscard]] auto getModifiersSlotsLeft() const -> size_t;

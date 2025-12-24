@@ -5,7 +5,7 @@
 #include <types.hpp>
 
 namespace AppDefaults {
-constexpr auto createKeyBindingArray() -> KeyBindingArray {
+auto createKeyBindingArray() -> KeyBindingArray {
     KeyBindingArray arr{};
 
     using Keys::Modifiers, Keys::Printables;
@@ -22,7 +22,7 @@ constexpr auto createKeyBindingArray() -> KeyBindingArray {
     return arr;
 };
 
-constexpr KeyBindingArray keyBindingArray{createKeyBindingArray()};
+const KeyBindingArray keyBindingArray{createKeyBindingArray()};
 } // namespace AppDefaults
 
 #endif // APPDEFAULTS_HPP
