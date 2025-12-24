@@ -22,6 +22,14 @@ auto MacOS::setEventToCurrentCombination(Event &event) -> void {
         modifierBitMask |= modifier2NativeModifier(modifier);
     }
 
+    const auto currentKey{currentCombination.getKeys().at(0)};
+
+    const auto config{getConfig()};
+
+    CGEventSetIntegerValueField(
+        event, kCGKeyboardEventKeycode,
+        config.printable2NativeKey.at(static_cast<size_t>(currentKey)));
+
     CGEventSetFlags(event, modifierBitMask);
 }
 

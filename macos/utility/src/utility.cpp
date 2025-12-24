@@ -2,19 +2,10 @@
 #include <macos.hpp>
 #include <utility.hpp>
 
-#include <algorithm>
 #include <iostream>
 
 using Keys::Modifiers;
 using macOS::MacOS;
-
-auto macOS::util::isModifiersArrayEmpty(
-    const CombinationModifiers &modifiersArray) -> bool {
-    return std::ranges::all_of(modifiersArray.begin(), modifiersArray.end(),
-                               [](Modifiers modifier) -> bool {
-                                   return modifier == Modifiers::NULLKEY;
-                               });
-}
 
 auto macOS::util::isHRMModeExitTriggered(const MacOS *self, const Event &event)
     -> bool {
@@ -60,7 +51,9 @@ auto macOS::util::isBindedKeyPressed(const MacOS *self, const Event &event)
         return false;
     }
 
-    return !getBindedCombination(self, event).isEmpty();
+    const auto &bindedCombination{getBindedCombination(self, event)};
+
+    return !bindedCombination.isEmpty() && !bindedCombination.isNoModifiers();
 }
 
 auto macOS::util::isKeymapFinished(const MacOS *self, const Event &event)
@@ -69,7 +62,9 @@ auto macOS::util::isKeymapFinished(const MacOS *self, const Event &event)
         return false;
     }
 
-    return getBindedCombination(self, event).isEmpty();
+    const auto &bindedCombination{getBindedCombination(self, event)};
+
+    return bindedCombination.isEmpty() || bindedCombination.isNoModifiers();
 }
 
 auto macOS::util::processKeyPress(CGEventTapProxy proxy, CGEventType type,
@@ -99,15 +94,16 @@ auto macOS::util::processKeyPress(CGEventTapProxy proxy, CGEventType type,
 
     if (isBindedKeyPressed(self, event)) {
         std::cout << "binded keypress\n";
-        const auto bindedModifier{getBindedCombination(self, event)};
 
-        self->addToCurrentCombination(bindedModifier);
+        self->addToCurrentCombination(getBindedCombination(self, event));
 
         return nullptr;
     }
 
     if (isKeymapFinished(self, event)) {
         std::cout << "keymap finished\n";
+
+        self->addToCurrentCombination(getBindedCombination(self, event));
         self->setEventToCurrentCombination(event);
         self->toggleLeaderUpProcessed();
         self->exitHRMMode();

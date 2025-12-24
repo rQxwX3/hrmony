@@ -1,8 +1,7 @@
 #include <combination.hpp>
 
 Combination::Combination()
-    : m_modifiers{Keys::Modifiers::NULLKEY}, m_keys{Keys::Printables::NULLKEY} {
-}
+    : m_modifiers{}, m_keys{}, m_modifiersCount{0}, m_keysCount{0} {}
 
 Combination::Combination(const CombinationModifiers &modifiers,
                          size_t modifiersCount)
@@ -61,6 +60,10 @@ Combination::Combination(const CombinationModifiers &modifiers,
 
 [[nodiscard]] auto Combination::isEmpty() const -> bool {
     return m_modifiersCount == 0 && m_keysCount == 0;
+}
+
+[[nodiscard]] auto Combination::isNoModifiers() const -> bool {
+    return !isEmpty() && m_modifiersCount == 0;
 }
 
 auto Combination::addModifier(const Keys::Modifiers modifier) -> void {

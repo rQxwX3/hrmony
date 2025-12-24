@@ -5,11 +5,11 @@
 
 class Combination {
   private:
-    CombinationModifiers m_modifiers{Keys::Modifiers::NULLKEY};
-    CombinationKeys m_keys{Keys::Printables::NULLKEY};
+    CombinationModifiers m_modifiers;
+    CombinationKeys m_keys;
 
-    size_t m_modifiersCount{0};
-    size_t m_keysCount{0};
+    size_t m_modifiersCount;
+    size_t m_keysCount;
 
   public:
     Combination();
@@ -31,6 +31,7 @@ class Combination {
 
   public:
     [[nodiscard]] auto isEmpty() const -> bool;
+    [[nodiscard]] auto isNoModifiers() const -> bool;
 
   public:
     auto addModifier(Keys::Modifiers modifier) -> void;

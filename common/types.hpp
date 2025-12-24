@@ -17,6 +17,8 @@ using CombinationModifiers = std::array<Keys::Modifiers, maxKeymapModifiers>;
 using CombinationKeys = std::array<Keys::Printables, maxKeymapKeys>;
 
 using NativeKey2PrintableArray = std::array<Keys::Printables, maxKeyCode>;
+using Printable2NativeKeyArray =
+    std::array<NativeKeyCode, static_cast<size_t>(Keys::Printables::m_size)>;
 
 using Modifier2NativeModifierArray =
     std::array<NativeModifier, static_cast<size_t>(Keys::Modifiers::m_size)>;

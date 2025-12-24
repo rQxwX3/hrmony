@@ -5,8 +5,6 @@
 #include <types.hpp>
 
 namespace macOS::util {
-auto isModifiersArrayEmpty(const CombinationModifiers &modifiersArray) -> bool;
-
 auto getBindedCombination(const MacOS *self, const Event &event) -> Combination;
 
 auto isHRMModeEnterTriggered(const MacOS *self, const Event &event) -> bool;

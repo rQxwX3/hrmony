@@ -10,9 +10,10 @@ auto createKeyBindingArray() -> KeyBindingArray {
 
     using Keys::Modifiers, Keys::Printables;
 
-    arr[static_cast<size_t>(Printables::J)] = {Combination(
-        {Modifiers::CMD, Modifiers::ALT, Modifiers::CTRL, Modifiers::SHIFT},
-        4)};
+    arr[static_cast<size_t>(Printables::J)] = Combination(
+        {Modifiers::CMD, Modifiers::ALT, Modifiers::CTRL, Modifiers::SHIFT}, 4);
+
+    arr[static_cast<size_t>(Printables::A)] = Combination({Printables::S}, 1);
 
     // arr[static_cast<size_t>(Printables::K)] = {Modifiers::ALT};
     // arr[static_cast<size_t>(Printables::L)] = {Modifiers::CTRL};
