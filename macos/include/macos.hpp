@@ -19,7 +19,7 @@ class MacOS : public Platform {
     ~MacOS() override;
 
   public:
-    auto setEventModifiersToCurrent(Event &event) -> void override;
+    auto setEventToCurrentCombination(Event &event) -> void override;
 
   public:
     [[nodiscard]] auto isLeaderUpProcessed() const -> bool;

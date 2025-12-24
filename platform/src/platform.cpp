@@ -3,29 +3,33 @@
 #include <platform.hpp>
 
 Platform::Platform(App *appPtr)
-    : m_appPtr{appPtr}, m_config{conf::defaultConfig},
-      m_currentModifiers{Keys::Modifiers::NULLKEY}, m_currentModifiersCnt{0} {};
+    : m_appPtr{appPtr}, m_config{conf::defaultConfig} {};
 
-[[nodiscard]] auto Platform::getCurrentModifiers() const
-    -> const CurrentModifiersArray & {
-    return m_currentModifiers;
+[[nodiscard]] auto Platform::getCurrentCombination() const
+    -> const Combination & {
+    return m_currentCombination;
 }
 
-auto Platform::resetCurrentModifiers() -> void {
-    m_currentModifiers = {Keys::Modifiers::NULLKEY};
-    m_currentModifiersCnt = 0;
+auto Platform::resetCurrentCombination() -> void {
+    m_currentCombination = Combination();
 }
 
-auto Platform::addModifersArrayToCurrent(const ModifiersArray &modifiersArray)
-    -> void {
-    for (const auto &modifier : modifiersArray) {
-        m_currentModifiers.at(m_currentModifiersCnt) = modifier;
-        m_currentModifiersCnt++;
+auto Platform::addToCurrentCombination(const Combination &combination) -> void {
+    const auto &modifiers{combination.getModifiers()};
+
+    for (const auto &modifier : modifiers) {
+        m_currentCombination.addModifier(modifier);
+    }
+
+    const auto &keys{combination.getKeys()};
+
+    for (const auto &key : keys) {
+        m_currentCombination.addKey(key);
     }
 }
 
 [[nodiscard]] auto Platform::getKeyBinding(const Keys::Printables key) const
-    -> ModifiersArray {
+    -> Combination {
     return m_appPtr->getKeyBinding(key);
 }
 
@@ -45,10 +49,6 @@ Platform::modifier2NativeModifier(const Keys::Modifiers modifier) const
     return m_config.modifier2NativeModifier.at(static_cast<size_t>(modifier));
 }
 
-[[nodiscard]] auto Platform::isAppRunning() const -> bool {
-    return m_appPtr->isRunning();
-}
-
 [[nodiscard]] auto Platform::isHRMMode() const -> bool {
     return m_appPtr->isHRMMode();
 }
@@ -56,6 +56,6 @@ Platform::modifier2NativeModifier(const Keys::Modifiers modifier) const
 auto Platform::enterHRMMode() -> void { m_appPtr->toggleHRMMode(); }
 
 auto Platform::exitHRMMode() -> void {
-    resetCurrentModifiers();
+    resetCurrentCombination();
     m_appPtr->toggleHRMMode();
 }

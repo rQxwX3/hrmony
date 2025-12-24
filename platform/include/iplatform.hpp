@@ -8,15 +8,15 @@ class IPlatform {
     virtual auto run() -> void = 0;
 
     [[nodiscard]] virtual auto getKeyBinding(Keys::Printables key) const
-        -> ModifiersArray = 0;
+        -> Combination = 0;
 
   public:
-    virtual auto addModifersArrayToCurrent(const ModifiersArray &modifiersArray)
+    virtual auto addToCurrentCombination(const Combination &combination)
         -> void = 0;
 
-    virtual auto resetCurrentModifiers() -> void = 0;
+    virtual auto resetCurrentCombination() -> void = 0;
 
-    virtual auto setEventModifiersToCurrent(Event &event) -> void = 0;
+    virtual auto setEventToCurrentCombination(Event &event) -> void = 0;
 
     virtual auto enterHRMMode() -> void = 0;
     virtual auto exitHRMMode() -> void = 0;

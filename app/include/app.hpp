@@ -1,6 +1,7 @@
 #ifndef APP_HPP
 #define APP_HPP
 
+#include <combination.hpp>
 #include <config.hpp>
 #include <platform.hpp>
 
@@ -22,9 +23,9 @@ class App {
     auto toggleHRMMode() -> void;
 
   public:
-    [[nodiscard]] auto getKeyBinding(Keys::Printables key) const
-        -> ModifiersArray;
+    [[nodiscard]] auto getKeyBinding(Keys::Printables key) const -> Combination;
 
+  public:
     [[nodiscard]] auto isRunning() const -> bool;
     [[nodiscard]] auto isHRMMode() const -> bool;
 };

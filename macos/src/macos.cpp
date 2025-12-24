@@ -8,9 +8,10 @@
 
 using macOS::MacOS;
 
-auto MacOS::setEventModifiersToCurrent(Event &event) -> void {
-    const auto currentModifiers{getCurrentModifiers()};
+auto MacOS::setEventToCurrentCombination(Event &event) -> void {
+    const auto currentCombination{getCurrentCombination()};
 
+    const auto currentModifiers{currentCombination.getModifiers()};
     NativeModifier modifierBitMask{0};
 
     for (const auto &modifier : currentModifiers) {

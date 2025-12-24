@@ -13,8 +13,7 @@ class Platform : public IPlatform {
 
     conf::Config m_config;
 
-    std::array<Keys::Modifiers, maxModifierCnt> m_currentModifiers;
-    size_t m_currentModifiersCnt;
+    Combination m_currentCombination;
 
   public:
     Platform(App *appPtr = nullptr);
@@ -24,10 +23,10 @@ class Platform : public IPlatform {
     auto exitHRMMode() -> void override;
 
   public:
-    auto addModifersArrayToCurrent(const ModifiersArray &modifiersArray)
+    auto addToCurrentCombination(const Combination &combination)
         -> void override;
 
-    auto resetCurrentModifiers() -> void override;
+    auto resetCurrentCombination() -> void override;
 
   public:
     [[nodiscard]] auto nativeKey2Printable(NativeKeyCode nativeKey) const
@@ -37,14 +36,11 @@ class Platform : public IPlatform {
         -> NativeModifier;
 
   public:
-    [[nodiscard]] auto getCurrentModifiers() const
-        -> const CurrentModifiersArray &;
+    [[nodiscard]] auto getCurrentCombination() const -> const Combination &;
 
   public:
-    [[nodiscard]] auto isAppRunning() const -> bool;
-
     [[nodiscard]] auto getKeyBinding(Keys::Printables key) const
-        -> ModifiersArray override;
+        -> Combination override;
 
     [[nodiscard]] auto getConfig() const -> conf::Config;
 

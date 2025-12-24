@@ -23,7 +23,7 @@ auto App::isRunning() const -> bool { return m_running; }
 auto App::isHRMMode() const -> bool { return m_HRMMode; }
 
 [[nodiscard]] auto App::getKeyBinding(const Keys::Printables key) const
-    -> ModifiersArray {
+    -> Combination {
     return m_keyBindingArray.at(static_cast<size_t>(key));
 }
 

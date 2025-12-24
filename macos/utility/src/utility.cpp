@@ -3,12 +3,13 @@
 #include <utility.hpp>
 
 #include <algorithm>
+#include <iostream>
 
 using Keys::Modifiers;
 using macOS::MacOS;
 
-auto macOS::util::isModifiersArrayEmpty(const ModifiersArray &modifiersArray)
-    -> bool {
+auto macOS::util::isModifiersArrayEmpty(
+    const CombinationModifiers &modifiersArray) -> bool {
     return std::ranges::all_of(modifiersArray.begin(), modifiersArray.end(),
                                [](Modifiers modifier) -> bool {
                                    return modifier == Modifiers::NULLKEY;
@@ -45,8 +46,8 @@ auto macOS::util::isHRMModeEnterTriggered(const MacOS *self, const Event &event)
     return (nativeModifiers & nativeLeaderKey) != 0U;
 }
 
-auto macOS::util::getBindedModifiers(const MacOS *self, const Event &event)
-    -> ModifiersArray {
+auto macOS::util::getBindedCombination(const MacOS *self, const Event &event)
+    -> Combination {
     const auto nativeKey{static_cast<NativeKeyCode>(
         CGEventGetIntegerValueField(event, kCGKeyboardEventKeycode))};
 
@@ -59,7 +60,7 @@ auto macOS::util::isBindedKeyPressed(const MacOS *self, const Event &event)
         return false;
     }
 
-    return Modifiers::NULLKEY != getBindedModifiers(self, event).at(0);
+    return !getBindedCombination(self, event).isEmpty();
 }
 
 auto macOS::util::isKeymapFinished(const MacOS *self, const Event &event)
@@ -68,7 +69,7 @@ auto macOS::util::isKeymapFinished(const MacOS *self, const Event &event)
         return false;
     }
 
-    return Modifiers::NULLKEY == getBindedModifiers(self, event).at(0);
+    return getBindedCombination(self, event).isEmpty();
 }
 
 auto macOS::util::processKeyPress(CGEventTapProxy proxy, CGEventType type,
@@ -77,32 +78,37 @@ auto macOS::util::processKeyPress(CGEventTapProxy proxy, CGEventType type,
     auto *self{static_cast<MacOS *>(refcon)};
 
     if (self->isHRMMode() && !self->isLeaderUpProcessed()) {
+        std::cout << "leader key processed\n";
         self->toggleLeaderUpProcessed();
         return nullptr;
     }
 
     if (isHRMModeEnterTriggered(self, event)) {
+        std::cout << "entering HRM\n";
         self->enterHRMMode();
 
         return nullptr;
     }
 
     if (isHRMModeExitTriggered(self, event)) {
+        std::cout << "exiting HRM\n";
         self->exitHRMMode();
 
         return nullptr;
     }
 
     if (isBindedKeyPressed(self, event)) {
-        const auto bindedModifier{getBindedModifiers(self, event)};
+        std::cout << "binded keypress\n";
+        const auto bindedModifier{getBindedCombination(self, event)};
 
-        self->addModifersArrayToCurrent(bindedModifier);
+        self->addToCurrentCombination(bindedModifier);
 
         return nullptr;
     }
 
     if (isKeymapFinished(self, event)) {
-        self->setEventModifiersToCurrent(event);
+        std::cout << "keymap finished\n";
+        self->setEventToCurrentCombination(event);
         self->toggleLeaderUpProcessed();
         self->exitHRMMode();
     }
