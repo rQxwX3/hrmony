@@ -37,8 +37,8 @@ class Combination {
     [[nodiscard]] auto isNoModifiers() const -> bool;
 
   public:
-    auto addModifier(Keys::Modifiers modifier) -> void;
-    auto addKey(Keys::Printables key) -> void;
+    auto addModifier(key::Modifiers modifier) -> void;
+    auto addKey(key::Keys key) -> void;
 };
 
 #endif // COMBINATION_HPP

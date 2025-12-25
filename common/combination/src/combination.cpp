@@ -74,7 +74,7 @@ Combination::Combination(const CombinationModifiers &modifiers,
     return !isEmpty() && m_modifiersCount == 0;
 }
 
-auto Combination::addModifier(const Keys::Modifiers modifier) -> void {
+auto Combination::addModifier(const key::Modifiers modifier) -> void {
     if (0 == getModifiersSlotsLeft()) {
         // TODO
         return;
@@ -84,7 +84,7 @@ auto Combination::addModifier(const Keys::Modifiers modifier) -> void {
     ++m_modifiersCount;
 }
 
-auto Combination::addKey(const Keys::Printables key) -> void {
+auto Combination::addKey(const key::Keys key) -> void {
     if (0 == getKeysSlotsLeft()) {
         // TODO
         return;

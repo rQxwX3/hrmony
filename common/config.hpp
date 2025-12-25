@@ -7,14 +7,14 @@
 #include <keys.hpp>
 #include <types.hpp>
 
-using Keys::Printables, Keys::Modifiers, macOS::constants::nativeKeyToPrintable,
+using key::Modifiers, key::Keys, macOS::constants::nativeKeyToPrintable,
     macOS::constants::modifierToNativeModifier,
-    macOS::constants::printableToNativeKey, ::AppDefaults::keyBindingArray;
+    macOS::constants::printableToNativeKey, ::app::keyBindingArray;
 
 namespace conf {
 struct Config {
     Modifiers leaderKey;
-    Printables exitKey;
+    Keys exitKey;
 
     NativeKeyToPrintable nativeKeyToPrintable;
     PrintableToNativeKey printableToNativeKey;
@@ -25,7 +25,7 @@ struct Config {
 
 constexpr auto loadDefaultConfig() -> Config {
     Config config{.leaderKey = Modifiers::CMD,
-                  .exitKey = Printables::ESC,
+                  .exitKey = Keys::ESC,
                   .nativeKeyToPrintable = nativeKeyToPrintable,
                   .printableToNativeKey = printableToNativeKey,
                   .modifierToNativeModifier = modifierToNativeModifier,

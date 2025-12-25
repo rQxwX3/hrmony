@@ -3,8 +3,8 @@
 
 #include <cstdint>
 
-namespace Keys {
-enum class Printables : uint8_t {
+namespace key {
+enum class Keys : uint8_t {
     NULLKEY = 0,
     A,
     B,
@@ -38,6 +38,6 @@ enum class Printables : uint8_t {
 };
 
 enum class Modifiers : uint8_t { NULLKEY = 0, CMD, ALT, CTRL, SHIFT, m_size };
-} // namespace Keys
+} // namespace key
 
 #endif // KEYS_HPP

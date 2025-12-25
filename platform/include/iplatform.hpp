@@ -7,7 +7,7 @@ class IPlatform {
   public:
     virtual auto run() -> void = 0;
 
-    [[nodiscard]] virtual auto getKeyBinding(Keys::Printables key) const
+    [[nodiscard]] virtual auto getKeyBinding(key::Keys key) const
         -> Combination = 0;
 
   public:

@@ -7,32 +7,32 @@
 #include <ApplicationServices/ApplicationServices.h>
 
 namespace macOS::constants {
-constexpr auto createNativeKeyToPrintableArray() -> NativeKey2PrintableArray {
-    NativeKey2PrintableArray arr{};
+constexpr auto createNativeKeyToPrintableArray() -> NativeKeyToPrintableArray {
+    NativeKeyToPrintableArray arr{};
 
-    using ::Keys::Printables;
+    using ::key::Keys;
 
-    arr[0] = Printables::A;
-    arr[1] = Printables::S;
-    arr[2] = Printables::D;
-    arr[3] = Printables::F;
-    arr[4] = Printables::H;
-    arr[12] = Printables::Q;
-    arr[13] = Printables::W;
-    arr[17] = Printables::T;
-    arr[37] = Printables::L;
-    arr[38] = Printables::J;
-    arr[40] = Printables::K;
-    arr[41] = Printables::SEMICOLON;
+    arr[0] = Keys::A;
+    arr[1] = Keys::S;
+    arr[2] = Keys::D;
+    arr[3] = Keys::F;
+    arr[4] = Keys::H;
+    arr[12] = Keys::Q;
+    arr[13] = Keys::W;
+    arr[17] = Keys::T;
+    arr[37] = Keys::L;
+    arr[38] = Keys::J;
+    arr[40] = Keys::K;
+    arr[41] = Keys::SEMICOLON;
 
     return arr;
 };
 
 constexpr auto createModifier2NativeModifierArray()
-    -> Modifier2NativeModifierArray {
-    Modifier2NativeModifierArray arr{};
+    -> ModifierToNativeModifierArray {
+    ModifierToNativeModifierArray arr{};
 
-    using ::Keys::Modifiers;
+    using ::key::Modifiers;
 
     arr[static_cast<size_t>(Modifiers::CMD)] = kCGEventFlagMaskCommand;
     arr[static_cast<size_t>(Modifiers::CTRL)] = kCGEventFlagMaskControl;
@@ -42,29 +42,29 @@ constexpr auto createModifier2NativeModifierArray()
     return arr;
 }
 
-constexpr auto createPrintable2NativeKey() -> Printable2NativeKeyArray {
-    Printable2NativeKeyArray arr{};
+constexpr auto createPrintable2NativeKey() -> PrintableToNativeKeyArray {
+    PrintableToNativeKeyArray arr{};
 
-    using ::Keys::Printables;
+    using ::key::Keys;
 
-    arr[static_cast<size_t>(Printables::A)] = 0;
-    arr[static_cast<size_t>(Printables::S)] = 1;
-    arr[static_cast<size_t>(Printables::T)] = 17;
-    arr[static_cast<size_t>(Printables::W)] = 13;
+    arr[static_cast<size_t>(Keys::A)] = 0;
+    arr[static_cast<size_t>(Keys::S)] = 1;
+    arr[static_cast<size_t>(Keys::T)] = 17;
+    arr[static_cast<size_t>(Keys::W)] = 13;
 
     return arr;
 }
 
-constexpr NativeKey2PrintableArray nativeKey2PrintableArray{
+constexpr NativeKeyToPrintableArray nativeKey2PrintableArray{
     createNativeKeyToPrintableArray()};
 constexpr NativeKeyToPrintable nativeKeyToPrintable =
     NativeKeyToPrintable(nativeKey2PrintableArray);
 
-constexpr Printable2NativeKeyArray printable2NativeKeyArray{
+constexpr PrintableToNativeKeyArray printable2NativeKeyArray{
     createPrintable2NativeKey()};
 constexpr PrintableToNativeKey printableToNativeKey{printable2NativeKeyArray};
 
-constexpr Modifier2NativeModifierArray modifier2NativeModifierArray{
+constexpr ModifierToNativeModifierArray modifier2NativeModifierArray{
     createModifier2NativeModifierArray()};
 constexpr ModifierToNativeModifier modifierToNativeModifier{
     modifier2NativeModifierArray};

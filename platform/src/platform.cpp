@@ -2,8 +2,6 @@
 #include <config.hpp>
 #include <platform.hpp>
 
-#include <iostream>
-
 Platform::Platform(App *appPtr)
     : m_appPtr{appPtr}, m_config{conf::defaultConfig} {};
 
@@ -32,7 +30,7 @@ auto Platform::addToCurrentCombination(const Combination &combination) -> void {
     }
 }
 
-[[nodiscard]] auto Platform::getKeyBinding(const Keys::Printables key) const
+[[nodiscard]] auto Platform::getKeyBinding(const key::Keys key) const
     -> Combination {
     const auto &config{getConfig()};
 
@@ -48,12 +46,12 @@ auto Platform::addToCurrentCombination(const Combination &combination) -> void {
 
 [[nodiscard]] auto
 Platform::nativeKeyToPrintable(const NativeKeyCode nativeKey) const
-    -> Keys::Printables {
+    -> key::Keys {
     return m_config.nativeKeyToPrintable.at(nativeKey);
 }
 
 [[nodiscard]] auto
-Platform::modifierToNativeModifier(const Keys::Modifiers modifier) const
+Platform::modifierToNativeModifier(const key::Modifiers modifier) const
     -> NativeModifier {
     return m_config.modifierToNativeModifier.at(modifier);
 }

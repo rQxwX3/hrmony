@@ -4,7 +4,7 @@
 
 #include <iostream>
 
-using Keys::Modifiers;
+using key::Modifiers;
 using macOS::MacOS;
 
 auto macOS::util::getBindedCombination(const MacOS *self, const Event &event)

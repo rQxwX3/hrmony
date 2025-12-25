@@ -2,16 +2,16 @@
 #include <types.hpp>
 
 [[nodiscard]] auto NativeKeyToPrintable::at(NativeKeyCode nativeKey) const
-    -> Keys::Printables {
+    -> key::Keys {
     return m_array.at(static_cast<size_t>(nativeKey));
 }
 
-[[nodiscard]] auto PrintableToNativeKey::at(Keys::Printables key) const
+[[nodiscard]] auto PrintableToNativeKey::at(key::Keys key) const
     -> NativeKeyCode {
     return m_array.at(static_cast<size_t>(key));
 }
 
-[[nodiscard]] auto ModifierToNativeModifier::at(Keys::Modifiers modifier) const
+[[nodiscard]] auto ModifierToNativeModifier::at(key::Modifiers modifier) const
     -> NativeModifier {
     return m_array.at(static_cast<size_t>(modifier));
 }

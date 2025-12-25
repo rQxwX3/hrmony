@@ -30,16 +30,16 @@ class Platform : public IPlatform {
 
   public:
     [[nodiscard]] auto nativeKeyToPrintable(NativeKeyCode nativeKey) const
-        -> Keys::Printables;
+        -> key::Keys;
 
-    [[nodiscard]] auto modifierToNativeModifier(Keys::Modifiers modifier) const
+    [[nodiscard]] auto modifierToNativeModifier(key::Modifiers modifier) const
         -> NativeModifier;
 
   public:
     [[nodiscard]] auto getCurrentCombination() const -> const Combination &;
 
   public:
-    [[nodiscard]] auto getKeyBinding(Keys::Printables key) const
+    [[nodiscard]] auto getKeyBinding(key::Keys key) const
         -> Combination override;
 
     [[nodiscard]] auto getConfig() const -> conf::Config;
