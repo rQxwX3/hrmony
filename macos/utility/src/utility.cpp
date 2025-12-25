@@ -7,13 +7,21 @@
 using Keys::Modifiers;
 using macOS::MacOS;
 
-auto macOS::util::isHRMModeExitTriggered(const MacOS *self, const Event &event)
-    -> bool {
+auto macOS::util::getBindedCombination(const MacOS *self, const Event &event)
+    -> Combination {
+    const auto nativeKey{static_cast<NativeKeyCode>(
+        CGEventGetIntegerValueField(event, kCGKeyboardEventKeycode))};
+
+    return self->getKeyBinding(self->nativeKey2Printable(nativeKey));
+}
+
+auto macOS::util::isHRMModeExitTriggered(const MacOS *self) -> bool {
     if (!self->isHRMMode()) {
         return false;
     }
 
     const auto config{self->getConfig()};
+    const Event event{self->getCurrentEvent()};
 
     auto const nativeKey{static_cast<NativeKeyCode>(
         CGEventGetIntegerValueField(event, kCGKeyboardEventKeycode))};
@@ -23,48 +31,53 @@ auto macOS::util::isHRMModeExitTriggered(const MacOS *self, const Event &event)
     return printableKey == config.exitKey;
 }
 
-auto macOS::util::isHRMModeEnterTriggered(const MacOS *self, const Event &event)
-    -> bool {
+auto macOS::util::isHRMModeEnterTriggered(const MacOS *self) -> bool {
     if (self->isHRMMode()) {
         return false;
     }
 
     const auto config{self->getConfig()};
-    const auto nativeLeaderKey{self->modifier2NativeModifier(config.leaderKey)};
 
-    auto const nativeModifiers{CGEventGetFlags(event)};
+    const auto nativeLeaderKey{self->modifier2NativeModifier(config.leaderKey)};
+    auto const nativeModifiers{CGEventGetFlags(self->getCurrentEvent())};
 
     return (nativeModifiers & nativeLeaderKey) != 0U;
 }
 
-auto macOS::util::getBindedCombination(const MacOS *self, const Event &event)
-    -> Combination {
-    const auto nativeKey{static_cast<NativeKeyCode>(
-        CGEventGetIntegerValueField(event, kCGKeyboardEventKeycode))};
-
-    return self->getKeyBinding(self->nativeKey2Printable(nativeKey));
-}
-
-auto macOS::util::isBindedKeyPressed(const MacOS *self, const Event &event)
-    -> bool {
+auto macOS::util::isBindedKeyPressed(const MacOS *self) -> bool {
     if (!self->isHRMMode()) {
         return false;
     }
 
-    const auto &bindedCombination{getBindedCombination(self, event)};
+    const auto &bindedCombination{self->getCurrentBindedCombination()};
 
     return !bindedCombination.isEmpty() && !bindedCombination.isNoModifiers();
 }
 
-auto macOS::util::isKeymapFinished(const MacOS *self, const Event &event)
-    -> bool {
+auto macOS::util::isKeymapFinished(const MacOS *self) -> bool {
     if (!self->isHRMMode()) {
         return false;
     }
 
-    const auto &bindedCombination{getBindedCombination(self, event)};
+    const auto &bindedCombination{self->getCurrentBindedCombination()};
 
     return bindedCombination.isEmpty() || bindedCombination.isNoModifiers();
+}
+
+auto macOS::util::addKeyToFinishedKeymap(MacOS *self) -> void {
+    Combination combination(self->getCurrentBindedCombination());
+    Event event{self->getCurrentEvent()};
+
+    if (combination.isNoModifiers()) {
+        const auto &combination{self->getCurrentBindedCombination()};
+    } else {
+        const auto nativeKey{
+            CGEventGetIntegerValueField(event, kCGKeyboardEventKeycode)};
+
+        combination = Combination({nativeKey2Printable.at(nativeKey)}, 1);
+    }
+
+    self->addToCurrentCombination(combination);
 }
 
 auto macOS::util::processKeyPress(CGEventTapProxy proxy, CGEventType type,
@@ -72,27 +85,31 @@ auto macOS::util::processKeyPress(CGEventTapProxy proxy, CGEventType type,
     -> CGEventRef {
     auto *self{static_cast<MacOS *>(refcon)};
 
+    const auto &bindedCombination(getBindedCombination(self, event));
+    self->setCurrentBindedCombination(bindedCombination);
+    self->setCurrentEvent(event);
+
     if (self->isHRMMode() && !self->isLeaderUpProcessed()) {
         std::cout << "leader key processed\n";
         self->toggleLeaderUpProcessed();
         return nullptr;
     }
 
-    if (isHRMModeEnterTriggered(self, event)) {
+    if (isHRMModeEnterTriggered(self)) {
         std::cout << "entering HRM\n";
         self->enterHRMMode();
 
         return nullptr;
     }
 
-    if (isHRMModeExitTriggered(self, event)) {
+    if (isHRMModeExitTriggered(self)) {
         std::cout << "exiting HRM\n";
         self->exitHRMMode();
 
         return nullptr;
     }
 
-    if (isBindedKeyPressed(self, event)) {
+    if (isBindedKeyPressed(self)) {
         std::cout << "binded keypress\n";
 
         self->addToCurrentCombination(getBindedCombination(self, event));
@@ -100,21 +117,10 @@ auto macOS::util::processKeyPress(CGEventTapProxy proxy, CGEventType type,
         return nullptr;
     }
 
-    if (isKeymapFinished(self, event)) {
+    if (isKeymapFinished(self)) {
         std::cout << "keymap finished\n";
 
-        const auto nativeKey{
-            CGEventGetIntegerValueField(event, kCGKeyboardEventKeycode)};
-
-        const auto &bindedCombination{getBindedCombination(self, event)};
-
-        if (bindedCombination.isNoModifiers()) {
-            self->addToCurrentCombination(bindedCombination);
-        } else {
-            self->addToCurrentCombination(
-                Combination({nativeKey2Printable.at(nativeKey)}, 1));
-        }
-
+        addKeyToFinishedKeymap(self);
         self->setEventToCurrentCombination(event);
         self->toggleLeaderUpProcessed();
         self->exitHRMMode();

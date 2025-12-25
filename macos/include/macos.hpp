@@ -11,6 +11,9 @@ class MacOS : public Platform {
   private:
     CFRunLoopRef m_runLoopRef;
 
+    Combination m_currentBindedCombination;
+    Event m_currentEvent;
+
     bool m_leaderUpProcessed;
 
   public:
@@ -20,6 +23,14 @@ class MacOS : public Platform {
 
   public:
     auto setEventToCurrentCombination(Event &event) -> void override;
+
+  public:
+    auto setCurrentBindedCombination(const Combination &combination) -> void;
+    auto setCurrentEvent(const Event &event) -> void;
+
+  public:
+    [[nodiscard]] auto getCurrentBindedCombination() const -> Combination;
+    [[nodiscard]] auto getCurrentEvent() const -> Event;
 
   public:
     [[nodiscard]] auto isLeaderUpProcessed() const -> bool;

@@ -5,7 +5,6 @@
 #include <utility.hpp>
 
 #include <ApplicationServices/ApplicationServices.h>
-#include <iostream>
 
 using macOS::MacOS;
 
@@ -35,6 +34,23 @@ auto MacOS::setEventToCurrentCombination(Event &event) -> void {
             config.printable2NativeKey.at(
                 static_cast<size_t>(currentKeys.at(i))));
     }
+}
+
+auto MacOS::setCurrentEvent(const Event &event) -> void {
+    m_currentEvent = event;
+}
+
+[[nodiscard]] auto MacOS::getCurrentEvent() const -> Event {
+    return m_currentEvent;
+}
+
+auto MacOS::setCurrentBindedCombination(const Combination &combination)
+    -> void {
+    m_currentBindedCombination = combination;
+}
+
+[[nodiscard]] auto MacOS::getCurrentBindedCombination() const -> Combination {
+    return m_currentBindedCombination;
 }
 
 [[nodiscard]] auto MacOS::isLeaderUpProcessed() const -> bool {
