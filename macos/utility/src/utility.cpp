@@ -75,7 +75,7 @@ auto macOS::util::addKeyToFinishedKeymap(MacOS *self) -> void {
         const auto nativeKey{
             CGEventGetIntegerValueField(event, kCGKeyboardEventKeycode)};
 
-        combination = Combination({nativeKeyToPrintable.at(nativeKey)}, 1);
+        combination = Combination({nativeCodeToKey.at(nativeKey)}, 1);
     }
 
     self->addToCurrentCombination(combination);

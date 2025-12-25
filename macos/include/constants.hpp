@@ -1,14 +1,15 @@
-#ifndef MACOS_CONSTANTS
-#define MACOS_CONSTANTS
+#ifndef MACOS_CONSTANTS_HPP
+#define MACOS_CONSTANTS_HPP
 
 #include <keys.hpp>
+#include <macosTypes.hpp>
 #include <types.hpp>
 
 #include <ApplicationServices/ApplicationServices.h>
 
 namespace macOS::constants {
-constexpr auto createNativeKeyToPrintableArray() -> NativeKeyToPrintableArray {
-    NativeKeyToPrintableArray arr{};
+constexpr auto createNativeCodeToKeyArray() -> NativeCodeToKeyArray {
+    NativeCodeToKeyArray arr{};
 
     using ::key::Keys;
 
@@ -28,22 +29,13 @@ constexpr auto createNativeKeyToPrintableArray() -> NativeKeyToPrintableArray {
     return arr;
 };
 
-constexpr auto createModifier2NativeModifierArray()
-    -> ModifierToNativeModifierArray {
-    ModifierToNativeModifierArray arr{};
+constexpr NativeCodeToKeyArray nativeCodeToKeyArray{
+    createNativeCodeToKeyArray()};
+constexpr NativeCodeToKey nativeCodeToKey =
+    NativeCodeToKey(nativeCodeToKeyArray);
 
-    using ::key::Modifiers;
-
-    arr[static_cast<size_t>(Modifiers::CMD)] = kCGEventFlagMaskCommand;
-    arr[static_cast<size_t>(Modifiers::CTRL)] = kCGEventFlagMaskControl;
-    arr[static_cast<size_t>(Modifiers::SHIFT)] = kCGEventFlagMaskShift;
-    arr[static_cast<size_t>(Modifiers::ALT)] = kCGEventFlagMaskAlternate;
-
-    return arr;
-}
-
-constexpr auto createPrintable2NativeKey() -> PrintableToNativeKeyArray {
-    PrintableToNativeKeyArray arr{};
+constexpr auto createKeyToNativeCodeArray() -> KeyToNativeCodeArray {
+    KeyToNativeCodeArray arr{};
 
     using ::key::Keys;
 
@@ -55,19 +47,48 @@ constexpr auto createPrintable2NativeKey() -> PrintableToNativeKeyArray {
     return arr;
 }
 
-constexpr NativeKeyToPrintableArray nativeKey2PrintableArray{
-    createNativeKeyToPrintableArray()};
-constexpr NativeKeyToPrintable nativeKeyToPrintable =
-    NativeKeyToPrintable(nativeKey2PrintableArray);
+constexpr KeyToNativeCodeArray keyToNativeCodeArray{
+    createKeyToNativeCodeArray()};
+constexpr KeyToNativeCode keyToNativeCode{keyToNativeCodeArray};
 
-constexpr PrintableToNativeKeyArray printable2NativeKeyArray{
-    createPrintable2NativeKey()};
-constexpr PrintableToNativeKey printableToNativeKey{printable2NativeKeyArray};
+constexpr auto createModifierToNativeCodeArray() -> ModifierToNativeCodeArray {
+    ModifierToNativeCodeArray arr{};
 
-constexpr ModifierToNativeModifierArray modifier2NativeModifierArray{
-    createModifier2NativeModifierArray()};
-constexpr ModifierToNativeModifier modifierToNativeModifier{
-    modifier2NativeModifierArray};
+    using ::key::Modifiers;
+
+    arr[static_cast<size_t>(Modifiers::CMD)] = 55;
+    arr[static_cast<size_t>(Modifiers::CTRL)] = 59;
+    arr[static_cast<size_t>(Modifiers::SHIFT)] = 60;
+    arr[static_cast<size_t>(Modifiers::ALT)] = 58;
+
+    return arr;
+}
+
+constexpr ModifierToNativeCodeArray modifierToNativeCodeArray{
+    createModifierToNativeCodeArray()};
+constexpr ModifierToNativeCode modifierToNativeCode{modifierToNativeCodeArray};
+
+using macOS::types::ModifierToCGEventFlags,
+    macOS::types::ModifierToCGEventFlagsArray;
+
+constexpr auto createModifierToCGEventFlagsArray()
+    -> ModifierToCGEventFlagsArray {
+    ModifierToCGEventFlagsArray arr{};
+
+    using ::key::Modifiers;
+
+    arr[static_cast<size_t>(Modifiers::CMD)] = kCGEventFlagMaskCommand;
+    arr[static_cast<size_t>(Modifiers::CTRL)] = kCGEventFlagMaskControl;
+    arr[static_cast<size_t>(Modifiers::SHIFT)] = kCGEventFlagMaskShift;
+    arr[static_cast<size_t>(Modifiers::ALT)] = kCGEventFlagMaskAlternate;
+
+    return arr;
+}
+
+constexpr ModifierToCGEventFlagsArray modifierToCGEventFlagsArray{
+    createModifierToCGEventFlagsArray()};
+constexpr ModifierToCGEventFlags modifierToCGEventFlags{
+    modifierToCGEventFlagsArray};
 } // namespace macOS::constants
 
-#endif // MACOS_CONSTANTS
+#endif // MACOS_CONSTANTS_HPP

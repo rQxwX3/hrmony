@@ -31,7 +31,7 @@ auto MacOS::setEventToCurrentCombination(Event &event) -> void {
         // TODO This doesn't support multi-key combinations
         CGEventSetIntegerValueField(
             event, kCGKeyboardEventKeycode,
-            config.printableToNativeKey.at(currentKeys.at(i)));
+            config.keyToNativeCode.at(currentKeys.at(i)));
     }
 }
 

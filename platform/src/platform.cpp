@@ -47,13 +47,13 @@ auto Platform::addToCurrentCombination(const Combination &combination) -> void {
 [[nodiscard]] auto
 Platform::nativeKeyToPrintable(const NativeKeyCode nativeKey) const
     -> key::Keys {
-    return m_config.nativeKeyToPrintable.at(nativeKey);
+    return m_config.nativeCodeToKey.at(nativeKey);
 }
 
 [[nodiscard]] auto
 Platform::modifierToNativeModifier(const key::Modifiers modifier) const
     -> NativeModifier {
-    return m_config.modifierToNativeModifier.at(modifier);
+    return m_config.modifierToCGEventFlags.at(modifier);
 }
 
 [[nodiscard]] auto Platform::isHRMMode() const -> bool {

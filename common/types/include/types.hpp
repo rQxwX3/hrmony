@@ -6,6 +6,8 @@
 
 #ifdef __APPLE__
 #include <macosTypes.hpp>
+using macOS::types::NativeKeyCode, macOS::types::NativeModifier,
+    macOS::types::maxKeyCode, macOS::types::Event;
 #endif // __APPLE__
 
 class Combination;
@@ -16,52 +18,51 @@ constexpr size_t maxKeymapKeys{4};
 using CombinationModifiers = std::array<key::Modifiers, maxKeymapModifiers>;
 using CombinationKeys = std::array<key::Keys, maxKeymapKeys>;
 
-using NativeKeyToPrintableArray = std::array<key::Keys, maxKeyCode>;
+using NativeCodeToKeyArray = std::array<key::Keys, maxKeyCode>;
 
-using PrintableToNativeKeyArray =
-    std::array<NativeKeyCode, static_cast<size_t>(key::Keys::m_size)>;
-
-using ModifierToNativeModifierArray =
+using ModifierToNativeCodeArray =
     std::array<NativeModifier, static_cast<size_t>(key::Modifiers::m_size)>;
+
+using KeyToNativeCodeArray =
+    std::array<NativeKeyCode, static_cast<size_t>(key::Keys::m_size)>;
 
 using KeyBindingArray =
     std::array<Combination, static_cast<size_t>(key::Keys::m_size)>;
 
-class NativeKeyToPrintable {
+class NativeCodeToKey {
   private:
-    NativeKeyToPrintableArray m_array;
+    NativeCodeToKeyArray m_array;
 
   public:
-    constexpr NativeKeyToPrintable(const NativeKeyToPrintableArray &array)
+    constexpr NativeCodeToKey(const NativeCodeToKeyArray &array)
         : m_array{array} {}
 
   public:
     [[nodiscard]] auto at(NativeKeyCode nativeKey) const -> key::Keys;
 };
 
-class PrintableToNativeKey {
+class KeyToNativeCode {
   private:
-    PrintableToNativeKeyArray m_array;
+    KeyToNativeCodeArray m_array;
 
   public:
-    constexpr PrintableToNativeKey(const PrintableToNativeKeyArray &array)
+    constexpr KeyToNativeCode(const KeyToNativeCodeArray &array)
         : m_array{array} {}
 
   public:
     [[nodiscard]] auto at(key::Keys key) const -> NativeKeyCode;
 };
 
-class ModifierToNativeModifier {
+class ModifierToNativeCode {
   private:
-    ModifierToNativeModifierArray m_array;
+    ModifierToNativeCodeArray m_array;
 
   public:
-    constexpr ModifierToNativeModifier(
-        const ModifierToNativeModifierArray &array)
+    constexpr ModifierToNativeCode(const ModifierToNativeCodeArray &array)
         : m_array{array} {}
 
   public:
-    [[nodiscard]] auto at(key::Modifiers modifier) const -> NativeModifier;
+    [[nodiscard]] auto at(key::Modifiers modifier) const -> NativeKeyCode;
 };
 
 #endif // TYPES_HPP
