@@ -17,7 +17,7 @@ auto MacOS::setEventToCurrentCombination(Event &event) -> void {
     NativeModifier modifierBitMask{0};
 
     for (size_t i{0}; i != currentModifiersCount; ++i) {
-        modifierBitMask |= modifier2NativeModifier(currentModifiers.at(i));
+        modifierBitMask |= modifierToNativeModifier(currentModifiers.at(i));
     }
 
     CGEventSetFlags(event, modifierBitMask);
@@ -31,8 +31,7 @@ auto MacOS::setEventToCurrentCombination(Event &event) -> void {
         // TODO This doesn't support multi-key combinations
         CGEventSetIntegerValueField(
             event, kCGKeyboardEventKeycode,
-            config.printable2NativeKey.at(
-                static_cast<size_t>(currentKeys.at(i))));
+            config.printableToNativeKey.at(currentKeys.at(i)));
     }
 }
 

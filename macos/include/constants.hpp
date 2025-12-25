@@ -7,7 +7,7 @@
 #include <ApplicationServices/ApplicationServices.h>
 
 namespace macOS::constants {
-constexpr auto createNativeKey2Printable() -> NativeKey2PrintableArray {
+constexpr auto createNativeKeyToPrintableArray() -> NativeKey2PrintableArray {
     NativeKey2PrintableArray arr{};
 
     using ::Keys::Printables;
@@ -28,7 +28,8 @@ constexpr auto createNativeKey2Printable() -> NativeKey2PrintableArray {
     return arr;
 };
 
-constexpr auto createModifier2NativeModifier() -> Modifier2NativeModifierArray {
+constexpr auto createModifier2NativeModifierArray()
+    -> Modifier2NativeModifierArray {
     Modifier2NativeModifierArray arr{};
 
     using ::Keys::Modifiers;
@@ -54,14 +55,19 @@ constexpr auto createPrintable2NativeKey() -> Printable2NativeKeyArray {
     return arr;
 }
 
-constexpr NativeKey2PrintableArray nativeKey2Printable{
-    createNativeKey2Printable()};
+constexpr NativeKey2PrintableArray nativeKey2PrintableArray{
+    createNativeKeyToPrintableArray()};
+constexpr NativeKeyToPrintable nativeKeyToPrintable =
+    NativeKeyToPrintable(nativeKey2PrintableArray);
 
-constexpr Modifier2NativeModifierArray modifier2NativeModifier{
-    createModifier2NativeModifier()};
-
-constexpr Printable2NativeKeyArray printable2NativeKey{
+constexpr Printable2NativeKeyArray printable2NativeKeyArray{
     createPrintable2NativeKey()};
+constexpr PrintableToNativeKey printableToNativeKey{printable2NativeKeyArray};
+
+constexpr Modifier2NativeModifierArray modifier2NativeModifierArray{
+    createModifier2NativeModifierArray()};
+constexpr ModifierToNativeModifier modifierToNativeModifier{
+    modifier2NativeModifierArray};
 } // namespace macOS::constants
 
 #endif // MACOS_CONSTANTS

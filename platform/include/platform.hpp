@@ -29,10 +29,10 @@ class Platform : public IPlatform {
     auto resetCurrentCombination() -> void override;
 
   public:
-    [[nodiscard]] auto nativeKey2Printable(NativeKeyCode nativeKey) const
+    [[nodiscard]] auto nativeKeyToPrintable(NativeKeyCode nativeKey) const
         -> Keys::Printables;
 
-    [[nodiscard]] auto modifier2NativeModifier(Keys::Modifiers modifier) const
+    [[nodiscard]] auto modifierToNativeModifier(Keys::Modifiers modifier) const
         -> NativeModifier;
 
   public:

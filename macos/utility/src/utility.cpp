@@ -12,7 +12,7 @@ auto macOS::util::getBindedCombination(const MacOS *self, const Event &event)
     const auto nativeKey{static_cast<NativeKeyCode>(
         CGEventGetIntegerValueField(event, kCGKeyboardEventKeycode))};
 
-    return self->getKeyBinding(self->nativeKey2Printable(nativeKey));
+    return self->getKeyBinding(self->nativeKeyToPrintable(nativeKey));
 }
 
 auto macOS::util::isHRMModeExitTriggered(const MacOS *self) -> bool {
@@ -26,7 +26,7 @@ auto macOS::util::isHRMModeExitTriggered(const MacOS *self) -> bool {
     auto const nativeKey{static_cast<NativeKeyCode>(
         CGEventGetIntegerValueField(event, kCGKeyboardEventKeycode))};
 
-    auto const printableKey{self->nativeKey2Printable(nativeKey)};
+    auto const printableKey{self->nativeKeyToPrintable(nativeKey)};
 
     return printableKey == config.exitKey;
 }
@@ -38,7 +38,8 @@ auto macOS::util::isHRMModeEnterTriggered(const MacOS *self) -> bool {
 
     const auto config{self->getConfig()};
 
-    const auto nativeLeaderKey{self->modifier2NativeModifier(config.leaderKey)};
+    const auto nativeLeaderKey{
+        self->modifierToNativeModifier(config.leaderKey)};
     auto const nativeModifiers{CGEventGetFlags(self->getCurrentEvent())};
 
     return (nativeModifiers & nativeLeaderKey) != 0U;
@@ -74,7 +75,7 @@ auto macOS::util::addKeyToFinishedKeymap(MacOS *self) -> void {
         const auto nativeKey{
             CGEventGetIntegerValueField(event, kCGKeyboardEventKeycode)};
 
-        combination = Combination({nativeKey2Printable.at(nativeKey)}, 1);
+        combination = Combination({nativeKeyToPrintable.at(nativeKey)}, 1);
     }
 
     self->addToCurrentCombination(combination);
