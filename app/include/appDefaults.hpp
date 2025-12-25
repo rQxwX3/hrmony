@@ -5,8 +5,8 @@
 #include <types.hpp>
 
 namespace AppDefaults {
-auto createKeyBindingArray() -> KeyBindingArray {
-    KeyBindingArray arr{};
+inline auto createKeyBindingArray() -> KeyBindingArray {
+    KeyBindingArray arr{Combination()};
 
     using Keys::Modifiers, Keys::Printables;
 

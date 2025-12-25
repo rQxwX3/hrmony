@@ -29,6 +29,9 @@ class Combination {
     [[nodiscard]] auto getModifiers() const -> CombinationModifiers;
     [[nodiscard]] auto getKeys() const -> CombinationKeys;
 
+    [[nodiscard]] auto getModifiersCount() const -> size_t;
+    [[nodiscard]] auto getKeysCount() const -> size_t;
+
   public:
     [[nodiscard]] auto isEmpty() const -> bool;
     [[nodiscard]] auto isNoModifiers() const -> bool;

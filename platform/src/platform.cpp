@@ -2,6 +2,8 @@
 #include <config.hpp>
 #include <platform.hpp>
 
+#include <iostream>
+
 Platform::Platform(App *appPtr)
     : m_appPtr{appPtr}, m_config{conf::defaultConfig} {};
 
@@ -16,21 +18,28 @@ auto Platform::resetCurrentCombination() -> void {
 
 auto Platform::addToCurrentCombination(const Combination &combination) -> void {
     const auto &modifiers{combination.getModifiers()};
+    const auto modifiersCount{combination.getModifiersCount()};
 
-    for (const auto &modifier : modifiers) {
-        m_currentCombination.addModifier(modifier);
+    for (size_t i{0}; i != modifiersCount; ++i) {
+        m_currentCombination.addModifier(modifiers.at(i));
     }
 
     const auto &keys{combination.getKeys()};
+    const auto keysCount{combination.getKeysCount()};
 
-    for (const auto &key : keys) {
-        m_currentCombination.addKey(key);
+    for (size_t i{0}; i != keysCount; ++i) {
+        m_currentCombination.addKey(keys.at(i));
     }
 }
 
 [[nodiscard]] auto Platform::getKeyBinding(const Keys::Printables key) const
     -> Combination {
-    return m_appPtr->getKeyBinding(key);
+    const auto &config{getConfig()};
+
+    const auto &bindedCombination{
+        config.keyBindingArray.at(static_cast<size_t>(key))};
+
+    return config.keyBindingArray.at(static_cast<size_t>(key));
 }
 
 [[nodiscard]] auto Platform::getConfig() const -> conf::Config {

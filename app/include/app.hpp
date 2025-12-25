@@ -1,8 +1,6 @@
 #ifndef APP_HPP
 #define APP_HPP
 
-#include <combination.hpp>
-#include <config.hpp>
 #include <platform.hpp>
 
 #include <memory>
@@ -14,16 +12,11 @@ class App {
     bool m_running;
     bool m_HRMMode;
 
-    KeyBindingArray m_keyBindingArray;
-
   public:
     App();
 
     auto run() -> void;
     auto toggleHRMMode() -> void;
-
-  public:
-    [[nodiscard]] auto getKeyBinding(Keys::Printables key) const -> Combination;
 
   public:
     [[nodiscard]] auto isRunning() const -> bool;

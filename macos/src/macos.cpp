@@ -5,6 +5,7 @@
 #include <utility.hpp>
 
 #include <ApplicationServices/ApplicationServices.h>
+#include <iostream>
 
 using macOS::MacOS;
 
@@ -12,25 +13,28 @@ auto MacOS::setEventToCurrentCombination(Event &event) -> void {
     const auto currentCombination{getCurrentCombination()};
 
     const auto currentModifiers{currentCombination.getModifiers()};
+    const auto currentModifiersCount{currentCombination.getModifiersCount()};
+
     NativeModifier modifierBitMask{0};
 
-    for (const auto &modifier : currentModifiers) {
-        if (modifier == Keys::Modifiers::NULLKEY) {
-            continue;
-        }
-
-        modifierBitMask |= modifier2NativeModifier(modifier);
+    for (size_t i{0}; i != currentModifiersCount; ++i) {
+        modifierBitMask |= modifier2NativeModifier(currentModifiers.at(i));
     }
 
-    const auto currentKey{currentCombination.getKeys().at(0)};
+    CGEventSetFlags(event, modifierBitMask);
+
+    const auto currentKeys{currentCombination.getKeys()};
+    const auto currentKeysCount{currentCombination.getKeysCount()};
 
     const auto config{getConfig()};
 
-    CGEventSetIntegerValueField(
-        event, kCGKeyboardEventKeycode,
-        config.printable2NativeKey.at(static_cast<size_t>(currentKey)));
-
-    CGEventSetFlags(event, modifierBitMask);
+    for (size_t i{0}; i != currentKeysCount; ++i) {
+        // TODO This doesn't support multi-key combinations
+        CGEventSetIntegerValueField(
+            event, kCGKeyboardEventKeycode,
+            config.printable2NativeKey.at(
+                static_cast<size_t>(currentKeys.at(i))));
+    }
 }
 
 [[nodiscard]] auto MacOS::isLeaderUpProcessed() const -> bool {

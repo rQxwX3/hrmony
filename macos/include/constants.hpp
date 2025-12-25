@@ -18,6 +18,8 @@ constexpr auto createNativeKey2Printable() -> NativeKey2PrintableArray {
     arr[3] = Printables::F;
     arr[4] = Printables::H;
     arr[12] = Printables::Q;
+    arr[13] = Printables::W;
+    arr[17] = Printables::T;
     arr[37] = Printables::L;
     arr[38] = Printables::J;
     arr[40] = Printables::K;
@@ -46,6 +48,8 @@ constexpr auto createPrintable2NativeKey() -> Printable2NativeKeyArray {
 
     arr[static_cast<size_t>(Printables::A)] = 0;
     arr[static_cast<size_t>(Printables::S)] = 1;
+    arr[static_cast<size_t>(Printables::T)] = 17;
+    arr[static_cast<size_t>(Printables::W)] = 13;
 
     return arr;
 }

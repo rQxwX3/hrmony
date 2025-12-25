@@ -58,6 +58,14 @@ Combination::Combination(const CombinationModifiers &modifiers,
     return m_keys;
 }
 
+[[nodiscard]] auto Combination::getModifiersCount() const -> size_t {
+    return m_modifiersCount;
+}
+
+[[nodiscard]] auto Combination::getKeysCount() const -> size_t {
+    return m_keysCount;
+}
+
 [[nodiscard]] auto Combination::isEmpty() const -> bool {
     return m_modifiersCount == 0 && m_keysCount == 0;
 }

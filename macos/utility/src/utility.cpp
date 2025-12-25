@@ -103,7 +103,18 @@ auto macOS::util::processKeyPress(CGEventTapProxy proxy, CGEventType type,
     if (isKeymapFinished(self, event)) {
         std::cout << "keymap finished\n";
 
-        self->addToCurrentCombination(getBindedCombination(self, event));
+        const auto nativeKey{
+            CGEventGetIntegerValueField(event, kCGKeyboardEventKeycode)};
+
+        const auto &bindedCombination{getBindedCombination(self, event)};
+
+        if (bindedCombination.isNoModifiers()) {
+            self->addToCurrentCombination(bindedCombination);
+        } else {
+            self->addToCurrentCombination(
+                Combination({nativeKey2Printable.at(nativeKey)}, 1));
+        }
+
         self->setEventToCurrentCombination(event);
         self->toggleLeaderUpProcessed();
         self->exitHRMMode();

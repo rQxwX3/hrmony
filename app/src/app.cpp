@@ -10,7 +10,7 @@
 #ifdef __APPLE__
 App::App()
     : m_platform{std::make_unique<macOS::MacOS>(this)}, m_running{false},
-      m_HRMMode{false}, m_keyBindingArray{AppDefaults::keyBindingArray} {}
+      m_HRMMode{false} {}
 #endif
 
 auto App::run() -> void {
@@ -21,10 +21,5 @@ auto App::run() -> void {
 auto App::isRunning() const -> bool { return m_running; }
 
 auto App::isHRMMode() const -> bool { return m_HRMMode; }
-
-[[nodiscard]] auto App::getKeyBinding(const Keys::Printables key) const
-    -> Combination {
-    return m_keyBindingArray.at(static_cast<size_t>(key));
-}
 
 auto App::toggleHRMMode() -> void { m_HRMMode = !m_HRMMode; }
