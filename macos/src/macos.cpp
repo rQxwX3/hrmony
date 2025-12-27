@@ -35,6 +35,21 @@ auto MacOS::setEventToCurrentCombination(Event &event) -> void {
     }
 }
 
+[[nodiscard]] auto MacOS::modifierToCGEventFlags(key::Modifiers modifier) const
+    -> CGEventFlags {
+    const auto &config{getConfig()};
+
+    return config.modifierToCGEventFlags.at(modifier);
+}
+
+[[nodiscard]] auto
+MacOS::nativeCodeToModifier(NativeModifier nativeModifier) const
+    -> key::Modifiers {
+    const auto &config{getConfig()};
+
+    return config.nativeCodeToModifier.at(nativeModifier);
+}
+
 auto MacOS::setCurrentEvent(const Event &event) -> void {
     m_currentEvent = event;
 }

@@ -37,7 +37,18 @@ enum class Keys : uint8_t {
     m_size
 };
 
-enum class Modifiers : uint8_t { NULLKEY = 0, CMD, ALT, CTRL, SHIFT, m_size };
+enum class Modifiers : uint8_t {
+    NULLKEY = 0,
+    RIGHT_CMD,
+    LEFT_CMD,
+    RIGHT_ALT,
+    LEFT_ALT,
+    RIGHT_CTRL,
+    LEFT_CTRL,
+    RIGHT_SHIFT,
+    LEFT_SHIFT,
+    m_size
+};
 } // namespace key
 
 #endif // KEYS_HPP

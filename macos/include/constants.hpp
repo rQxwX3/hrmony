@@ -56,17 +56,40 @@ constexpr auto createModifierToNativeCodeArray() -> ModifierToNativeCodeArray {
 
     using ::key::Modifiers;
 
-    arr[static_cast<size_t>(Modifiers::CMD)] = 55;
-    arr[static_cast<size_t>(Modifiers::CTRL)] = 59;
-    arr[static_cast<size_t>(Modifiers::SHIFT)] = 60;
-    arr[static_cast<size_t>(Modifiers::ALT)] = 58;
+    arr[static_cast<size_t>(Modifiers::RIGHT_CMD)] = 55;
+    arr[static_cast<size_t>(Modifiers::LEFT_CTRL)] = 59;
+    arr[static_cast<size_t>(Modifiers::LEFT_SHIFT)] = 60;
+    arr[static_cast<size_t>(Modifiers::RIGHT_ALT)] = 58;
+
+    return arr;
+}
+constexpr ModifierToNativeCodeArray modifierToNativeCodeArray{
+    createModifierToNativeCodeArray()};
+constexpr ModifierToNativeCode modifierToNativeCode{modifierToNativeCodeArray};
+
+constexpr size_t modifierNativeCodeOffsetFromZero = 54;
+
+constexpr auto createNativeCodeToModifierArray()
+    -> types::NativeCodeToModifierArray {
+    types::NativeCodeToModifierArray arr{};
+
+    using key::Modifiers;
+
+    arr[0] = Modifiers::RIGHT_CMD;
+    arr[1] = Modifiers::LEFT_CMD;
+    arr[2] = Modifiers::LEFT_SHIFT;
+    arr[4] = Modifiers::LEFT_ALT;
+    arr[5] = Modifiers::LEFT_CTRL;
+    arr[6] = Modifiers::RIGHT_SHIFT;
+    arr[7] = Modifiers::RIGHT_ALT;
 
     return arr;
 }
 
-constexpr ModifierToNativeCodeArray modifierToNativeCodeArray{
-    createModifierToNativeCodeArray()};
-constexpr ModifierToNativeCode modifierToNativeCode{modifierToNativeCodeArray};
+constexpr types::NativeCodeToModifierArray nativeCodeToModifierArray{
+    createNativeCodeToModifierArray()};
+constexpr types::NativeCodeToModifier nativeCodeToModifier{
+    nativeCodeToModifierArray};
 
 using macOS::types::ModifierToCGEventFlags,
     macOS::types::ModifierToCGEventFlagsArray;
@@ -77,10 +100,10 @@ constexpr auto createModifierToCGEventFlagsArray()
 
     using ::key::Modifiers;
 
-    arr[static_cast<size_t>(Modifiers::CMD)] = kCGEventFlagMaskCommand;
-    arr[static_cast<size_t>(Modifiers::CTRL)] = kCGEventFlagMaskControl;
-    arr[static_cast<size_t>(Modifiers::SHIFT)] = kCGEventFlagMaskShift;
-    arr[static_cast<size_t>(Modifiers::ALT)] = kCGEventFlagMaskAlternate;
+    arr[static_cast<size_t>(Modifiers::RIGHT_CMD)] = kCGEventFlagMaskCommand;
+    arr[static_cast<size_t>(Modifiers::LEFT_CTRL)] = kCGEventFlagMaskControl;
+    arr[static_cast<size_t>(Modifiers::LEFT_SHIFT)] = kCGEventFlagMaskShift;
+    arr[static_cast<size_t>(Modifiers::RIGHT_ALT)] = kCGEventFlagMaskAlternate;
 
     return arr;
 }

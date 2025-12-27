@@ -38,11 +38,12 @@ auto macOS::util::isHRMModeEnterTriggered(const MacOS *self) -> bool {
 
     const auto config{self->getConfig()};
 
-    const auto nativeLeaderKey{
-        self->modifierToNativeModifier(config.leaderKey)};
-    auto const nativeModifiers{CGEventGetFlags(self->getCurrentEvent())};
+    const auto leaderKey{config.leaderKey};
 
-    return (nativeModifiers & nativeLeaderKey) != 0U;
+    const auto nativeCode{CGEventGetIntegerValueField(self->getCurrentEvent(),
+                                                      kCGKeyboardEventKeycode)};
+
+    return self->nativeCodeToModifier(nativeCode) == leaderKey;
 }
 
 auto macOS::util::isBindedKeyPressed(const MacOS *self) -> bool {
@@ -85,6 +86,11 @@ auto macOS::util::processKeyPress(CGEventTapProxy proxy, CGEventType type,
                                   CGEventRef event, void *refcon)
     -> CGEventRef {
     auto *self{static_cast<MacOS *>(refcon)};
+
+    const auto nativeCode{
+        CGEventGetIntegerValueField(event, kCGKeyboardEventKeycode)};
+
+    std::cout << "native code is " << nativeCode << '\n';
 
     const auto &bindedCombination(getBindedCombination(self, event));
     self->setCurrentBindedCombination(bindedCombination);

@@ -22,6 +22,13 @@ class MacOS : public Platform {
     ~MacOS() override;
 
   public:
+    [[nodiscard]] auto modifierToCGEventFlags(key::Modifiers modifier) const
+        -> CGEventFlags;
+
+    [[nodiscard]] auto nativeCodeToModifier(NativeModifier nativeModifier) const
+        -> key::Modifiers;
+
+  public:
     auto setEventToCurrentCombination(Event &event) -> void override;
 
   public:

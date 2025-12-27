@@ -10,6 +10,7 @@
 using key::Modifiers, key::Keys, macOS::constants::nativeCodeToKey,
     macOS::constants::keyToNativeCode, macOS::constants::modifierToNativeCode,
     macOS::constants::modifierToCGEventFlags,
+    macOS::constants::nativeCodeToModifier, macOS::types::NativeCodeToModifier,
     macOS::types::ModifierToCGEventFlags, ::app::keyBindingArray;
 
 namespace conf {
@@ -23,11 +24,13 @@ struct Config {
     ModifierToCGEventFlags modifierToCGEventFlags;
     ModifierToNativeCode modifierToNativeCode;
 
+    NativeCodeToModifier nativeCodeToModifier;
+
     KeyBindingArray keyBindingArray;
 };
 
 constexpr auto loadDefaultConfig() -> Config {
-    Config config{.leaderKey = Modifiers::CMD,
+    Config config{.leaderKey = Modifiers::RIGHT_CMD,
                   .exitKey = Keys::ESC,
 
                   .nativeCodeToKey = nativeCodeToKey,
@@ -35,6 +38,8 @@ constexpr auto loadDefaultConfig() -> Config {
 
                   .modifierToCGEventFlags = modifierToCGEventFlags,
                   .modifierToNativeCode = modifierToNativeCode,
+
+                  .nativeCodeToModifier = nativeCodeToModifier,
 
                   .keyBindingArray = keyBindingArray};
 
