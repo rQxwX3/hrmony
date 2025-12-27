@@ -12,7 +12,8 @@ class MacOS : public Platform {
     CFRunLoopRef m_runLoopRef;
 
     Combination m_currentBindedCombination;
-    Event m_currentEvent;
+
+    NativeKeyCode m_currentNativeCode;
 
     bool m_leaderUpProcessed;
 
@@ -33,11 +34,11 @@ class MacOS : public Platform {
 
   public:
     auto setCurrentBindedCombination(const Combination &combination) -> void;
-    auto setCurrentEvent(const Event &event) -> void;
+    auto setCurrentNativeCode(NativeKeyCode nativeCode) -> void;
 
   public:
     [[nodiscard]] auto getCurrentBindedCombination() const -> Combination;
-    [[nodiscard]] auto getCurrentEvent() const -> Event;
+    [[nodiscard]] auto getCurrentNativeCode() const -> NativeKeyCode;
 
   public:
     [[nodiscard]] auto isLeaderUpProcessed() const -> bool;

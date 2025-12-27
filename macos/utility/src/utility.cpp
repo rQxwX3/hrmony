@@ -21,10 +21,8 @@ auto macOS::util::isHRMModeExitTriggered(const MacOS *self) -> bool {
     }
 
     const auto config{self->getConfig()};
-    const Event event{self->getCurrentEvent()};
 
-    auto const nativeKey{static_cast<NativeKeyCode>(
-        CGEventGetIntegerValueField(event, kCGKeyboardEventKeycode))};
+    auto const nativeKey{self->getCurrentNativeCode()};
 
     auto const printableKey{self->nativeKeyToPrintable(nativeKey)};
 
@@ -40,8 +38,7 @@ auto macOS::util::isHRMModeEnterTriggered(const MacOS *self) -> bool {
 
     const auto leaderKey{config.leaderKey};
 
-    const auto nativeCode{CGEventGetIntegerValueField(self->getCurrentEvent(),
-                                                      kCGKeyboardEventKeycode)};
+    const auto nativeCode{self->getCurrentNativeCode()};
 
     return self->nativeCodeToModifier(nativeCode) == leaderKey;
 }
@@ -68,13 +65,11 @@ auto macOS::util::isKeymapFinished(const MacOS *self) -> bool {
 
 auto macOS::util::addKeyToFinishedKeymap(MacOS *self) -> void {
     Combination combination(self->getCurrentBindedCombination());
-    Event event{self->getCurrentEvent()};
 
     if (combination.isNoModifiers()) {
         const auto &combination{self->getCurrentBindedCombination()};
     } else {
-        const auto nativeKey{
-            CGEventGetIntegerValueField(event, kCGKeyboardEventKeycode)};
+        const auto nativeKey{self->getCurrentNativeCode()};
 
         combination = Combination({nativeCodeToKey.at(nativeKey)}, 1);
     }
@@ -82,21 +77,34 @@ auto macOS::util::addKeyToFinishedKeymap(MacOS *self) -> void {
     self->addToCurrentCombination(combination);
 }
 
+[[nodiscard]] auto macOS::util::isProcessingLeaderUp(const MacOS *self)
+    -> bool {
+    if (self->isLeaderUpProcessed()) {
+        return false;
+    }
+
+    if (!self->isHRMMode()) {
+        return false;
+    }
+
+    const auto config{self->getConfig()};
+    const auto nativeCode{self->getCurrentNativeCode()};
+
+    return config.leaderKey == self->nativeCodeToModifier(nativeCode);
+}
+
 auto macOS::util::processKeyPress(CGEventTapProxy proxy, CGEventType type,
                                   CGEventRef event, void *refcon)
     -> CGEventRef {
     auto *self{static_cast<MacOS *>(refcon)};
 
-    const auto nativeCode{
-        CGEventGetIntegerValueField(event, kCGKeyboardEventKeycode)};
-
-    std::cout << "native code is " << nativeCode << '\n';
-
     const auto &bindedCombination(getBindedCombination(self, event));
-    self->setCurrentBindedCombination(bindedCombination);
-    self->setCurrentEvent(event);
 
-    if (self->isHRMMode() && !self->isLeaderUpProcessed()) {
+    self->setCurrentBindedCombination(bindedCombination);
+    self->setCurrentNativeCode(
+        CGEventGetIntegerValueField(event, kCGKeyboardEventKeycode));
+
+    if (isProcessingLeaderUp(self)) {
         std::cout << "leader key processed\n";
         self->toggleLeaderUpProcessed();
         return nullptr;
