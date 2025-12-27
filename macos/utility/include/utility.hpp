@@ -5,20 +5,25 @@
 #include <types.hpp>
 
 namespace macOS::util {
-auto getBindedCombination(const MacOS *self, const Event &event) -> Combination;
+[[nodiscard]] auto getBindedCombination(const MacOS *self, const Event &event)
+    -> Combination;
 
-auto isHRMModeEnterTriggered(const MacOS *self) -> bool;
+[[nodiscard]] auto isHRMModeEnterTriggered(const MacOS *self) -> bool;
 
-auto isHRMModeExitTriggered(const MacOS *self) -> bool;
+[[nodiscard]] auto isHRMModeExitTriggered(const MacOS *self) -> bool;
 
-auto isKeymapFinished(const MacOS *self) -> bool;
+[[nodiscard]] auto isKeymapFinished(const MacOS *self) -> bool;
 
-auto isBindedKeyPressed(const MacOS *self) -> bool;
+[[nodiscard]] auto isBindedKeyPressed(const MacOS *self) -> bool;
 
-auto processKeyPress(CGEventTapProxy proxy, CGEventType type, CGEventRef event,
-                     void *refcon) -> CGEventRef;
+[[nodiscard]] auto processKeyPress(CGEventTapProxy proxy, CGEventType type,
+                                   CGEventRef event, void *refcon)
+    -> CGEventRef;
+
+[[nodiscard]] auto isProcessingLeaderUp(const MacOS *self) -> bool;
 
 auto addKeyToFinishedKeymap(MacOS *self) -> void;
+
 } // namespace macOS::util
 
 #endif // UTILITY_HPP

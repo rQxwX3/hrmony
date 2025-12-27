@@ -50,21 +50,21 @@ MacOS::nativeCodeToModifier(NativeModifier nativeModifier) const
     return config.nativeCodeToModifier.at(nativeModifier);
 }
 
-auto MacOS::setCurrentEvent(const Event &event) -> void {
-    m_currentEvent = event;
-}
-
-[[nodiscard]] auto MacOS::getCurrentEvent() const -> Event {
-    return m_currentEvent;
-}
-
 auto MacOS::setCurrentBindedCombination(const Combination &combination)
     -> void {
     m_currentBindedCombination = combination;
 }
 
+auto MacOS::setCurrentNativeCode(NativeKeyCode nativeCode) -> void {
+    m_currentNativeCode = nativeCode;
+}
+
 [[nodiscard]] auto MacOS::getCurrentBindedCombination() const -> Combination {
     return m_currentBindedCombination;
+}
+
+[[nodiscard]] auto MacOS::getCurrentNativeCode() const -> NativeKeyCode {
+    return m_currentNativeCode;
 }
 
 [[nodiscard]] auto MacOS::isLeaderUpProcessed() const -> bool {
@@ -75,7 +75,8 @@ auto MacOS::toggleLeaderUpProcessed() -> void {
     m_leaderUpProcessed = !m_leaderUpProcessed;
 }
 
-MacOS::MacOS(App *appPtr) : Platform(appPtr), m_leaderUpProcessed{false} {
+MacOS::MacOS(App *appPtr)
+    : Platform(appPtr), m_leaderUpProcessed{false}, m_currentNativeCode{0} {
     CGEventMask eventMask{CGEventMaskBit(kCGEventKeyDown) |
                           // CGEventMaskBit(kCGEventKeyUp) |
                           CGEventMaskBit(kCGEventFlagsChanged)};
