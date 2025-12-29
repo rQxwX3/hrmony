@@ -8,7 +8,7 @@
 
 namespace macOS::types {
 using NativeModifier = CGEventFlags;
-using NativeKeyCode = CGKeyCode;
+using NativeCode = CGKeyCode;
 using Event = CGEventRef;
 constexpr size_t maxKeyCode{128};
 

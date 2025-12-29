@@ -6,7 +6,7 @@
 
 #ifdef __APPLE__
 #include <macosTypes.hpp>
-using macOS::types::NativeKeyCode, macOS::types::NativeModifier,
+using macOS::types::NativeCode, macOS::types::NativeModifier,
     macOS::types::maxKeyCode, macOS::types::Event;
 #endif // __APPLE__
 
@@ -24,7 +24,7 @@ using ModifierToNativeCodeArray =
     std::array<NativeModifier, static_cast<size_t>(key::Modifiers::m_size)>;
 
 using KeyToNativeCodeArray =
-    std::array<NativeKeyCode, static_cast<size_t>(key::Keys::m_size)>;
+    std::array<NativeCode, static_cast<size_t>(key::Keys::m_size)>;
 
 using KeyBindingArray =
     std::array<Combination, static_cast<size_t>(key::Keys::m_size)>;
@@ -38,7 +38,7 @@ class NativeCodeToKey {
         : m_array{array} {}
 
   public:
-    [[nodiscard]] auto at(NativeKeyCode nativeKey) const -> key::Keys;
+    [[nodiscard]] auto at(NativeCode nativeCode) const -> key::Keys;
 };
 
 class KeyToNativeCode {
@@ -50,7 +50,7 @@ class KeyToNativeCode {
         : m_array{array} {}
 
   public:
-    [[nodiscard]] auto at(key::Keys key) const -> NativeKeyCode;
+    [[nodiscard]] auto at(key::Keys key) const -> NativeCode;
 };
 
 class ModifierToNativeCode {
@@ -62,7 +62,7 @@ class ModifierToNativeCode {
         : m_array{array} {}
 
   public:
-    [[nodiscard]] auto at(key::Modifiers modifier) const -> NativeKeyCode;
+    [[nodiscard]] auto at(key::Modifiers modifier) const -> NativeCode;
 };
 
 #endif // TYPES_HPP

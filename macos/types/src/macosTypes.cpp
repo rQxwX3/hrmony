@@ -1,8 +1,6 @@
 #include <constants.hpp>
 #include <macosTypes.hpp>
 
-#include <iostream>
-
 [[nodiscard]] auto
 macOS::types::ModifierToCGEventFlags::at(key::Modifiers modifier) const
     -> CGEventFlags {

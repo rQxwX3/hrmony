@@ -50,20 +50,11 @@ MacOS::nativeCodeToModifier(NativeModifier nativeModifier) const
     return config.nativeCodeToModifier.at(nativeModifier);
 }
 
-auto MacOS::setCurrentBindedCombination(const Combination &combination)
-    -> void {
-    m_currentBindedCombination = combination;
-}
-
-auto MacOS::setCurrentNativeCode(NativeKeyCode nativeCode) -> void {
+auto MacOS::setCurrentNativeCode(NativeCode nativeCode) -> void {
     m_currentNativeCode = nativeCode;
 }
 
-[[nodiscard]] auto MacOS::getCurrentBindedCombination() const -> Combination {
-    return m_currentBindedCombination;
-}
-
-[[nodiscard]] auto MacOS::getCurrentNativeCode() const -> NativeKeyCode {
+[[nodiscard]] auto MacOS::getCurrentNativeCode() const -> NativeCode {
     return m_currentNativeCode;
 }
 

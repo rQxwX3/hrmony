@@ -29,7 +29,7 @@ class Platform : public IPlatform {
     auto resetCurrentCombination() -> void override;
 
   public:
-    [[nodiscard]] auto nativeKeyToPrintable(NativeKeyCode nativeKey) const
+    [[nodiscard]] auto nativeCodeToKey(NativeCode nativeCode) const
         -> key::Keys;
 
     [[nodiscard]] auto modifierToNativeModifier(key::Modifiers modifier) const

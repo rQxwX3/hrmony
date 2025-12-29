@@ -7,12 +7,10 @@
 using key::Modifiers;
 using macOS::MacOS;
 
-auto macOS::util::getBindedCombination(const MacOS *self, const Event &event)
-    -> Combination {
-    const auto nativeKey{static_cast<NativeKeyCode>(
-        CGEventGetIntegerValueField(event, kCGKeyboardEventKeycode))};
+auto macOS::util::getBindedCombination(const MacOS *self) -> Combination {
+    const auto nativeCode{self->getCurrentNativeCode()};
 
-    return self->getKeyBinding(self->nativeKeyToPrintable(nativeKey));
+    return self->getKeyBinding(self->nativeCodeToKey(nativeCode));
 }
 
 auto macOS::util::isHRMModeExitTriggered(const MacOS *self) -> bool {
@@ -20,13 +18,11 @@ auto macOS::util::isHRMModeExitTriggered(const MacOS *self) -> bool {
         return false;
     }
 
-    const auto config{self->getConfig()};
+    const auto exitKey{self->getConfig().exitKey};
+    const auto nativeCode{self->getCurrentNativeCode()};
 
-    auto const nativeKey{self->getCurrentNativeCode()};
-
-    auto const printableKey{self->nativeKeyToPrintable(nativeKey)};
-
-    return printableKey == config.exitKey;
+    // TODO Only works if exitKey is a key
+    return self->nativeCodeToKey(nativeCode) == self->getConfig().exitKey;
 }
 
 auto macOS::util::isHRMModeEnterTriggered(const MacOS *self) -> bool {
@@ -34,12 +30,11 @@ auto macOS::util::isHRMModeEnterTriggered(const MacOS *self) -> bool {
         return false;
     }
 
-    const auto config{self->getConfig()};
-
-    const auto leaderKey{config.leaderKey};
-
+    const auto leaderKey{self->getConfig().leaderKey};
     const auto nativeCode{self->getCurrentNativeCode()};
 
+    // TODO Only works if leaderKey is a modifier (maybe create a single
+    // conversion function for both types)
     return self->nativeCodeToModifier(nativeCode) == leaderKey;
 }
 
@@ -48,7 +43,7 @@ auto macOS::util::isBindedKeyPressed(const MacOS *self) -> bool {
         return false;
     }
 
-    const auto &bindedCombination{self->getCurrentBindedCombination()};
+    const auto &bindedCombination{getBindedCombination(self)};
 
     return !bindedCombination.isEmpty() && !bindedCombination.isNoModifiers();
 }
@@ -58,20 +53,21 @@ auto macOS::util::isKeymapFinished(const MacOS *self) -> bool {
         return false;
     }
 
-    const auto &bindedCombination{self->getCurrentBindedCombination()};
+    const auto &bindedCombination{getBindedCombination(self)};
 
     return bindedCombination.isEmpty() || bindedCombination.isNoModifiers();
 }
 
 auto macOS::util::addKeyToFinishedKeymap(MacOS *self) -> void {
-    Combination combination(self->getCurrentBindedCombination());
+    Combination combination(getBindedCombination(self));
 
     if (combination.isNoModifiers()) {
-        const auto &combination{self->getCurrentBindedCombination()};
+        const auto &combination{getBindedCombination(self)};
     } else {
-        const auto nativeKey{self->getCurrentNativeCode()};
+        const auto nativeCode{self->getCurrentNativeCode()};
 
-        combination = Combination({nativeCodeToKey.at(nativeKey)}, 1);
+        // TODO Only supports addition of one key
+        combination = Combination({nativeCodeToKey.at(nativeCode)}, 1);
     }
 
     self->addToCurrentCombination(combination);
@@ -98,44 +94,44 @@ auto macOS::util::processKeyPress(CGEventTapProxy proxy, CGEventType type,
     -> CGEventRef {
     auto *self{static_cast<MacOS *>(refcon)};
 
-    const auto &bindedCombination(getBindedCombination(self, event));
+    const auto &bindedCombination(getBindedCombination(self));
 
-    self->setCurrentBindedCombination(bindedCombination);
     self->setCurrentNativeCode(
         CGEventGetIntegerValueField(event, kCGKeyboardEventKeycode));
 
     if (isProcessingLeaderUp(self)) {
-        std::cout << "leader key processed\n";
+        std::cout << "processing leader up\n";
         self->toggleLeaderUpProcessed();
+
         return nullptr;
     }
 
     if (isHRMModeEnterTriggered(self)) {
-        std::cout << "entering HRM\n";
+        std::cout << "entering hrm mode\n";
         self->enterHRMMode();
 
         return nullptr;
     }
 
     if (isHRMModeExitTriggered(self)) {
-        std::cout << "exiting HRM\n";
+        std::cout << "exiting hrm mode\n";
         self->exitHRMMode();
 
         return nullptr;
     }
 
     if (isBindedKeyPressed(self)) {
-        std::cout << "binded keypress\n";
-
-        self->addToCurrentCombination(getBindedCombination(self, event));
+        std::cout << "binded key press\n";
+        self->addToCurrentCombination(getBindedCombination(self));
 
         return nullptr;
     }
 
     if (isKeymapFinished(self)) {
         std::cout << "keymap finished\n";
+        addKeyToFinishedKeymap(
+            self); // for key-key remaps (does nothing otherwise)
 
-        addKeyToFinishedKeymap(self);
         self->setEventToCurrentCombination(event);
         self->toggleLeaderUpProcessed();
         self->exitHRMMode();

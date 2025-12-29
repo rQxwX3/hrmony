@@ -15,6 +15,8 @@ inline auto createKeyBindingArray() -> KeyBindingArray {
                      Modifiers::LEFT_CTRL, Modifiers::LEFT_SHIFT},
                     4);
 
+    arr[static_cast<size_t>(Keys::K)] = Combination({Modifiers::RIGHT_CMD}, 1);
+
     arr[static_cast<size_t>(Keys::A)] = Combination({Keys::S}, 1);
 
     // arr[static_cast<size_t>(Printables::K)] = {Modifiers::ALT};

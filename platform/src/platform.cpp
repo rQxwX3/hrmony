@@ -44,10 +44,9 @@ auto Platform::addToCurrentCombination(const Combination &combination) -> void {
     return m_config;
 }
 
-[[nodiscard]] auto
-Platform::nativeKeyToPrintable(const NativeKeyCode nativeKey) const
+[[nodiscard]] auto Platform::nativeCodeToKey(const NativeCode nativeCode) const
     -> key::Keys {
-    return m_config.nativeCodeToKey.at(nativeKey);
+    return m_config.nativeCodeToKey.at(nativeCode);
 }
 
 [[nodiscard]] auto

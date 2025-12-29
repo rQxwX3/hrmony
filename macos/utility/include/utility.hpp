@@ -5,8 +5,7 @@
 #include <types.hpp>
 
 namespace macOS::util {
-[[nodiscard]] auto getBindedCombination(const MacOS *self, const Event &event)
-    -> Combination;
+[[nodiscard]] auto getBindedCombination(const MacOS *self) -> Combination;
 
 [[nodiscard]] auto isHRMModeEnterTriggered(const MacOS *self) -> bool;
 
