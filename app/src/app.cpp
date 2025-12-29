@@ -10,7 +10,7 @@
 #ifdef __APPLE__
 App::App()
     : m_platform{std::make_unique<macOS::MacOS>(this)}, m_running{false},
-      m_HRMMode{false} {}
+      m_HRMMode{false}, m_config{conf::defaultConfig} {}
 #endif
 
 auto App::run() -> void {
@@ -19,6 +19,8 @@ auto App::run() -> void {
 }
 
 auto App::isRunning() const -> bool { return m_running; }
+
+[[nodiscard]] auto App::getConfig() const -> conf::Config { return m_config; }
 
 auto App::isHRMMode() const -> bool { return m_HRMMode; }
 

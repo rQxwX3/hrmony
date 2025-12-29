@@ -2,8 +2,7 @@
 #include <config.hpp>
 #include <platform.hpp>
 
-Platform::Platform(App *appPtr)
-    : m_appPtr{appPtr}, m_config{conf::defaultConfig} {};
+Platform::Platform(App *appPtr) : m_appPtr{appPtr} {};
 
 [[nodiscard]] auto Platform::getCurrentCombination() const
     -> const Combination & {
@@ -41,18 +40,22 @@ auto Platform::addToCurrentCombination(const Combination &combination) -> void {
 }
 
 [[nodiscard]] auto Platform::getConfig() const -> conf::Config {
-    return m_config;
+    return m_appPtr->getConfig();
 }
 
 [[nodiscard]] auto Platform::nativeCodeToKey(const NativeCode nativeCode) const
     -> key::Keys {
-    return m_config.nativeCodeToKey.at(nativeCode);
+    const auto config{getConfig()};
+
+    return config.nativeCodeToKey.at(nativeCode);
 }
 
 [[nodiscard]] auto
 Platform::modifierToNativeModifier(const key::Modifiers modifier) const
     -> NativeModifier {
-    return m_config.modifierToCGEventFlags.at(modifier);
+    const auto config{getConfig()};
+
+    return config.modifierToCGEventFlags.at(modifier);
 }
 
 [[nodiscard]] auto Platform::isHRMMode() const -> bool {

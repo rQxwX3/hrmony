@@ -1,6 +1,7 @@
 #ifndef PLATFORM_HPP
 #define PLATFORM_HPP
 
+#include <combination.hpp>
 #include <config.hpp>
 #include <iplatform.hpp>
 #include <types.hpp>
@@ -10,8 +11,6 @@ class App;
 class Platform : public IPlatform {
   private:
     App *m_appPtr;
-
-    conf::Config m_config;
 
     Combination m_currentCombination;
 
