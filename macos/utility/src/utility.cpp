@@ -10,6 +10,8 @@ using mac::MacOS;
 auto mac::util::getBindedCombination(const MacOS *self) -> comb::Combination {
     const auto nativeCode{self->getCurrentNativeCode()};
 
+    const auto key{self->nativeCodeToKey(nativeCode)};
+
     return self->getKeyBinding(self->nativeCodeToKey(nativeCode));
 }
 

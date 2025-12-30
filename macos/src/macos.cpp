@@ -24,8 +24,8 @@ auto mac::MacOS::setEventToCurrentCombination(Event &event) -> void {
 
     const auto config{getConfig()};
 
+    // TODO This doesn't support multi-key combinations
     for (size_t i{0}; i != currentRegularsCount; ++i) {
-        // TODO This doesn't support multi-key combinations
         CGEventSetIntegerValueField(
             event, kCGKeyboardEventKeycode,
             config.keyToNativeCode.at(currentRegulars.at(i)));

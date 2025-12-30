@@ -54,7 +54,7 @@ constexpr size_t regularsCount{static_cast<size_t>(Keys::m_regularsCount)};
 constexpr size_t modifiersCount{keysCount - regularsCount};
 
 inline auto isModifier(const Keys key) -> bool {
-    return key > Keys::m_regularsCount;
+    return key > Keys::m_regularsCount && key < Keys::NULLKEY;
 }
 } // namespace key
 

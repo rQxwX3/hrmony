@@ -41,7 +41,7 @@ comb::Combination::Combination(const comb::types::Keys &keys, size_t keysCount)
 }
 
 [[nodiscard]] auto comb::Combination::isEmpty() const -> bool {
-    return m_regularsCount == 0;
+    return m_regularsCount == 0 && m_modifiersCount == 0;
 }
 
 [[nodiscard]] auto comb::Combination::isNoModifiers() const -> bool {

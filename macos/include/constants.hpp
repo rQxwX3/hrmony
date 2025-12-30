@@ -27,7 +27,8 @@ constexpr auto createNativeCodeToKeyArray()
     arr[40] = Keys::K;
     arr[41] = Keys::SEMICOLON;
 
-    arr[55] = Keys::RIGHT_CMD;
+    arr[54] = Keys::RIGHT_CMD;
+    arr[55] = Keys::LEFT_CMD;
     arr[59] = Keys::LEFT_CTRL;
     arr[60] = Keys::LEFT_SHIFT;
     arr[58] = Keys::RIGHT_ALT;
@@ -50,6 +51,7 @@ constexpr auto createKeyToNativeCodeArray()
     arr[static_cast<size_t>(Keys::S)] = 1;
     arr[static_cast<size_t>(Keys::T)] = 17;
     arr[static_cast<size_t>(Keys::W)] = 13;
+    arr[static_cast<size_t>(Keys::J)] = 38;
 
     // Subtracting 1 is required because of Keys::m_regularsCount
     arr[static_cast<size_t>(Keys::RIGHT_CMD) - 1] = 55;
