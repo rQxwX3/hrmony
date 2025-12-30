@@ -48,10 +48,10 @@ enum class Keys : uint8_t {
 };
 
 constexpr size_t keysCount{static_cast<size_t>(Keys::m_keysCount) - 1};
-
 constexpr size_t regularsCount{static_cast<size_t>(Keys::m_regularsCount)};
-
 constexpr size_t modifiersCount{keysCount - regularsCount};
+
+constexpr size_t modifiersEnumOffset{key::regularsCount + 1};
 
 inline auto isModifier(const Keys key) -> bool {
     return key > Keys::m_regularsCount && key < Keys::NULLKEY;

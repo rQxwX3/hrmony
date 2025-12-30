@@ -4,5 +4,5 @@
 [[nodiscard]] auto
 mac::types::ModifierToCGEventFlags::at(key::Keys modifier) const
     -> CGEventFlags {
-    return m_array.at(static_cast<size_t>(modifier) - key::regularsCount - 1);
+    return m_array.at(static_cast<size_t>(modifier) - key::modifiersEnumOffset);
 }

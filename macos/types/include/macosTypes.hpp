@@ -10,22 +10,22 @@ namespace mac::types {
 using NativeModifier = CGEventFlags;
 using NativeCode = CGKeyCode;
 using Event = CGEventRef;
-constexpr size_t maxKeyCode{128};
 
-using ModifierToCGEventFlagsArray =
-    std::array<CGEventFlags, static_cast<size_t>(key::modifiersCount)>;
+constexpr size_t maxKeyCode{128};
 
 class ModifierToCGEventFlags {
   private:
-    ModifierToCGEventFlagsArray m_array;
+    std::array<CGEventFlags, static_cast<size_t>(key::modifiersCount)> m_array;
 
   public:
-    constexpr ModifierToCGEventFlags(const ModifierToCGEventFlagsArray &array)
-        : m_array{array} {}
+    constexpr auto operator[](key::Keys modifier) -> CGEventFlags & {
+        return m_array.at(static_cast<size_t>(modifier) -
+                          key::modifiersEnumOffset);
+    }
 
-  public:
     [[nodiscard]] auto at(key::Keys modifier) const -> CGEventFlags;
 };
+
 } // namespace mac::types
 
 #endif // MACOS_TYPES_HPP

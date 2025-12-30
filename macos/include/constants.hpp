@@ -66,33 +66,23 @@ constexpr plat::types::KeyToNativeCodeArray keyToNativeCodeArray{
     createKeyToNativeCodeArray()};
 constexpr plat::types::KeyToNativeCode keyToNativeCode{keyToNativeCodeArray};
 
-using mac::types::ModifierToCGEventFlags,
-    mac::types::ModifierToCGEventFlagsArray;
+using mac::types::ModifierToCGEventFlags;
 
-constexpr auto createModifierToCGEventFlagsArray()
-    -> ModifierToCGEventFlagsArray {
-    ModifierToCGEventFlagsArray arr{};
+constexpr auto createModifierToCGEventFlags() -> ModifierToCGEventFlags {
+    ModifierToCGEventFlags modifierToCGEventFlags{};
 
     using ::key::Keys;
 
-    // Subracting key::regularsCount and 1 is required because regulars and
-    // modifiers are in the same enum class
-    arr[static_cast<size_t>(Keys::RIGHT_CMD) - key::regularsCount - 1] =
-        kCGEventFlagMaskCommand;
-    arr[static_cast<size_t>(Keys::LEFT_CTRL) - key::regularsCount - 1] =
-        kCGEventFlagMaskControl;
-    arr[static_cast<size_t>(Keys::LEFT_SHIFT) - key::regularsCount - 1] =
-        kCGEventFlagMaskShift;
-    arr[static_cast<size_t>(Keys::RIGHT_ALT) - key::regularsCount - 1] =
-        kCGEventFlagMaskAlternate;
+    modifierToCGEventFlags[Keys::RIGHT_CMD] = kCGEventFlagMaskCommand;
+    modifierToCGEventFlags[Keys::LEFT_CTRL] = kCGEventFlagMaskControl;
+    modifierToCGEventFlags[Keys::LEFT_SHIFT] = kCGEventFlagMaskShift;
+    modifierToCGEventFlags[Keys::RIGHT_ALT] = kCGEventFlagMaskAlternate;
 
-    return arr;
+    return modifierToCGEventFlags;
 }
 
-constexpr ModifierToCGEventFlagsArray modifierToCGEventFlagsArray{
-    createModifierToCGEventFlagsArray()};
 constexpr ModifierToCGEventFlags modifierToCGEventFlags{
-    modifierToCGEventFlagsArray};
+    createModifierToCGEventFlags()};
 } // namespace mac::consts
 
 #endif // MACOS_CONSTANTS_HPP
