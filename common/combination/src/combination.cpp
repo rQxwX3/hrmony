@@ -1,95 +1,77 @@
 #include <combination.hpp>
 
-Combination::Combination()
-    : m_modifiers{}, m_keys{}, m_modifiersCount{0}, m_keysCount{0} {}
+comb::Combination::Combination()
+    : m_regulars{}, m_regularsCount{0}, m_modifiersCount{0} {}
 
-Combination::Combination(const CombinationModifiers &modifiers,
-                         size_t modifiersCount)
+comb::Combination::Combination(const CombinationRegulars &keys,
+                               size_t keysCount)
     : Combination() {
-    if (modifiersCount > m_modifiers.size()) {
-        // TODO
-    }
-
-    for (int i{0}; i != modifiersCount; ++i) {
-        m_modifiers[i] = modifiers[i];
-        ++m_modifiersCount;
-    }
-}
-
-Combination::Combination(const CombinationKeys &keys, size_t keysCount)
-    : Combination() {
-    if (keysCount > m_keys.size()) {
-        // TODO
-    }
 
     for (int i{0}; i != keysCount; ++i) {
-        m_keys[i] = keys[i];
-        ++m_keysCount;
+        const auto key = keys.at(i);
+
+        addKey(key);
     }
 }
 
-Combination::Combination(const CombinationModifiers &modifiers,
-                         size_t modifiersCount, const CombinationKeys &keys,
-                         size_t keysCount)
-    : Combination(modifiers, modifiersCount) {
-    if (keysCount > m_keys.size()) {
-        // TODO
-    }
-
-    for (int i{0}; i != keysCount; ++i) {
-        m_keys[i] = keys[i];
-        ++m_keysCount;
-    }
+[[nodiscard]] auto comb::Combination::getRegularsSlotsLeft() const -> size_t {
+    return m_regulars.size() - m_regularsCount;
 }
 
-[[nodiscard]] auto Combination::getModifiersSlotsLeft() const -> size_t {
+[[nodiscard]] auto comb::Combination::getModifiersSlotsLeft() const -> size_t {
     return m_modifiers.size() - m_modifiersCount;
 }
 
-[[nodiscard]] auto Combination::getKeysSlotsLeft() const -> size_t {
-    return m_keys.size() - m_keysCount;
+[[nodiscard]] auto comb::Combination::getRegulars() const
+    -> CombinationRegulars {
+    return m_regulars;
 }
 
-[[nodiscard]] auto Combination::getModifiers() const -> CombinationModifiers {
+[[nodiscard]] auto comb::Combination::getModifiers() const
+    -> CombinationModifiers {
     return m_modifiers;
 }
 
-[[nodiscard]] auto Combination::getKeys() const -> CombinationKeys {
-    return m_keys;
+[[nodiscard]] auto comb::Combination::getRegularsCount() const -> size_t {
+    return m_regularsCount;
 }
 
-[[nodiscard]] auto Combination::getModifiersCount() const -> size_t {
+[[nodiscard]] auto comb::Combination::getModifiersCount() const -> size_t {
     return m_modifiersCount;
 }
 
-[[nodiscard]] auto Combination::getKeysCount() const -> size_t {
-    return m_keysCount;
+[[nodiscard]] auto comb::Combination::isEmpty() const -> bool {
+    return m_regularsCount == 0;
 }
 
-[[nodiscard]] auto Combination::isEmpty() const -> bool {
-    return m_modifiersCount == 0 && m_keysCount == 0;
-}
-
-[[nodiscard]] auto Combination::isNoModifiers() const -> bool {
+[[nodiscard]] auto comb::Combination::isNoModifiers() const -> bool {
     return !isEmpty() && m_modifiersCount == 0;
 }
 
-auto Combination::addModifier(const key::Modifiers modifier) -> void {
+auto comb::Combination::addModifier(const key::Keys key) -> void {
     if (0 == getModifiersSlotsLeft()) {
         // TODO
         return;
     }
 
-    m_modifiers[m_modifiersCount] = modifier;
+    m_modifiers[m_modifiersCount] = key;
     ++m_modifiersCount;
 }
 
-auto Combination::addKey(const key::Keys key) -> void {
-    if (0 == getKeysSlotsLeft()) {
+auto comb::Combination::addRegular(const key::Keys key) -> void {
+    if (0 == getRegularsSlotsLeft()) {
         // TODO
         return;
     }
 
-    m_keys[m_keysCount] = key;
-    ++m_keysCount;
+    m_regulars[m_regularsCount] = key;
+    ++m_regularsCount;
+}
+
+auto comb::Combination::addKey(const key::Keys key) -> void {
+    if (key::isModifier(key)) {
+        addModifier(key);
+    } else {
+        addRegular(key);
+    }
 }

@@ -34,11 +34,7 @@ enum class Keys : uint8_t {
     Z,
     SEMICOLON,
     ESC,
-    m_size
-};
-
-enum class Modifiers : uint8_t {
-    NULLKEY = 0,
+    m_regularsCount,
     RIGHT_CMD,
     LEFT_CMD,
     RIGHT_ALT,
@@ -47,8 +43,9 @@ enum class Modifiers : uint8_t {
     LEFT_CTRL,
     RIGHT_SHIFT,
     LEFT_SHIFT,
-    m_size
 };
+
+auto isModifier(const Keys key) -> bool { return key > Keys::m_regularsCount; }
 } // namespace key
 
 #endif // KEYS_HPP

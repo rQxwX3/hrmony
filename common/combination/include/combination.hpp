@@ -3,42 +3,41 @@
 
 #include <types.hpp>
 
+namespace comb {
 class Combination {
   private:
     CombinationModifiers m_modifiers;
-    CombinationKeys m_keys;
+    CombinationRegulars m_regulars;
 
+    size_t m_regularsCount;
     size_t m_modifiersCount;
-    size_t m_keysCount;
 
   public:
     Combination();
 
-    Combination(const CombinationModifiers &modifiers, size_t modifiersCount);
-
-    Combination(const CombinationKeys &keys, size_t keysCount);
-
-    Combination(const CombinationModifiers &modifiers, size_t modifiersCount,
-                const CombinationKeys &keys, size_t keysCount);
+    Combination(const CombinationRegulars &keys, size_t keysCount);
 
   public:
     [[nodiscard]] auto getModifiersSlotsLeft() const -> size_t;
-    [[nodiscard]] auto getKeysSlotsLeft() const -> size_t;
+    [[nodiscard]] auto getRegularsSlotsLeft() const -> size_t;
 
   public:
     [[nodiscard]] auto getModifiers() const -> CombinationModifiers;
-    [[nodiscard]] auto getKeys() const -> CombinationKeys;
+    [[nodiscard]] auto getRegulars() const -> CombinationRegulars;
 
     [[nodiscard]] auto getModifiersCount() const -> size_t;
-    [[nodiscard]] auto getKeysCount() const -> size_t;
+    [[nodiscard]] auto getRegularsCount() const -> size_t;
 
   public:
     [[nodiscard]] auto isEmpty() const -> bool;
     [[nodiscard]] auto isNoModifiers() const -> bool;
 
   public:
-    auto addModifier(key::Modifiers modifier) -> void;
     auto addKey(key::Keys key) -> void;
+
+    auto addModifier(key::Keys key) -> void;
+    auto addRegular(key::Keys key) -> void;
 };
+} // namespace comb
 
 #endif // COMBINATION_HPP

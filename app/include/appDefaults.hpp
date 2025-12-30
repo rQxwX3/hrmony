@@ -18,6 +18,8 @@ inline auto createKeyBindingArray() -> KeyBindingArray {
     arr[static_cast<size_t>(Keys::K)] = Combination({Modifiers::RIGHT_CMD}, 1);
 
     arr[static_cast<size_t>(Keys::A)] = Combination({Keys::S}, 1);
+    arr[static_cast<size_t>(Keys::T)] =
+        Combination({Modifiers::RIGHT_CMD}, 1, {Keys::T}, 1);
 
     // arr[static_cast<size_t>(Printables::K)] = {Modifiers::ALT};
     // arr[static_cast<size_t>(Printables::L)] = {Modifiers::CTRL};

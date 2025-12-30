@@ -13,10 +13,10 @@ using macOS::types::NativeCode, macOS::types::NativeModifier,
 class Combination;
 
 constexpr size_t maxKeymapModifiers{4};
-constexpr size_t maxKeymapKeys{4};
+constexpr size_t maxKeymapRegulars{4};
 
-using CombinationModifiers = std::array<key::Modifiers, maxKeymapModifiers>;
-using CombinationKeys = std::array<key::Keys, maxKeymapKeys>;
+using CombinationModifiers = std::array<key::Keys, maxKeymapModifiers>;
+using CombinationRegulars = std::array<key::Keys, maxKeymapRegulars>;
 
 using NativeCodeToKeyArray = std::array<key::Keys, maxKeyCode>;
 
