@@ -1,17 +1,18 @@
 #ifndef IPLATFORM_HPP
 #define IPLATFORM_HPP
 
-#include <types.hpp>
+#include <combination.hpp>
+#include <platformTypes.hpp>
 
 class IPlatform {
   public:
     virtual auto run() -> void = 0;
 
     [[nodiscard]] virtual auto getKeyBinding(key::Keys key) const
-        -> Combination = 0;
+        -> comb::Combination = 0;
 
   public:
-    virtual auto addToCurrentCombination(const Combination &combination)
+    virtual auto addToCurrentCombination(const comb::Combination &combination)
         -> void = 0;
 
     virtual auto resetCurrentCombination() -> void = 0;

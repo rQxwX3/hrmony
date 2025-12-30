@@ -4,25 +4,28 @@
 #include <combination.hpp>
 #include <config.hpp>
 #include <iplatform.hpp>
-#include <types.hpp>
+#include <platformTypes.hpp>
 
+namespace app {
 class App;
+}
 
+namespace plat {
 class Platform : public IPlatform {
   private:
-    App *m_appPtr;
+    app::App *m_appPtr;
 
-    Combination m_currentCombination;
+    comb::Combination m_currentCombination;
 
   public:
-    Platform(App *appPtr = nullptr);
+    Platform(app::App *appPtr = nullptr);
 
   public:
     auto enterHRMMode() -> void override;
     auto exitHRMMode() -> void override;
 
   public:
-    auto addToCurrentCombination(const Combination &combination)
+    auto addToCurrentCombination(const comb::Combination &combination)
         -> void override;
 
     auto resetCurrentCombination() -> void override;
@@ -31,19 +34,18 @@ class Platform : public IPlatform {
     [[nodiscard]] auto nativeCodeToKey(NativeCode nativeCode) const
         -> key::Keys;
 
-    [[nodiscard]] auto modifierToNativeModifier(key::Modifiers modifier) const
-        -> NativeModifier;
-
   public:
-    [[nodiscard]] auto getCurrentCombination() const -> const Combination &;
+    [[nodiscard]] auto getCurrentCombination() const
+        -> const comb::Combination &;
 
   public:
     [[nodiscard]] auto getKeyBinding(key::Keys key) const
-        -> Combination override;
+        -> comb::Combination override;
 
     [[nodiscard]] auto getConfig() const -> conf::Config;
 
     [[nodiscard]] auto isHRMMode() const -> bool;
 };
+} // namespace plat
 
 #endif // PLATFORM_HPP

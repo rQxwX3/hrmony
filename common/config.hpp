@@ -1,47 +1,34 @@
 #ifndef CONFIG_HPP
 #define CONFIG_HPP
 
-#include <appDefaults.hpp>
-#include <combination.hpp>
+#include <appTypes.hpp>
 #include <constants.hpp>
 #include <keys.hpp>
-#include <types.hpp>
-
-using key::Modifiers, key::Keys, macOS::constants::nativeCodeToKey,
-    macOS::constants::keyToNativeCode, macOS::constants::modifierToNativeCode,
-    macOS::constants::modifierToCGEventFlags,
-    macOS::constants::nativeCodeToModifier, macOS::types::NativeCodeToModifier,
-    macOS::types::ModifierToCGEventFlags, ::app::keyBindingArray;
+#include <platformTypes.hpp>
 
 namespace conf {
 struct Config {
-    Modifiers leaderKey;
-    Keys exitKey;
+    key::Keys leaderKey;
+    key::Keys exitKey;
 
-    NativeCodeToKey nativeCodeToKey;
-    KeyToNativeCode keyToNativeCode;
+    plat::types::NativeCodeToKey nativeCodeToKey;
+    plat::types::KeyToNativeCode keyToNativeCode;
 
-    ModifierToCGEventFlags modifierToCGEventFlags;
-    ModifierToNativeCode modifierToNativeCode;
+    mac::types::ModifierToCGEventFlags modifierToCGEventFlags;
 
-    NativeCodeToModifier nativeCodeToModifier;
-
-    KeyBindingArray keyBindingArray;
+    app::types::KeyBindingArray keyBindingArray;
 };
 
 constexpr auto loadDefaultConfig() -> Config {
-    Config config{.leaderKey = Modifiers::RIGHT_CMD,
-                  .exitKey = Keys::ESC,
+    Config config{.leaderKey = key::Keys::RIGHT_CMD,
+                  .exitKey = key::Keys::ESC,
 
-                  .nativeCodeToKey = nativeCodeToKey,
-                  .keyToNativeCode = keyToNativeCode,
+                  .nativeCodeToKey = mac::consts::nativeCodeToKey,
+                  .keyToNativeCode = mac::consts::keyToNativeCode,
 
-                  .modifierToCGEventFlags = modifierToCGEventFlags,
-                  .modifierToNativeCode = modifierToNativeCode,
+                  .modifierToCGEventFlags = mac::consts::modifierToCGEventFlags,
 
-                  .nativeCodeToModifier = nativeCodeToModifier,
-
-                  .keyBindingArray = keyBindingArray};
+                  .keyBindingArray = app::types::keyBindingArray};
 
     return config;
 }

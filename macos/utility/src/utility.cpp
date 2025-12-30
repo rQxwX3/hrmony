@@ -4,16 +4,16 @@
 
 #include <iostream>
 
-using key::Modifiers;
-using macOS::MacOS;
+using key::Keys;
+using mac::MacOS;
 
-auto macOS::util::getBindedCombination(const MacOS *self) -> Combination {
+auto mac::util::getBindedCombination(const MacOS *self) -> comb::Combination {
     const auto nativeCode{self->getCurrentNativeCode()};
 
     return self->getKeyBinding(self->nativeCodeToKey(nativeCode));
 }
 
-auto macOS::util::isHRMModeExitTriggered(const MacOS *self) -> bool {
+auto mac::util::isHRMModeExitTriggered(const MacOS *self) -> bool {
     if (!self->isHRMMode()) {
         return false;
     }
@@ -25,7 +25,7 @@ auto macOS::util::isHRMModeExitTriggered(const MacOS *self) -> bool {
     return self->nativeCodeToKey(nativeCode) == self->getConfig().exitKey;
 }
 
-auto macOS::util::isHRMModeEnterTriggered(const MacOS *self) -> bool {
+auto mac::util::isHRMModeEnterTriggered(const MacOS *self) -> bool {
     if (self->isHRMMode()) {
         return false;
     }
@@ -35,10 +35,10 @@ auto macOS::util::isHRMModeEnterTriggered(const MacOS *self) -> bool {
 
     // TODO Only works if leaderKey is a modifier (maybe create a single
     // conversion function for both types)
-    return self->nativeCodeToModifier(nativeCode) == leaderKey;
+    return self->nativeCodeToKey(nativeCode) == leaderKey;
 }
 
-auto macOS::util::isBindedKeyPressed(const MacOS *self) -> bool {
+auto mac::util::isBindedKeyPressed(const MacOS *self) -> bool {
     if (!self->isHRMMode()) {
         return false;
     }
@@ -48,7 +48,7 @@ auto macOS::util::isBindedKeyPressed(const MacOS *self) -> bool {
     return !bindedCombination.isEmpty() && !bindedCombination.isNoModifiers();
 }
 
-auto macOS::util::isKeymapFinished(const MacOS *self) -> bool {
+auto mac::util::isKeymapFinished(const MacOS *self) -> bool {
     if (!self->isHRMMode()) {
         return false;
     }
@@ -58,8 +58,8 @@ auto macOS::util::isKeymapFinished(const MacOS *self) -> bool {
     return bindedCombination.isEmpty() || bindedCombination.isNoModifiers();
 }
 
-auto macOS::util::addKeyToFinishedKeymap(MacOS *self) -> void {
-    Combination combination(getBindedCombination(self));
+auto mac::util::addKeyToFinishedKeymap(MacOS *self) -> void {
+    comb::Combination combination(getBindedCombination(self));
 
     if (combination.isNoModifiers()) {
         const auto &combination{getBindedCombination(self)};
@@ -67,14 +67,13 @@ auto macOS::util::addKeyToFinishedKeymap(MacOS *self) -> void {
         const auto nativeCode{self->getCurrentNativeCode()};
 
         // TODO Only supports addition of one key
-        combination = Combination({nativeCodeToKey.at(nativeCode)}, 1);
+        combination = comb::Combination({self->nativeCodeToKey(nativeCode)}, 1);
     }
 
     self->addToCurrentCombination(combination);
 }
 
-[[nodiscard]] auto macOS::util::isProcessingLeaderUp(const MacOS *self)
-    -> bool {
+[[nodiscard]] auto mac::util::isProcessingLeaderUp(const MacOS *self) -> bool {
     if (self->isLeaderUpProcessed()) {
         return false;
     }
@@ -86,12 +85,11 @@ auto macOS::util::addKeyToFinishedKeymap(MacOS *self) -> void {
     const auto config{self->getConfig()};
     const auto nativeCode{self->getCurrentNativeCode()};
 
-    return config.leaderKey == self->nativeCodeToModifier(nativeCode);
+    return config.leaderKey == self->nativeCodeToKey(nativeCode);
 }
 
-auto macOS::util::processKeyPress(CGEventTapProxy proxy, CGEventType type,
-                                  CGEventRef event, void *refcon)
-    -> CGEventRef {
+auto mac::util::processKeyPress(CGEventTapProxy proxy, CGEventType type,
+                                CGEventRef event, void *refcon) -> CGEventRef {
     auto *self{static_cast<MacOS *>(refcon)};
 
     const auto &bindedCombination(getBindedCombination(self));

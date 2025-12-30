@@ -6,30 +6,14 @@
 #include <ApplicationServices/ApplicationServices.h>
 #include <array>
 
-namespace macOS::types {
+namespace mac::types {
 using NativeModifier = CGEventFlags;
 using NativeCode = CGKeyCode;
 using Event = CGEventRef;
 constexpr size_t maxKeyCode{128};
 
-using NativeCodeToModifierArray =
-    std::array<key::Modifiers, static_cast<size_t>(key::Modifiers::m_size)>;
-
-class NativeCodeToModifier {
-  private:
-    NativeCodeToModifierArray m_array;
-
-  public:
-    constexpr NativeCodeToModifier(const NativeCodeToModifierArray &array)
-        : m_array{array} {}
-
-  public:
-    [[nodiscard]] auto at(NativeModifier nativeModifier) const
-        -> key::Modifiers;
-};
-
 using ModifierToCGEventFlagsArray =
-    std::array<CGEventFlags, static_cast<size_t>(key::Modifiers::m_size)>;
+    std::array<CGEventFlags, static_cast<size_t>(key::modifiersCount)>;
 
 class ModifierToCGEventFlags {
   private:
@@ -40,8 +24,8 @@ class ModifierToCGEventFlags {
         : m_array{array} {}
 
   public:
-    [[nodiscard]] auto at(key::Modifiers modifier) const -> CGEventFlags;
+    [[nodiscard]] auto at(key::Keys modifier) const -> CGEventFlags;
 };
-} // namespace macOS::types
+} // namespace mac::types
 
 #endif // MACOS_TYPES_HPP

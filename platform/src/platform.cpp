@@ -2,18 +2,19 @@
 #include <config.hpp>
 #include <platform.hpp>
 
-Platform::Platform(App *appPtr) : m_appPtr{appPtr} {};
+plat::Platform::Platform(app::App *appPtr) : m_appPtr{appPtr} {};
 
-[[nodiscard]] auto Platform::getCurrentCombination() const
-    -> const Combination & {
+[[nodiscard]] auto plat::Platform::getCurrentCombination() const
+    -> const comb::Combination & {
     return m_currentCombination;
 }
 
-auto Platform::resetCurrentCombination() -> void {
-    m_currentCombination = Combination();
+auto plat::Platform::resetCurrentCombination() -> void {
+    m_currentCombination = comb::Combination();
 }
 
-auto Platform::addToCurrentCombination(const Combination &combination) -> void {
+auto plat::Platform::addToCurrentCombination(
+    const comb::Combination &combination) -> void {
     const auto &modifiers{combination.getModifiers()};
     const auto modifiersCount{combination.getModifiersCount()};
 
@@ -21,16 +22,17 @@ auto Platform::addToCurrentCombination(const Combination &combination) -> void {
         m_currentCombination.addModifier(modifiers.at(i));
     }
 
-    const auto &keys{combination.getKeys()};
-    const auto keysCount{combination.getKeysCount()};
+    const auto &regulars{combination.getRegulars()};
+    const auto regularsCount{combination.getRegularsCount()};
 
-    for (size_t i{0}; i != keysCount; ++i) {
-        m_currentCombination.addKey(keys.at(i));
+    // TODO Supports only one key
+    for (size_t i{0}; i != regularsCount; ++i) {
+        m_currentCombination.addKey(regulars.at(i));
     }
 }
 
-[[nodiscard]] auto Platform::getKeyBinding(const key::Keys key) const
-    -> Combination {
+[[nodiscard]] auto plat::Platform::getKeyBinding(const key::Keys key) const
+    -> comb::Combination {
     const auto &config{getConfig()};
 
     const auto &bindedCombination{
@@ -39,32 +41,25 @@ auto Platform::addToCurrentCombination(const Combination &combination) -> void {
     return config.keyBindingArray.at(static_cast<size_t>(key));
 }
 
-[[nodiscard]] auto Platform::getConfig() const -> conf::Config {
+[[nodiscard]] auto plat::Platform::getConfig() const -> conf::Config {
     return m_appPtr->getConfig();
 }
 
-[[nodiscard]] auto Platform::nativeCodeToKey(const NativeCode nativeCode) const
+[[nodiscard]] auto
+plat::Platform::nativeCodeToKey(const NativeCode nativeCode) const
     -> key::Keys {
     const auto config{getConfig()};
 
     return config.nativeCodeToKey.at(nativeCode);
 }
 
-[[nodiscard]] auto
-Platform::modifierToNativeModifier(const key::Modifiers modifier) const
-    -> NativeModifier {
-    const auto config{getConfig()};
-
-    return config.modifierToCGEventFlags.at(modifier);
-}
-
-[[nodiscard]] auto Platform::isHRMMode() const -> bool {
+[[nodiscard]] auto plat::Platform::isHRMMode() const -> bool {
     return m_appPtr->isHRMMode();
 }
 
-auto Platform::enterHRMMode() -> void { m_appPtr->toggleHRMMode(); }
+auto plat::Platform::enterHRMMode() -> void { m_appPtr->toggleHRMMode(); }
 
-auto Platform::exitHRMMode() -> void {
+auto plat::Platform::exitHRMMode() -> void {
     resetCurrentCombination();
     m_appPtr->toggleHRMMode();
 }

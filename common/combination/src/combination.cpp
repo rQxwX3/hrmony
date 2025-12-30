@@ -1,10 +1,10 @@
 #include <combination.hpp>
+#include <keys.hpp>
 
 comb::Combination::Combination()
-    : m_regulars{}, m_regularsCount{0}, m_modifiersCount{0} {}
+    : m_regulars{}, m_modifiers{}, m_regularsCount{0}, m_modifiersCount{0} {}
 
-comb::Combination::Combination(const CombinationRegulars &keys,
-                               size_t keysCount)
+comb::Combination::Combination(const comb::types::Keys &keys, size_t keysCount)
     : Combination() {
 
     for (int i{0}; i != keysCount; ++i) {
@@ -23,12 +23,12 @@ comb::Combination::Combination(const CombinationRegulars &keys,
 }
 
 [[nodiscard]] auto comb::Combination::getRegulars() const
-    -> CombinationRegulars {
+    -> comb::types::Regulars {
     return m_regulars;
 }
 
 [[nodiscard]] auto comb::Combination::getModifiers() const
-    -> CombinationModifiers {
+    -> comb::types::Modifiers {
     return m_modifiers;
 }
 

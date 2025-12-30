@@ -1,12 +1,12 @@
 #ifndef KEYS_HPP
 #define KEYS_HPP
 
+#include <cstddef>
 #include <cstdint>
 
 namespace key {
 enum class Keys : uint8_t {
-    NULLKEY = 0,
-    A,
+    A = 0,
     B,
     C,
     D,
@@ -43,9 +43,19 @@ enum class Keys : uint8_t {
     LEFT_CTRL,
     RIGHT_SHIFT,
     LEFT_SHIFT,
+    m_keysCount,
+    NULLKEY,
 };
 
-auto isModifier(const Keys key) -> bool { return key > Keys::m_regularsCount; }
+constexpr size_t keysCount{static_cast<size_t>(Keys::m_keysCount) - 1};
+
+constexpr size_t regularsCount{static_cast<size_t>(Keys::m_regularsCount)};
+
+constexpr size_t modifiersCount{keysCount - regularsCount};
+
+inline auto isModifier(const Keys key) -> bool {
+    return key > Keys::m_regularsCount;
+}
 } // namespace key
 
 #endif // KEYS_HPP

@@ -3,13 +3,14 @@
 
 #include <keys.hpp>
 #include <macosTypes.hpp>
-#include <types.hpp>
+#include <platformTypes.hpp>
 
 #include <ApplicationServices/ApplicationServices.h>
 
-namespace macOS::constants {
-constexpr auto createNativeCodeToKeyArray() -> NativeCodeToKeyArray {
-    NativeCodeToKeyArray arr{};
+namespace mac::consts {
+constexpr auto createNativeCodeToKeyArray()
+    -> plat::types::NativeCodeToKeyArray {
+    plat::types::NativeCodeToKeyArray arr{};
 
     using ::key::Keys;
 
@@ -26,16 +27,22 @@ constexpr auto createNativeCodeToKeyArray() -> NativeCodeToKeyArray {
     arr[40] = Keys::K;
     arr[41] = Keys::SEMICOLON;
 
+    arr[55] = Keys::RIGHT_CMD;
+    arr[59] = Keys::LEFT_CTRL;
+    arr[60] = Keys::LEFT_SHIFT;
+    arr[58] = Keys::RIGHT_ALT;
+
     return arr;
 };
 
-constexpr NativeCodeToKeyArray nativeCodeToKeyArray{
+constexpr plat::types::NativeCodeToKeyArray nativeCodeToKeyArray{
     createNativeCodeToKeyArray()};
-constexpr NativeCodeToKey nativeCodeToKey =
-    NativeCodeToKey(nativeCodeToKeyArray);
+constexpr plat::types::NativeCodeToKey nativeCodeToKey =
+    plat::types::NativeCodeToKey(nativeCodeToKeyArray);
 
-constexpr auto createKeyToNativeCodeArray() -> KeyToNativeCodeArray {
-    KeyToNativeCodeArray arr{};
+constexpr auto createKeyToNativeCodeArray()
+    -> plat::types::KeyToNativeCodeArray {
+    plat::types::KeyToNativeCodeArray arr{};
 
     using ::key::Keys;
 
@@ -44,66 +51,38 @@ constexpr auto createKeyToNativeCodeArray() -> KeyToNativeCodeArray {
     arr[static_cast<size_t>(Keys::T)] = 17;
     arr[static_cast<size_t>(Keys::W)] = 13;
 
+    // Subtracting 1 is required because of Keys::m_regularsCount
+    arr[static_cast<size_t>(Keys::RIGHT_CMD) - 1] = 55;
+    arr[static_cast<size_t>(Keys::LEFT_CTRL) - 1] = 59;
+    arr[static_cast<size_t>(Keys::LEFT_SHIFT) - 1] = 60;
+    arr[static_cast<size_t>(Keys::RIGHT_ALT) - 1] = 58;
+
     return arr;
 }
 
-constexpr KeyToNativeCodeArray keyToNativeCodeArray{
+constexpr plat::types::KeyToNativeCodeArray keyToNativeCodeArray{
     createKeyToNativeCodeArray()};
-constexpr KeyToNativeCode keyToNativeCode{keyToNativeCodeArray};
+constexpr plat::types::KeyToNativeCode keyToNativeCode{keyToNativeCodeArray};
 
-constexpr auto createModifierToNativeCodeArray() -> ModifierToNativeCodeArray {
-    ModifierToNativeCodeArray arr{};
-
-    using ::key::Modifiers;
-
-    arr[static_cast<size_t>(Modifiers::RIGHT_CMD)] = 55;
-    arr[static_cast<size_t>(Modifiers::LEFT_CTRL)] = 59;
-    arr[static_cast<size_t>(Modifiers::LEFT_SHIFT)] = 60;
-    arr[static_cast<size_t>(Modifiers::RIGHT_ALT)] = 58;
-
-    return arr;
-}
-constexpr ModifierToNativeCodeArray modifierToNativeCodeArray{
-    createModifierToNativeCodeArray()};
-constexpr ModifierToNativeCode modifierToNativeCode{modifierToNativeCodeArray};
-
-constexpr size_t modifierNativeCodeOffsetFromZero = 54;
-
-constexpr auto createNativeCodeToModifierArray()
-    -> types::NativeCodeToModifierArray {
-    types::NativeCodeToModifierArray arr{};
-
-    using key::Modifiers;
-
-    arr[0] = Modifiers::RIGHT_CMD;
-    arr[1] = Modifiers::LEFT_CMD;
-    arr[2] = Modifiers::LEFT_SHIFT;
-    arr[4] = Modifiers::LEFT_ALT;
-    arr[5] = Modifiers::LEFT_CTRL;
-    arr[6] = Modifiers::RIGHT_SHIFT;
-    arr[7] = Modifiers::RIGHT_ALT;
-
-    return arr;
-}
-
-constexpr types::NativeCodeToModifierArray nativeCodeToModifierArray{
-    createNativeCodeToModifierArray()};
-constexpr types::NativeCodeToModifier nativeCodeToModifier{
-    nativeCodeToModifierArray};
-
-using macOS::types::ModifierToCGEventFlags,
-    macOS::types::ModifierToCGEventFlagsArray;
+using mac::types::ModifierToCGEventFlags,
+    mac::types::ModifierToCGEventFlagsArray;
 
 constexpr auto createModifierToCGEventFlagsArray()
     -> ModifierToCGEventFlagsArray {
     ModifierToCGEventFlagsArray arr{};
 
-    using ::key::Modifiers;
+    using ::key::Keys;
 
-    arr[static_cast<size_t>(Modifiers::RIGHT_CMD)] = kCGEventFlagMaskCommand;
-    arr[static_cast<size_t>(Modifiers::LEFT_CTRL)] = kCGEventFlagMaskControl;
-    arr[static_cast<size_t>(Modifiers::LEFT_SHIFT)] = kCGEventFlagMaskShift;
-    arr[static_cast<size_t>(Modifiers::RIGHT_ALT)] = kCGEventFlagMaskAlternate;
+    // Subracting key::regularsCount and 1 is required because regulars and
+    // modifiers are in the same enum class
+    arr[static_cast<size_t>(Keys::RIGHT_CMD) - key::regularsCount - 1] =
+        kCGEventFlagMaskCommand;
+    arr[static_cast<size_t>(Keys::LEFT_CTRL) - key::regularsCount - 1] =
+        kCGEventFlagMaskControl;
+    arr[static_cast<size_t>(Keys::LEFT_SHIFT) - key::regularsCount - 1] =
+        kCGEventFlagMaskShift;
+    arr[static_cast<size_t>(Keys::RIGHT_ALT) - key::regularsCount - 1] =
+        kCGEventFlagMaskAlternate;
 
     return arr;
 }
@@ -112,6 +91,6 @@ constexpr ModifierToCGEventFlagsArray modifierToCGEventFlagsArray{
     createModifierToCGEventFlagsArray()};
 constexpr ModifierToCGEventFlags modifierToCGEventFlags{
     modifierToCGEventFlagsArray};
-} // namespace macOS::constants
+} // namespace mac::consts
 
 #endif // MACOS_CONSTANTS_HPP

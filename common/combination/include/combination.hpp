@@ -1,13 +1,13 @@
 #ifndef COMBINATION_HPP
 #define COMBINATION_HPP
 
-#include <types.hpp>
+#include <combinationTypes.hpp>
 
 namespace comb {
 class Combination {
   private:
-    CombinationModifiers m_modifiers;
-    CombinationRegulars m_regulars;
+    comb::types::Modifiers m_modifiers;
+    comb::types::Regulars m_regulars;
 
     size_t m_regularsCount;
     size_t m_modifiersCount;
@@ -15,15 +15,16 @@ class Combination {
   public:
     Combination();
 
-    Combination(const CombinationRegulars &keys, size_t keysCount);
+    Combination(const comb::types::Keys &keys, size_t keysCount);
 
   public:
     [[nodiscard]] auto getModifiersSlotsLeft() const -> size_t;
     [[nodiscard]] auto getRegularsSlotsLeft() const -> size_t;
 
   public:
-    [[nodiscard]] auto getModifiers() const -> CombinationModifiers;
-    [[nodiscard]] auto getRegulars() const -> CombinationRegulars;
+    [[nodiscard]] auto getModifiers() const -> comb::types::Modifiers;
+
+    [[nodiscard]] auto getRegulars() const -> comb::types::Regulars;
 
     [[nodiscard]] auto getModifiersCount() const -> size_t;
     [[nodiscard]] auto getRegularsCount() const -> size_t;

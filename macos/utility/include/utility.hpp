@@ -1,28 +1,29 @@
 #ifndef UTILITY_HPP
 #define UTILITY_HPP
 
+#include <combination.hpp>
 #include <macos.hpp>
-#include <types.hpp>
 
-namespace macOS::util {
-[[nodiscard]] auto getBindedCombination(const MacOS *self) -> Combination;
+namespace mac::util {
+[[nodiscard]] auto getBindedCombination(const mac::MacOS *self)
+    -> comb::Combination;
 
-[[nodiscard]] auto isHRMModeEnterTriggered(const MacOS *self) -> bool;
+[[nodiscard]] auto isHRMModeEnterTriggered(const mac::MacOS *self) -> bool;
 
-[[nodiscard]] auto isHRMModeExitTriggered(const MacOS *self) -> bool;
+[[nodiscard]] auto isHRMModeExitTriggered(const mac::MacOS *self) -> bool;
 
-[[nodiscard]] auto isKeymapFinished(const MacOS *self) -> bool;
+[[nodiscard]] auto isKeymapFinished(const mac::MacOS *self) -> bool;
 
-[[nodiscard]] auto isBindedKeyPressed(const MacOS *self) -> bool;
+[[nodiscard]] auto isBindedKeyPressed(const mac::MacOS *self) -> bool;
 
 [[nodiscard]] auto processKeyPress(CGEventTapProxy proxy, CGEventType type,
                                    CGEventRef event, void *refcon)
     -> CGEventRef;
 
-[[nodiscard]] auto isProcessingLeaderUp(const MacOS *self) -> bool;
+[[nodiscard]] auto isProcessingLeaderUp(const mac::MacOS *self) -> bool;
 
-auto addKeyToFinishedKeymap(MacOS *self) -> void;
+auto addKeyToFinishedKeymap(mac::MacOS *self) -> void;
 
-} // namespace macOS::util
+} // namespace mac::util
 
 #endif // UTILITY_HPP

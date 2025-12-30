@@ -6,8 +6,8 @@
 
 #include <ApplicationServices/ApplicationServices.h>
 
-namespace macOS {
-class MacOS : public Platform {
+namespace mac {
+class MacOS : public plat::Platform {
   private:
     CFRunLoopRef m_runLoopRef;
 
@@ -16,16 +16,18 @@ class MacOS : public Platform {
     bool m_leaderUpProcessed;
 
   public:
-    MacOS(App *appPtr);
-    auto run() -> void override;
+    MacOS(app::App *appPtr);
     ~MacOS() override;
 
   public:
-    [[nodiscard]] auto modifierToCGEventFlags(key::Modifiers modifier) const
+    auto run() -> void override;
+
+  public:
+    [[nodiscard]] auto modifierToCGEventFlags(key::Keys modifier) const
         -> CGEventFlags;
 
-    [[nodiscard]] auto nativeCodeToModifier(NativeModifier nativeModifier) const
-        -> key::Modifiers;
+    [[nodiscard]] auto nativeCodeToKey(NativeCode nativeCode) const
+        -> key::Keys;
 
   public:
     auto setEventToCurrentCombination(Event &event) -> void override;
@@ -48,6 +50,6 @@ class MacOS : public Platform {
     auto operator=(const MacOS &other) -> MacOS & = delete;
     auto operator=(MacOS &&other) -> MacOS & = delete;
 };
-} // namespace macOS
+} // namespace mac
 
 #endif // MACOS_HPP

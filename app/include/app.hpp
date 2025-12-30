@@ -6,9 +6,10 @@
 
 #include <memory>
 
+namespace app {
 class App {
   private:
-    std::unique_ptr<Platform> m_platform;
+    std::unique_ptr<plat::Platform> m_platform;
 
     conf::Config m_config;
 
@@ -18,14 +19,16 @@ class App {
   public:
     App();
 
+  public:
     auto run() -> void;
     auto toggleHRMMode() -> void;
-
-    [[nodiscard]] auto getConfig() const -> conf::Config;
 
   public:
     [[nodiscard]] auto isRunning() const -> bool;
     [[nodiscard]] auto isHRMMode() const -> bool;
+
+    [[nodiscard]] auto getConfig() const -> conf::Config;
 };
+} // namespace app
 
 #endif // APP_HPP
