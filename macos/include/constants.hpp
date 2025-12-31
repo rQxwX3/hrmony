@@ -8,38 +8,34 @@
 #include <ApplicationServices/ApplicationServices.h>
 
 namespace mac::consts {
-constexpr auto createNativeCodeToKeyArray()
-    -> plat::types::NativeCodeToKeyArray {
-    plat::types::NativeCodeToKeyArray arr{};
+constexpr auto createNativeCodeToKey() -> plat::types::NativeCodeToKey {
+    plat::types::NativeCodeToKey nativeCodeToKey{};
 
     using ::key::Keys;
 
-    arr[0] = Keys::A;
-    arr[1] = Keys::S;
-    arr[2] = Keys::D;
-    arr[3] = Keys::F;
-    arr[4] = Keys::H;
-    arr[12] = Keys::Q;
-    arr[13] = Keys::W;
-    arr[17] = Keys::T;
-    arr[37] = Keys::L;
-    arr[38] = Keys::J;
-    arr[40] = Keys::K;
-    arr[41] = Keys::SEMICOLON;
+    nativeCodeToKey[0] = Keys::A;
+    nativeCodeToKey[1] = Keys::S;
+    nativeCodeToKey[2] = Keys::D;
+    nativeCodeToKey[3] = Keys::F;
+    nativeCodeToKey[4] = Keys::H;
+    nativeCodeToKey[12] = Keys::Q;
+    nativeCodeToKey[13] = Keys::W;
+    nativeCodeToKey[17] = Keys::T;
+    nativeCodeToKey[37] = Keys::L;
+    nativeCodeToKey[38] = Keys::J;
+    nativeCodeToKey[40] = Keys::K;
+    nativeCodeToKey[41] = Keys::SEMICOLON;
 
-    arr[54] = Keys::RIGHT_CMD;
-    arr[55] = Keys::LEFT_CMD;
-    arr[59] = Keys::LEFT_CTRL;
-    arr[60] = Keys::LEFT_SHIFT;
-    arr[58] = Keys::RIGHT_ALT;
+    nativeCodeToKey[54] = Keys::RIGHT_CMD;
+    nativeCodeToKey[55] = Keys::LEFT_CMD;
+    nativeCodeToKey[59] = Keys::LEFT_CTRL;
+    nativeCodeToKey[60] = Keys::LEFT_SHIFT;
+    nativeCodeToKey[58] = Keys::RIGHT_ALT;
 
-    return arr;
+    return nativeCodeToKey;
 };
 
-constexpr plat::types::NativeCodeToKeyArray nativeCodeToKeyArray{
-    createNativeCodeToKeyArray()};
-constexpr plat::types::NativeCodeToKey nativeCodeToKey =
-    plat::types::NativeCodeToKey(nativeCodeToKeyArray);
+constexpr plat::types::NativeCodeToKey nativeCodeToKey{createNativeCodeToKey()};
 
 constexpr auto createKeyToNativeCode() -> plat::types::KeyToNativeCode {
     plat::types::KeyToNativeCode keyToNativeCode{};

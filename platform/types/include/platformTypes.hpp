@@ -11,18 +11,16 @@ using mac::types::NativeCode, mac::types::NativeModifier,
 #endif // __APPLE__
 
 namespace plat::types {
-using NativeCodeToKeyArray = std::array<key::Keys, maxKeyCode>;
-
 class NativeCodeToKey {
   private:
-    NativeCodeToKeyArray m_array;
-
-  public:
-    constexpr NativeCodeToKey(const NativeCodeToKeyArray &array)
-        : m_array{array} {}
+    std::array<key::Keys, maxKeyCode> m_array;
 
   public:
     [[nodiscard]] auto at(NativeCode nativeCode) const -> key::Keys;
+
+    constexpr auto operator[](NativeCode nativeCode) -> key::Keys & {
+        return m_array.at(static_cast<size_t>(nativeCode));
+    }
 };
 
 class KeyToNativeCode {
