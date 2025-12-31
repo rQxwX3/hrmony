@@ -41,30 +41,26 @@ constexpr plat::types::NativeCodeToKeyArray nativeCodeToKeyArray{
 constexpr plat::types::NativeCodeToKey nativeCodeToKey =
     plat::types::NativeCodeToKey(nativeCodeToKeyArray);
 
-constexpr auto createKeyToNativeCodeArray()
-    -> plat::types::KeyToNativeCodeArray {
-    plat::types::KeyToNativeCodeArray arr{};
+constexpr auto createKeyToNativeCode() -> plat::types::KeyToNativeCode {
+    plat::types::KeyToNativeCode keyToNativeCode{};
 
     using ::key::Keys;
 
-    arr[static_cast<size_t>(Keys::A)] = 0;
-    arr[static_cast<size_t>(Keys::S)] = 1;
-    arr[static_cast<size_t>(Keys::T)] = 17;
-    arr[static_cast<size_t>(Keys::W)] = 13;
-    arr[static_cast<size_t>(Keys::J)] = 38;
+    keyToNativeCode[Keys::A] = 0;
+    keyToNativeCode[Keys::S] = 1;
+    keyToNativeCode[Keys::T] = 17;
+    keyToNativeCode[Keys::W] = 13;
+    keyToNativeCode[Keys::J] = 38;
 
-    // Subtracting 1 is required because of Keys::m_regularsCount
-    arr[static_cast<size_t>(Keys::RIGHT_CMD) - 1] = 55;
-    arr[static_cast<size_t>(Keys::LEFT_CTRL) - 1] = 59;
-    arr[static_cast<size_t>(Keys::LEFT_SHIFT) - 1] = 60;
-    arr[static_cast<size_t>(Keys::RIGHT_ALT) - 1] = 58;
+    keyToNativeCode[Keys::RIGHT_CMD] = 55;
+    keyToNativeCode[Keys::LEFT_CTRL] = 59;
+    keyToNativeCode[Keys::LEFT_SHIFT] = 60;
+    keyToNativeCode[Keys::RIGHT_ALT] = 58;
 
-    return arr;
+    return keyToNativeCode;
 }
 
-constexpr plat::types::KeyToNativeCodeArray keyToNativeCodeArray{
-    createKeyToNativeCodeArray()};
-constexpr plat::types::KeyToNativeCode keyToNativeCode{keyToNativeCodeArray};
+constexpr plat::types::KeyToNativeCode keyToNativeCode{createKeyToNativeCode()};
 
 using mac::types::ModifierToCGEventFlags;
 

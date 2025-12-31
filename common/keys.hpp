@@ -53,7 +53,7 @@ constexpr size_t modifiersCount{keysCount - regularsCount};
 
 constexpr size_t modifiersEnumOffset{key::regularsCount + 1};
 
-inline auto isModifier(const Keys key) -> bool {
+constexpr auto isModifier(const Keys key) -> bool {
     return key > Keys::m_regularsCount && key < Keys::NULLKEY;
 }
 } // namespace key

@@ -12,7 +12,6 @@ using mac::types::NativeCode, mac::types::NativeModifier,
 
 namespace plat::types {
 using NativeCodeToKeyArray = std::array<key::Keys, maxKeyCode>;
-using KeyToNativeCodeArray = std::array<NativeCode, key::keysCount>;
 
 class NativeCodeToKey {
   private:
@@ -28,14 +27,19 @@ class NativeCodeToKey {
 
 class KeyToNativeCode {
   private:
-    KeyToNativeCodeArray m_array;
-
-  public:
-    constexpr KeyToNativeCode(const KeyToNativeCodeArray &array)
-        : m_array{array} {}
+    std::array<NativeCode, key::keysCount> m_array;
 
   public:
     [[nodiscard]] auto at(key::Keys key) const -> NativeCode;
+
+    constexpr auto operator[](key::Keys key) -> NativeCode & {
+        if (key::isModifier(key)) {
+            // Subtracting 1 is required because of Keys::m_regularsCount
+            return m_array.at(static_cast<size_t>(key) - 1);
+        }
+
+        return m_array.at(static_cast<size_t>(key));
+    }
 };
 } // namespace plat::types
 
