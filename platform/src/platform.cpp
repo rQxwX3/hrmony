@@ -35,10 +35,9 @@ auto plat::Platform::addToCurrentCombination(
     -> comb::Combination {
     const auto &config{getConfig()};
 
-    const auto &bindedCombination{
-        config.keyBindingArray.at(static_cast<size_t>(key))};
+    const auto &bindedCombination{config.keyCombinationBinding.at(key)};
 
-    return config.keyBindingArray.at(static_cast<size_t>(key));
+    return config.keyCombinationBinding.at(key);
 }
 
 [[nodiscard]] auto plat::Platform::getConfig() const -> conf::Config {

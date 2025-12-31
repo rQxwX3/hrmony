@@ -16,7 +16,7 @@ struct Config {
 
     mac::types::ModifierToCGEventFlags modifierToCGEventFlags;
 
-    app::types::KeyBindingArray keyBindingArray;
+    app::types::KeyCombinationBinding keyCombinationBinding;
 };
 
 constexpr auto loadDefaultConfig() -> Config {
@@ -28,7 +28,7 @@ constexpr auto loadDefaultConfig() -> Config {
 
                   .modifierToCGEventFlags = mac::consts::modifierToCGEventFlags,
 
-                  .keyBindingArray = app::types::keyBindingArray};
+                  .keyCombinationBinding = app::types::keyCombinationBinding};
 
     return config;
 }
