@@ -5,30 +5,42 @@
 
 #include <ApplicationServices/ApplicationServices.h>
 
-auto mac::MacOS::setEventToCurrentCombination(Event &event) -> void {
-    const auto currentCombination{getCurrentCombination()};
-
-    const auto currentModifiers{currentCombination.getModifiers()};
-    const auto currentModifiersCount{currentCombination.getModifiersCount()};
+auto mac::MacOS::setEventFlagsToModifiers(
+    Event &event, comb::types::Modifiers modifiers) const -> void {
+    const auto [modifiersArray, modifiersCount]{modifiers};
 
     NativeModifier modifierBitMask{0};
 
-    for (size_t i{0}; i != currentModifiersCount; ++i) {
-        modifierBitMask |= modifierToCGEventFlags(currentModifiers.at(i));
+    for (size_t i{0}; i != modifiersCount; ++i) {
+        modifierBitMask |= modifierToCGEventFlags(modifiersArray.at(i));
     }
 
     CGEventSetFlags(event, modifierBitMask);
+}
 
-    const auto currentRegulars{currentCombination.getRegulars()};
-    const auto currentRegularsCount{currentCombination.getRegularsCount()};
+auto mac::MacOS::setCurrentCombinationToCurrentNativeCode() -> void {
+    const auto currentNative{getCurrentNativeCode()};
+
+    const auto combination{comb::Combination(
+        {.array = {nativeCodeToKey(currentNative)}, .count = 1})};
+
+    setCurrentCombination(combination);
+}
+
+auto mac::MacOS::setEventToCurrentCombination(Event &event) const -> void {
+    const auto currentCombination{getCurrentCombination()};
+
+    setEventFlagsToModifiers(event, currentCombination.getModifiers());
+
+    const auto [regularsArray, regularsCount]{currentCombination.getRegulars()};
 
     const auto config{getConfig()};
 
     // TODO This doesn't support multi-key combinations
-    for (size_t i{0}; i != currentRegularsCount; ++i) {
+    for (size_t i{0}; i != regularsCount; ++i) {
         CGEventSetIntegerValueField(
             event, kCGKeyboardEventKeycode,
-            config.keyToNativeCode.at(currentRegulars.at(i)));
+            config.keyToNativeCode.at(regularsArray.at(i)));
     }
 }
 
@@ -42,6 +54,7 @@ auto mac::MacOS::setEventToCurrentCombination(Event &event) -> void {
 
     const auto &config{getConfig()};
 
+    // TODO bound check
     return config.modifierToCGEventFlags.at(modifier);
 }
 
@@ -49,15 +62,40 @@ auto mac::MacOS::setCurrentNativeCode(NativeCode nativeCode) -> void {
     m_currentNativeCode = nativeCode;
 }
 
+auto mac::MacOS::setCurrentCombination(const comb::Combination &combination)
+    -> void {
+    m_currentCombination = combination;
+}
+
 [[nodiscard]] auto mac::MacOS::nativeCodeToKey(NativeCode nativeCode) const
     -> key::Keys {
     const auto config{getConfig()};
 
+    // TODO bound check
     return config.nativeCodeToKey.at(nativeCode);
+}
+[[nodiscard]] auto mac::MacOS::keyToNativeCode(key::Keys key) const
+    -> NativeCode {
+    const auto config{getConfig()};
+
+    return config.keyToNativeCode.at(key);
 }
 
 [[nodiscard]] auto mac::MacOS::getCurrentNativeCode() const -> NativeCode {
     return m_currentNativeCode;
+}
+
+[[nodiscard]] auto mac::MacOS::getCurrentCombination() const
+    -> comb::Combination {
+    return m_currentCombination;
+}
+
+[[nodiscard]] auto mac::MacOS::getBindedCombination() const
+    -> comb::Combination {
+    const auto nativeCode{getCurrentNativeCode()};
+    const auto key{nativeCodeToKey(nativeCode)};
+
+    return getKeyBinding(nativeCodeToKey(nativeCode));
 }
 
 [[nodiscard]] auto mac::MacOS::isLeaderUpProcessed() const -> bool {

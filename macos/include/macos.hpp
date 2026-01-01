@@ -2,6 +2,7 @@
 #define MACOS_HPP
 
 #include <app.hpp>
+#include <combination.hpp>
 #include <platform.hpp>
 
 #include <ApplicationServices/ApplicationServices.h>
@@ -12,6 +13,7 @@ class MacOS : public plat::Platform {
     CFRunLoopRef m_runLoopRef;
 
     NativeCode m_currentNativeCode;
+    comb::Combination m_currentCombination;
 
     bool m_leaderUpProcessed;
 
@@ -29,14 +31,28 @@ class MacOS : public plat::Platform {
     [[nodiscard]] auto nativeCodeToKey(NativeCode nativeCode) const
         -> key::Keys;
 
+    [[nodiscard]] auto keyToNativeCode(key::Keys key) const -> NativeCode;
+
   public:
-    auto setEventToCurrentCombination(Event &event) -> void override;
+    auto setCurrentCombinationToCurrentNativeCode() -> void;
+
+    auto setEventFlagsToModifiers(Event &event,
+                                  comb::types::Modifiers modifiers) const
+        -> void;
+
+    auto setEventToCurrentCombination(Event &event) const -> void override;
 
   public:
     auto setCurrentNativeCode(NativeCode nativeCode) -> void;
 
+    auto setCurrentCombination(const comb::Combination &combination) -> void;
+
   public:
     [[nodiscard]] auto getCurrentNativeCode() const -> NativeCode;
+
+    [[nodiscard]] auto getCurrentCombination() const -> comb::Combination;
+
+    [[nodiscard]] auto getBindedCombination() const -> comb::Combination;
 
   public:
     [[nodiscard]] auto isLeaderUpProcessed() const -> bool;
