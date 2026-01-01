@@ -18,25 +18,16 @@ auto mac::MacOS::setEventFlagsToModifiers(
     CGEventSetFlags(event, modifierBitMask);
 }
 
-auto mac::MacOS::setCurrentCombinationToCurrentNativeCode() -> void {
-    const auto currentNative{getCurrentNativeCode()};
+auto mac::MacOS::setEventToCombination(
+    Event &event, const comb::Combination &combination) const -> void {
+    setEventFlagsToModifiers(event, combination.getModifiers());
 
-    const auto combination{comb::Combination(
-        {.array = {nativeCodeToKey(currentNative)}, .count = 1})};
-
-    setCurrentCombination(combination);
-}
-
-auto mac::MacOS::setEventToCurrentCombination(Event &event) const -> void {
-    const auto currentCombination{getCurrentCombination()};
-
-    setEventFlagsToModifiers(event, currentCombination.getModifiers());
-
-    const auto [regularsArray, regularsCount]{currentCombination.getRegulars()};
+    const auto [regularsArray, regularsCount]{combination.getRegulars()};
 
     const auto config{getConfig()};
 
-    // TODO This doesn't support multi-key combinations
+    // TODO This doesn't support multi-key
+    // combinations, and it shouldn't
     for (size_t i{0}; i != regularsCount; ++i) {
         CGEventSetIntegerValueField(
             event, kCGKeyboardEventKeycode,
@@ -62,11 +53,6 @@ auto mac::MacOS::setCurrentNativeCode(NativeCode nativeCode) -> void {
     m_currentNativeCode = nativeCode;
 }
 
-auto mac::MacOS::setCurrentCombination(const comb::Combination &combination)
-    -> void {
-    m_currentCombination = combination;
-}
-
 [[nodiscard]] auto mac::MacOS::nativeCodeToKey(NativeCode nativeCode) const
     -> key::Keys {
     const auto config{getConfig()};
@@ -83,11 +69,6 @@ auto mac::MacOS::setCurrentCombination(const comb::Combination &combination)
 
 [[nodiscard]] auto mac::MacOS::getCurrentNativeCode() const -> NativeCode {
     return m_currentNativeCode;
-}
-
-[[nodiscard]] auto mac::MacOS::getCurrentCombination() const
-    -> comb::Combination {
-    return m_currentCombination;
 }
 
 [[nodiscard]] auto mac::MacOS::getBindedCombination() const

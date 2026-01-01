@@ -5,9 +5,17 @@
 #include <macos.hpp>
 
 namespace mac::util {
+constexpr int64_t kSyntheticTag{0xC0FFEE};
+
 auto createAndPostKeyboardEvent(const mac::MacOS *self, NativeCode nativeCode,
-                                comb::types::Modifiers modifiers, bool isDown)
-    -> void;
+                                comb::types::Modifiers modifiers, bool isDown,
+                                int64_t kSyntheticTag = 0) -> void;
+
+[[nodiscard]] auto createCombinationFromNativeCode(const mac::MacOS *self,
+                                                   NativeCode nativeCode)
+    -> comb::Combination;
+
+[[nodiscard]] auto isSyntheticEvent(const Event &event) -> bool;
 
 [[nodiscard]] auto isHRMModeEnterTriggered(const mac::MacOS *self) -> bool;
 
@@ -22,8 +30,6 @@ auto createAndPostKeyboardEvent(const mac::MacOS *self, NativeCode nativeCode,
     -> CGEventRef;
 
 [[nodiscard]] auto isProcessingLeaderUp(const mac::MacOS *self) -> bool;
-
-auto addKeyToFinishedKeymap(mac::MacOS *self) -> void;
 
 } // namespace mac::util
 

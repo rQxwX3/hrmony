@@ -66,11 +66,11 @@ comb::Combination::Combination(const comb::types::Modifiers &modifiers,
 }
 
 [[nodiscard]] auto comb::Combination::containsNoModifiers() const -> bool {
-    return !isEmpty() && m_modifiers.count == 0;
+    return m_modifiers.count == 0;
 }
 
 [[nodiscard]] auto comb::Combination::containsNoRegulars() const -> bool {
-    return !isEmpty() && m_regulars.count == 0;
+    return m_regulars.count == 0;
 }
 
 [[nodiscard]] auto comb::Combination::containsMultipleRegulars() const -> bool {

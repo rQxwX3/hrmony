@@ -9,14 +9,27 @@ using mac::MacOS;
 
 auto mac::util::createAndPostKeyboardEvent(
     const MacOS *self, const NativeCode nativeCode,
-    const comb::types::Modifiers modifiers, bool isDown) -> void {
+    const comb::types::Modifiers modifiers, bool isDown, int64_t kSyntheticTag)
+    -> void {
     auto *event{CGEventCreateKeyboardEvent(nullptr, nativeCode, isDown)};
 
     self->setEventFlagsToModifiers(event, modifiers);
 
+    if (kSyntheticTag != 0) {
+        CGEventSetIntegerValueField(event, kCGEventSourceUserData,
+                                    kSyntheticTag);
+    }
+
     CGEventPost(kCGHIDEventTap, event);
 
     CFRelease(event);
+}
+
+[[nodiscard]] auto mac::util::createCombinationFromNativeCode(
+    const MacOS *self, const NativeCode nativeCode) -> comb::Combination {
+    const auto key{self->nativeCodeToKey(nativeCode)};
+
+    return comb::Combination({.array = {key}, .count = 1});
 }
 
 auto mac::util::isHRMModeExitTriggered(const MacOS *self) -> bool {
@@ -49,10 +62,15 @@ auto mac::util::isBindedKeyPressed(const MacOS *self) -> bool {
         return false;
     }
 
-    const auto &bindedCombination{self->getCurrentCombination()};
+    const auto &bindedCombination{self->getBindedCombination()};
 
     return !bindedCombination.isEmpty() &&
            !bindedCombination.containsNoModifiers();
+}
+
+auto mac::util::isSyntheticEvent(const Event &event) -> bool {
+    return CGEventGetIntegerValueField(event, kCGEventSourceUserData) ==
+           mac::util::kSyntheticTag;
 }
 
 auto mac::util::isKeymapFinished(const MacOS *self) -> bool {
@@ -60,25 +78,10 @@ auto mac::util::isKeymapFinished(const MacOS *self) -> bool {
         return false;
     }
 
-    const auto &bindedCombination{self->getCurrentCombination()};
+    const auto &bindedCombination{self->getBindedCombination()};
 
     return bindedCombination.isEmpty() ||
            bindedCombination.containsNoModifiers();
-}
-
-auto mac::util::addKeyToFinishedKeymap(MacOS *self) -> void {
-    comb::Combination combination(self->getCurrentCombination());
-
-    if (combination.containsNoModifiers()) {
-        const auto &combination{self->getCurrentCombination()};
-    } else {
-        const auto nativeCode{self->getCurrentNativeCode()};
-
-        // TODO Only supports addition of one key
-        combination = comb::Combination({self->nativeCodeToKey(nativeCode)}, 1);
-    }
-
-    self->addToCurrentCombination(combination);
 }
 
 [[nodiscard]] auto mac::util::isProcessingLeaderUp(const MacOS *self) -> bool {
@@ -98,12 +101,16 @@ auto mac::util::addKeyToFinishedKeymap(MacOS *self) -> void {
 
 auto mac::util::processKeyPress(CGEventTapProxy proxy, CGEventType type,
                                 CGEventRef event, void *refcon) -> CGEventRef {
-    auto *self{static_cast<MacOS *>(refcon)};
+    if (isSyntheticEvent(event)) {
+        return event;
+    }
 
-    self->setCurrentCombination(self->getBindedCombination());
+    auto *self{static_cast<MacOS *>(refcon)};
 
     self->setCurrentNativeCode(
         CGEventGetIntegerValueField(event, kCGKeyboardEventKeycode));
+
+    const auto currentCombination{self->getBindedCombination()};
 
     if (isProcessingLeaderUp(self)) {
         std::cout << "processing leader up\n";
@@ -128,7 +135,7 @@ auto mac::util::processKeyPress(CGEventTapProxy proxy, CGEventType type,
 
     if (isBindedKeyPressed(self)) {
         std::cout << "binded key press\n";
-        self->addToCurrentCombination(self->getCurrentCombination());
+        self->addToCurrentCombination(self->getBindedCombination());
 
         return nullptr;
     }
@@ -136,29 +143,36 @@ auto mac::util::processKeyPress(CGEventTapProxy proxy, CGEventType type,
     if (isKeymapFinished(self)) {
         std::cout << "keymap finished\n";
 
-        auto currentCombination{self->getCurrentCombination()};
+        auto currentBinding{self->getBindedCombination()};
 
-        if (currentCombination.containsMultipleRegulars()) {
-            const auto modifiers{currentCombination.getModifiers()};
+        if (currentBinding.containsMultipleRegulars()) {
+            const auto modifiers{currentBinding.getModifiers()};
             const auto [regularsArray,
-                        regularsCount]{currentCombination.getRegulars()};
+                        regularsCount]{currentBinding.getRegulars()};
 
             for (size_t i{0}; i != regularsCount; ++i) {
                 const auto regular{regularsArray.at(i)};
                 const auto nativeCode{self->keyToNativeCode(regular)};
 
-                createAndPostKeyboardEvent(self, nativeCode, modifiers, true);
-                createAndPostKeyboardEvent(self, nativeCode, modifiers, false);
+                createAndPostKeyboardEvent(self, nativeCode, modifiers, true,
+                                           mac::util::kSyntheticTag);
+                createAndPostKeyboardEvent(self, nativeCode, modifiers, false,
+                                           mac::util::kSyntheticTag);
             }
 
             return nullptr;
         }
 
-        if (currentCombination.isEmpty()) {
-            self->setCurrentCombinationToCurrentNativeCode();
+        if (currentBinding.isEmpty()) {
+            const auto nativeCodeCombination{createCombinationFromNativeCode(
+                self, self->getCurrentNativeCode())};
+
+            self->addToCurrentCombination(nativeCodeCombination);
+        } else if (currentBinding.containsNoModifiers()) {
+            self->addToCurrentCombination(currentBinding);
         }
 
-        self->setEventToCurrentCombination(event);
+        self->setEventToCombination(event, self->getCurrentCombination());
         self->toggleLeaderUpProcessed();
         self->exitHRMMode();
     }

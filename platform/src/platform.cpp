@@ -23,7 +23,6 @@ auto plat::Platform::addToCurrentCombination(
 
     const auto [regularsArray, regularsCount]{combination.getRegulars()};
 
-    // TODO Supports only one key
     for (size_t i{0}; i != regularsCount; ++i) {
         m_currentCombination.addKey(regularsArray.at(i));
     }

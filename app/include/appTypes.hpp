@@ -30,13 +30,19 @@ inline auto createKeyCombinationBinding() -> KeyCombinationBinding {
 
     using key::Keys, comb::Combination;
 
-    keyCombinationBinding[Keys::J] = Combination(
-        {Keys::RIGHT_CMD, Keys::RIGHT_ALT, Keys::LEFT_CTRL, Keys::LEFT_SHIFT},
-        4);
+    keyCombinationBinding[Keys::J] =
+        Combination({.array = {Keys::RIGHT_CMD, Keys::RIGHT_ALT,
+                               Keys::LEFT_CTRL, Keys::LEFT_SHIFT},
+                     .count = 4});
 
-    keyCombinationBinding[Keys::K] = Combination({Keys::RIGHT_CMD}, 1);
+    keyCombinationBinding[Keys::K] =
+        Combination({.array = {Keys::RIGHT_CMD}, .count = 1});
 
-    keyCombinationBinding[Keys::A] = Combination({Keys::S}, 1);
+    keyCombinationBinding[Keys::A] =
+        Combination({.array = {Keys::S}, .count = 1});
+
+    keyCombinationBinding[Keys::S] =
+        Combination({.array = {Keys::H, Keys::I}, .count = 2});
 
     return keyCombinationBinding;
 };

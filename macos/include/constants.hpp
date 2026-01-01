@@ -22,6 +22,7 @@ constexpr auto createNativeCodeToKey() -> plat::types::NativeCodeToKey {
     nativeCodeToKey[13] = Keys::W;
     nativeCodeToKey[17] = Keys::T;
     nativeCodeToKey[37] = Keys::L;
+    nativeCodeToKey[34] = Keys::I;
     nativeCodeToKey[38] = Keys::J;
     nativeCodeToKey[40] = Keys::K;
     nativeCodeToKey[41] = Keys::SEMICOLON;
@@ -44,8 +45,10 @@ constexpr auto createKeyToNativeCode() -> plat::types::KeyToNativeCode {
 
     keyToNativeCode[Keys::A] = 0;
     keyToNativeCode[Keys::S] = 1;
+    keyToNativeCode[Keys::H] = 4;
     keyToNativeCode[Keys::T] = 17;
     keyToNativeCode[Keys::W] = 13;
+    keyToNativeCode[Keys::I] = 34;
     keyToNativeCode[Keys::J] = 38;
 
     keyToNativeCode[Keys::RIGHT_CMD] = 55;
