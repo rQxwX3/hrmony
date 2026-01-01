@@ -17,7 +17,7 @@ class IPlatform {
 
     virtual auto resetCurrentCombination() -> void = 0;
 
-    virtual auto setEventToCurrentCombination(Event &event) -> void = 0;
+    virtual auto setEventToCurrentCombination(Event &event) const -> void = 0;
 
     virtual auto enterHRMMode() -> void = 0;
     virtual auto exitHRMMode() -> void = 0;

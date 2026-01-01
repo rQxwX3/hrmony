@@ -9,13 +9,13 @@ class Combination {
     comb::types::Modifiers m_modifiers;
     comb::types::Regulars m_regulars;
 
-    size_t m_regularsCount;
-    size_t m_modifiersCount;
-
   public:
     Combination();
 
-    Combination(const comb::types::Keys &keys, size_t keysCount);
+    Combination(const comb::types::Modifiers &modifiers,
+                const comb::types::Regulars &regulars);
+
+    Combination(const comb::types::Keys &keys);
 
   public:
     [[nodiscard]] auto getModifiersSlotsLeft() const -> size_t;
@@ -23,15 +23,16 @@ class Combination {
 
   public:
     [[nodiscard]] auto getModifiers() const -> comb::types::Modifiers;
-
     [[nodiscard]] auto getRegulars() const -> comb::types::Regulars;
-
-    [[nodiscard]] auto getModifiersCount() const -> size_t;
-    [[nodiscard]] auto getRegularsCount() const -> size_t;
+    [[nodiscard]] auto getKeys() const -> comb::types::Keys;
 
   public:
     [[nodiscard]] auto isEmpty() const -> bool;
-    [[nodiscard]] auto isNoModifiers() const -> bool;
+    [[nodiscard]] auto isSendable() const -> bool;
+
+    [[nodiscard]] auto containsNoModifiers() const -> bool;
+    [[nodiscard]] auto containsNoRegulars() const -> bool;
+    [[nodiscard]] auto containsMultipleRegulars() const -> bool;
 
   public:
     auto addKey(key::Keys key) -> void;

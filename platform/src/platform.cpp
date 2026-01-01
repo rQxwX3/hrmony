@@ -15,19 +15,17 @@ auto plat::Platform::resetCurrentCombination() -> void {
 
 auto plat::Platform::addToCurrentCombination(
     const comb::Combination &combination) -> void {
-    const auto &modifiers{combination.getModifiers()};
-    const auto modifiersCount{combination.getModifiersCount()};
+    const auto [modifiersArray, modifiersCount]{combination.getModifiers()};
 
     for (size_t i{0}; i != modifiersCount; ++i) {
-        m_currentCombination.addModifier(modifiers.at(i));
+        m_currentCombination.addModifier(modifiersArray.at(i));
     }
 
-    const auto &regulars{combination.getRegulars()};
-    const auto regularsCount{combination.getRegularsCount()};
+    const auto [regularsArray, regularsCount]{combination.getRegulars()};
 
     // TODO Supports only one key
     for (size_t i{0}; i != regularsCount; ++i) {
-        m_currentCombination.addKey(regulars.at(i));
+        m_currentCombination.addKey(regularsArray.at(i));
     }
 }
 

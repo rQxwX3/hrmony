@@ -5,8 +5,9 @@
 #include <macos.hpp>
 
 namespace mac::util {
-[[nodiscard]] auto getBindedCombination(const mac::MacOS *self)
-    -> comb::Combination;
+auto createAndPostKeyboardEvent(const mac::MacOS *self, NativeCode nativeCode,
+                                comb::types::Modifiers modifiers, bool isDown)
+    -> void;
 
 [[nodiscard]] auto isHRMModeEnterTriggered(const mac::MacOS *self) -> bool;
 
