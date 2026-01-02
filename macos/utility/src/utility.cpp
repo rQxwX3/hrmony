@@ -84,6 +84,47 @@ auto mac::util::isKeymapFinished(const MacOS *self) -> bool {
            bindedCombination.containsNoModifiers();
 }
 
+auto mac::util::processNoModifiersBinding(MacOS *self, Event &event,
+                                          const comb::Combination &binding)
+    -> void {
+    self->addToCurrentCombination(binding);
+    self->setEventToCombination(event, self->getCurrentCombination());
+    self->toggleLeaderUpProcessed();
+    self->exitHRMMode();
+}
+
+auto mac::util::processEmptyBinding(MacOS *self, Event &event,
+                                    const comb::Combination &binding) -> void {
+    const auto nativeCodeCombination{
+        createCombinationFromNativeCode(self, self->getCurrentNativeCode())};
+
+    self->addToCurrentCombination(nativeCodeCombination);
+
+    self->setEventToCombination(event, self->getCurrentCombination());
+    self->toggleLeaderUpProcessed();
+    self->exitHRMMode();
+}
+
+auto mac::util::processMultipleRegularsBinding(MacOS *self,
+                                               const comb::Combination &binding)
+    -> void {
+    const auto modifiers{binding.getModifiers()};
+    const auto [regularsArray, regularsCount]{binding.getRegulars()};
+
+    for (size_t i{0}; i != regularsCount; ++i) {
+        const auto regular{regularsArray.at(i)};
+        const auto nativeCode{self->keyToNativeCode(regular)};
+
+        createAndPostKeyboardEvent(self, nativeCode, modifiers, true,
+                                   mac::util::kSyntheticTag);
+        createAndPostKeyboardEvent(self, nativeCode, modifiers, false,
+                                   mac::util::kSyntheticTag);
+    }
+
+    self->toggleLeaderUpProcessed();
+    self->exitHRMMode();
+}
+
 [[nodiscard]] auto mac::util::isProcessingLeaderUp(const MacOS *self) -> bool {
     if (self->isLeaderUpProcessed()) {
         return false;
@@ -143,38 +184,21 @@ auto mac::util::processKeyPress(CGEventTapProxy proxy, CGEventType type,
     if (isKeymapFinished(self)) {
         std::cout << "keymap finished\n";
 
-        auto currentBinding{self->getBindedCombination()};
+        const auto currentBinding{self->getBindedCombination()};
 
         if (currentBinding.containsMultipleRegulars()) {
-            const auto modifiers{currentBinding.getModifiers()};
-            const auto [regularsArray,
-                        regularsCount]{currentBinding.getRegulars()};
-
-            for (size_t i{0}; i != regularsCount; ++i) {
-                const auto regular{regularsArray.at(i)};
-                const auto nativeCode{self->keyToNativeCode(regular)};
-
-                createAndPostKeyboardEvent(self, nativeCode, modifiers, true,
-                                           mac::util::kSyntheticTag);
-                createAndPostKeyboardEvent(self, nativeCode, modifiers, false,
-                                           mac::util::kSyntheticTag);
-            }
+            processMultipleRegularsBinding(self, currentBinding);
 
             return nullptr;
         }
 
-        if (currentBinding.isEmpty()) {
-            const auto nativeCodeCombination{createCombinationFromNativeCode(
-                self, self->getCurrentNativeCode())};
-
-            self->addToCurrentCombination(nativeCodeCombination);
-        } else if (currentBinding.containsNoModifiers()) {
-            self->addToCurrentCombination(currentBinding);
+        if (currentBinding.containsNoModifiers()) {
+            if (currentBinding.isEmpty()) {
+                processEmptyBinding(self, event, currentBinding);
+            } else {
+                processNoModifiersBinding(self, event, currentBinding);
+            }
         }
-
-        self->setEventToCombination(event, self->getCurrentCombination());
-        self->toggleLeaderUpProcessed();
-        self->exitHRMMode();
     }
 
     return event;

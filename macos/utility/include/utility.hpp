@@ -31,6 +31,14 @@ auto createAndPostKeyboardEvent(const mac::MacOS *self, NativeCode nativeCode,
 
 [[nodiscard]] auto isProcessingLeaderUp(const mac::MacOS *self) -> bool;
 
+auto processNoModifiersBinding(MacOS *self, Event &event,
+                               const comb::Combination &binding) -> void;
+
+auto processEmptyBinding(MacOS *self, Event &event,
+                         const comb::Combination &binding) -> void;
+
+auto processMultipleRegularsBinding(MacOS *self,
+                                    const comb::Combination &binding) -> void;
 } // namespace mac::util
 
 #endif // UTILITY_HPP
