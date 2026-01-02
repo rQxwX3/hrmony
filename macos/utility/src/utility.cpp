@@ -57,15 +57,14 @@ auto mac::util::isHRMModeEnterTriggered(const MacOS *self) -> bool {
     return self->nativeCodeToKey(nativeCode) == leaderKey;
 }
 
-auto mac::util::isBindedKeyPressed(const MacOS *self) -> bool {
+auto mac::util::isBindedKeyPressed(const MacOS *self,
+                                   const comb::Combination &combination)
+    -> bool {
     if (!self->isHRMMode()) {
         return false;
     }
 
-    const auto &bindedCombination{self->getBindedCombinations()};
-
-    return !bindedCombination.isEmpty() &&
-           !bindedCombination.containsNoModifiers();
+    return !combination.isEmpty() && !combination.containsNoModifiers();
 }
 
 auto mac::util::isSyntheticEvent(const Event &event) -> bool {
@@ -73,15 +72,13 @@ auto mac::util::isSyntheticEvent(const Event &event) -> bool {
            mac::util::kSyntheticTag;
 }
 
-auto mac::util::isKeymapFinished(const MacOS *self) -> bool {
+auto mac::util::isKeymapFinished(const MacOS *self,
+                                 const comb::Combination &combination) -> bool {
     if (!self->isHRMMode()) {
         return false;
     }
 
-    const auto &bindedCombination{self->getBindedCombinations()};
-
-    return bindedCombination.isEmpty() ||
-           bindedCombination.containsNoModifiers();
+    return combination.isEmpty() || combination.containsNoModifiers();
 }
 
 auto mac::util::processNoModifiersBinding(MacOS *self, Event &event,
@@ -151,8 +148,6 @@ auto mac::util::processKeyPress(CGEventTapProxy proxy, CGEventType type,
     self->setCurrentNativeCode(
         CGEventGetIntegerValueField(event, kCGKeyboardEventKeycode));
 
-    const auto currentCombination{self->getBindedCombinations()};
-
     if (isProcessingLeaderUp(self)) {
         std::cout << "processing leader up\n";
         self->toggleLeaderUpProcessed();
@@ -174,32 +169,37 @@ auto mac::util::processKeyPress(CGEventTapProxy proxy, CGEventType type,
         return nullptr;
     }
 
-    if (isBindedKeyPressed(self)) {
-        std::cout << "binded key press\n";
-        self->addToCurrentCombination(self->getBindedCombinations());
+    const auto currentBinding{self->getBindedCombinations()};
+    std::cout << currentBinding.count << '\n';
 
-        return nullptr;
-    }
+    for (size_t i{0}; i != currentBinding.count; ++i) {
+        const auto combination{currentBinding.array.at(i)};
 
-    if (isKeymapFinished(self)) {
-        std::cout << "keymap finished\n";
-
-        const auto currentBinding{self->getBindedCombinations()};
-
-        if (currentBinding.containsMultipleRegulars()) {
-            processMultipleRegularsBinding(self, currentBinding);
+        if (isBindedKeyPressed(self, combination)) {
+            std::cout << "binded key press\n";
+            self->addToCurrentCombination(combination);
 
             return nullptr;
         }
 
-        if (currentBinding.containsNoModifiers()) {
-            if (currentBinding.isEmpty()) {
-                processEmptyBinding(self, event, currentBinding);
-            } else {
-                processNoModifiersBinding(self, event, currentBinding);
+        if (isKeymapFinished(self, combination)) {
+            std::cout << "keymap finished\n";
+
+            if (combination.containsMultipleRegulars()) {
+                processMultipleRegularsBinding(self, combination);
+
+                return nullptr;
             }
+
+            if (combination.containsNoModifiers()) {
+                if (combination.isEmpty()) {
+                    processEmptyBinding(self, event, combination);
+                } else {
+                    processNoModifiersBinding(self, event, combination);
+                }
+            }
+
+            return event;
         }
     }
-
-    return event;
 }

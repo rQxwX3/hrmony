@@ -5,17 +5,21 @@
 #include <keys.hpp>
 
 namespace app::types {
+
 constexpr size_t maxCombinationsInMapping{5};
 
-using Combinations = std::array<comb::Combination, maxCombinationsInMapping>;
+struct Combinations {
+    std::array<comb::Combination, maxCombinationsInMapping> array;
+    size_t count = 1;
+};
 
 class KeyCombinationBinding {
   private:
     std::array<Combinations, key::keysCount> m_array;
 
   public:
-    constexpr KeyCombinationBinding(const comb::Combination &combination)
-        : m_array{combination} {}
+    constexpr KeyCombinationBinding(const Combinations &combinations)
+        : m_array{combinations} {}
 
     [[nodiscard]] auto at(key::Keys key) const -> Combinations {
         // TODO bound check
@@ -29,23 +33,28 @@ class KeyCombinationBinding {
 };
 
 inline auto createKeyCombinationBinding() -> KeyCombinationBinding {
-    KeyCombinationBinding keyCombinationBinding{comb::Combination()};
+    KeyCombinationBinding keyCombinationBinding{
+        {.array = {comb::Combination()}, .count = 1}};
 
     using key::Keys, comb::Combination;
 
     keyCombinationBinding[Keys::J] = {
-        Combination({.array = {Keys::RIGHT_CMD, Keys::RIGHT_ALT,
-                               Keys::LEFT_CTRL, Keys::LEFT_SHIFT},
-                     .count = 4})};
+        .array = {Combination({.array = {Keys::RIGHT_CMD, Keys::RIGHT_ALT,
+                                         Keys::LEFT_CTRL, Keys::LEFT_SHIFT},
+                               .count = 4})},
+        .count = 1};
 
     keyCombinationBinding[Keys::K] = {
-        Combination({.array = {Keys::RIGHT_CMD}, .count = 1})};
+        .array = {Combination({.array = {Keys::RIGHT_CMD}, .count = 1})},
+        .count = 1};
 
-    keyCombinationBinding[Keys::A] = {
-        Combination({.array = {Keys::S}, .count = 1})};
+    keyCombinationBinding[Keys::A] = {.array = {Combination(
+                                          {.array = {Keys::S}, .count = 1})},
+                                      .count = 1},
 
     keyCombinationBinding[Keys::S] = {
-        Combination({.array = {Keys::H, Keys::I}, .count = 2})};
+        .array = {Combination({.array = {Keys::H, Keys::I}, .count = 2})},
+        .count = 1};
 
     return keyCombinationBinding;
 };

@@ -21,9 +21,13 @@ auto createAndPostKeyboardEvent(const mac::MacOS *self, NativeCode nativeCode,
 
 [[nodiscard]] auto isHRMModeExitTriggered(const mac::MacOS *self) -> bool;
 
-[[nodiscard]] auto isKeymapFinished(const mac::MacOS *self) -> bool;
+[[nodiscard]] auto isKeymapFinished(const mac::MacOS *self,
+                                    const comb::Combination &combination)
+    -> bool;
 
-[[nodiscard]] auto isBindedKeyPressed(const mac::MacOS *self) -> bool;
+[[nodiscard]] auto isBindedKeyPressed(const mac::MacOS *self,
+                                      const comb::Combination &combination)
+    -> bool;
 
 [[nodiscard]] auto processKeyPress(CGEventTapProxy proxy, CGEventType type,
                                    CGEventRef event, void *refcon)
