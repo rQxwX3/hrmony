@@ -1,6 +1,7 @@
 #ifndef PLATFORM_HPP
 #define PLATFORM_HPP
 
+#include <appTypes.hpp>
 #include <combination.hpp>
 #include <config.hpp>
 #include <iplatform.hpp>
@@ -39,8 +40,8 @@ class Platform : public IPlatform {
         -> const comb::Combination &;
 
   public:
-    [[nodiscard]] auto getKeyBinding(key::Keys key) const
-        -> comb::Combination override;
+    [[nodiscard]] auto getBindedCombinations(key::Keys key) const
+        -> app::types::Combinations override;
 
     [[nodiscard]] auto getConfig() const -> conf::Config;
 

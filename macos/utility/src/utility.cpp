@@ -62,7 +62,7 @@ auto mac::util::isBindedKeyPressed(const MacOS *self) -> bool {
         return false;
     }
 
-    const auto &bindedCombination{self->getBindedCombination()};
+    const auto &bindedCombination{self->getBindedCombinations()};
 
     return !bindedCombination.isEmpty() &&
            !bindedCombination.containsNoModifiers();
@@ -78,7 +78,7 @@ auto mac::util::isKeymapFinished(const MacOS *self) -> bool {
         return false;
     }
 
-    const auto &bindedCombination{self->getBindedCombination()};
+    const auto &bindedCombination{self->getBindedCombinations()};
 
     return bindedCombination.isEmpty() ||
            bindedCombination.containsNoModifiers();
@@ -151,7 +151,7 @@ auto mac::util::processKeyPress(CGEventTapProxy proxy, CGEventType type,
     self->setCurrentNativeCode(
         CGEventGetIntegerValueField(event, kCGKeyboardEventKeycode));
 
-    const auto currentCombination{self->getBindedCombination()};
+    const auto currentCombination{self->getBindedCombinations()};
 
     if (isProcessingLeaderUp(self)) {
         std::cout << "processing leader up\n";
@@ -176,7 +176,7 @@ auto mac::util::processKeyPress(CGEventTapProxy proxy, CGEventType type,
 
     if (isBindedKeyPressed(self)) {
         std::cout << "binded key press\n";
-        self->addToCurrentCombination(self->getBindedCombination());
+        self->addToCurrentCombination(self->getBindedCombinations());
 
         return nullptr;
     }
@@ -184,7 +184,7 @@ auto mac::util::processKeyPress(CGEventTapProxy proxy, CGEventType type,
     if (isKeymapFinished(self)) {
         std::cout << "keymap finished\n";
 
-        const auto currentBinding{self->getBindedCombination()};
+        const auto currentBinding{self->getBindedCombinations()};
 
         if (currentBinding.containsMultipleRegulars()) {
             processMultipleRegularsBinding(self, currentBinding);

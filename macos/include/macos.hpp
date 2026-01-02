@@ -2,6 +2,7 @@
 #define MACOS_HPP
 
 #include <app.hpp>
+#include <appTypes.hpp>
 #include <combination.hpp>
 #include <platform.hpp>
 
@@ -47,7 +48,8 @@ class MacOS : public plat::Platform {
   public:
     [[nodiscard]] auto getCurrentNativeCode() const -> NativeCode;
 
-    [[nodiscard]] auto getBindedCombination() const -> comb::Combination;
+    [[nodiscard]] auto getBindedCombinations() const
+        -> app::types::Combinations;
 
   public:
     [[nodiscard]] auto isLeaderUpProcessed() const -> bool;

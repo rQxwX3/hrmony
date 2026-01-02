@@ -28,8 +28,9 @@ auto plat::Platform::addToCurrentCombination(
     }
 }
 
-[[nodiscard]] auto plat::Platform::getKeyBinding(const key::Keys key) const
-    -> comb::Combination {
+[[nodiscard]] auto
+plat::Platform::getBindedCombinations(const key::Keys key) const
+    -> app::types::Combinations {
     const auto &config{getConfig()};
 
     const auto &bindedCombination{config.keyCombinationBinding.at(key)};
