@@ -43,6 +43,14 @@ auto processEmptyBinding(MacOS *self, Event &event,
 
 auto processMultipleRegularsBinding(MacOS *self,
                                     const comb::Combination &binding) -> void;
+
+auto processSingleCombinationBinding(MacOS *self, Event &event,
+                                     const app::types::Combinations &binding)
+    -> void;
+
+auto processMultipleCombinationsBinding(MacOS *self, Event &event,
+                                        const app::types::Combinations &binding)
+    -> void;
 } // namespace mac::util
 
 #endif // UTILITY_HPP

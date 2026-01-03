@@ -138,6 +138,64 @@ auto mac::util::processMultipleRegularsBinding(MacOS *self,
     return config.leaderKey == self->nativeCodeToKey(nativeCode);
 }
 
+auto mac::util::processSingleCombinationBinding(
+    MacOS *self, Event &event, const app::types::Combinations &binding)
+    -> void {
+    const auto combination{binding.array.at(0)};
+
+    if (isBindedKeyPressed(self, combination)) {
+        std::cout << "binded key press\n";
+        self->addToCurrentCombination(combination);
+
+        event = nullptr;
+        return;
+    }
+
+    if (isKeymapFinished(self, combination)) {
+        std::cout << "keymap finished\n";
+
+        if (combination.containsMultipleRegulars()) {
+            processMultipleRegularsBinding(self, combination);
+
+            event = nullptr;
+            return;
+        }
+
+        if (combination.containsNoModifiers()) {
+            if (combination.isEmpty()) {
+                mac::util::processEmptyBinding(self, event, combination);
+            } else {
+                mac::util::processNoModifiersBinding(self, event, combination);
+            }
+        }
+    }
+}
+
+auto mac::util::processMultipleCombinationsBinding(
+    MacOS *self, Event &event, const app::types::Combinations &binding)
+    -> void {
+    const auto combinationsInBinding{binding.count};
+
+    for (size_t i{0}; i != combinationsInBinding; ++i) {
+        const auto combination{binding.array.at(i)};
+
+        for (size_t j{0}; j != combination.getRegulars().count; ++j) {
+            const auto nativeCode{
+                self->keyToNativeCode(combination.getRegulars().array.at(j))};
+
+            createAndPostKeyboardEvent(self, nativeCode,
+                                       combination.getModifiers(), true,
+                                       kSyntheticTag);
+
+            createAndPostKeyboardEvent(self, nativeCode,
+                                       combination.getModifiers(), false,
+                                       kSyntheticTag);
+        }
+    }
+
+    event = nullptr;
+}
+
 auto mac::util::processKeyPress(CGEventTapProxy proxy, CGEventType type,
                                 CGEventRef event, void *refcon) -> CGEventRef {
     if (isSyntheticEvent(event)) {
@@ -173,52 +231,10 @@ auto mac::util::processKeyPress(CGEventTapProxy proxy, CGEventType type,
     const auto currentBinding{self->getBindedCombinations()};
 
     if (currentBinding.count == 1) {
-        const auto combination{currentBinding.array.at(0)};
-
-        if (isBindedKeyPressed(self, combination)) {
-            std::cout << "binded key press\n";
-            self->addToCurrentCombination(combination);
-
-            return nullptr;
-        }
-
-        if (isKeymapFinished(self, combination)) {
-            std::cout << "keymap finished\n";
-
-            if (combination.containsMultipleRegulars()) {
-                processMultipleRegularsBinding(self, combination);
-
-                return nullptr;
-            }
-
-            if (combination.containsNoModifiers()) {
-                if (combination.isEmpty()) {
-                    processEmptyBinding(self, event, combination);
-                } else {
-                    processNoModifiersBinding(self, event, combination);
-                }
-            }
-        }
-
-        return event;
+        processSingleCombinationBinding(self, event, currentBinding);
+    } else {
+        processMultipleCombinationsBinding(self, event, currentBinding);
     }
 
-    for (size_t i{0}; i != currentBinding.count; ++i) {
-        const auto combination{currentBinding.array.at(i)};
-
-        for (size_t j{0}; j != combination.getRegulars().count; ++j) {
-            const auto nativeCode{
-                self->keyToNativeCode(combination.getRegulars().array.at(j))};
-
-            createAndPostKeyboardEvent(self, nativeCode,
-                                       combination.getModifiers(), true,
-                                       kSyntheticTag);
-
-            createAndPostKeyboardEvent(self, nativeCode,
-                                       combination.getModifiers(), false,
-                                       kSyntheticTag);
-        }
-    }
-
-    return nullptr;
+    return event;
 }
