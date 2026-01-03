@@ -18,6 +18,7 @@ constexpr auto createNativeCodeToKey() -> plat::types::NativeCodeToKey {
     nativeCodeToKey[2] = Keys::D;
     nativeCodeToKey[3] = Keys::F;
     nativeCodeToKey[4] = Keys::H;
+    nativeCodeToKey[9] = Keys::V;
     nativeCodeToKey[12] = Keys::Q;
     nativeCodeToKey[13] = Keys::W;
     nativeCodeToKey[17] = Keys::T;
@@ -46,10 +47,13 @@ constexpr auto createKeyToNativeCode() -> plat::types::KeyToNativeCode {
     keyToNativeCode[Keys::A] = 0;
     keyToNativeCode[Keys::S] = 1;
     keyToNativeCode[Keys::H] = 4;
+    keyToNativeCode[Keys::V] = 9;
+    keyToNativeCode[Keys::W] = 13;
     keyToNativeCode[Keys::T] = 17;
     keyToNativeCode[Keys::W] = 13;
     keyToNativeCode[Keys::I] = 34;
     keyToNativeCode[Keys::J] = 38;
+    keyToNativeCode[Keys::K] = 40;
 
     keyToNativeCode[Keys::RIGHT_CMD] = 55;
     keyToNativeCode[Keys::LEFT_CTRL] = 59;

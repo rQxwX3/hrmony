@@ -64,7 +64,8 @@ auto mac::util::isBindedKeyPressed(const MacOS *self,
         return false;
     }
 
-    return !combination.isEmpty() && !combination.containsNoModifiers();
+    return combination.containsNoRegulars() && !combination.isEmpty() &&
+           !combination.containsNoModifiers();
 }
 
 auto mac::util::isSyntheticEvent(const Event &event) -> bool {
@@ -78,7 +79,7 @@ auto mac::util::isKeymapFinished(const MacOS *self,
         return false;
     }
 
-    return combination.isEmpty() || combination.containsNoModifiers();
+    return combination.isEmpty() || !combination.containsNoRegulars();
 }
 
 auto mac::util::processNoModifiersBinding(MacOS *self, Event &event,
@@ -170,10 +171,9 @@ auto mac::util::processKeyPress(CGEventTapProxy proxy, CGEventType type,
     }
 
     const auto currentBinding{self->getBindedCombinations()};
-    std::cout << currentBinding.count << '\n';
 
-    for (size_t i{0}; i != currentBinding.count; ++i) {
-        const auto combination{currentBinding.array.at(i)};
+    if (currentBinding.count == 1) {
+        const auto combination{currentBinding.array.at(0)};
 
         if (isBindedKeyPressed(self, combination)) {
             std::cout << "binded key press\n";
@@ -198,8 +198,24 @@ auto mac::util::processKeyPress(CGEventTapProxy proxy, CGEventType type,
                     processNoModifiersBinding(self, event, combination);
                 }
             }
-
-            return event;
         }
+
+        return event;
     }
+
+    for (size_t i{0}; i != currentBinding.count; ++i) {
+        const auto combination{currentBinding.array.at(i)};
+
+        // TODO only supports single-regular combinations
+        const auto nativeCode{
+            self->keyToNativeCode(combination.getRegulars().array.at(0))};
+
+        createAndPostKeyboardEvent(self, nativeCode, combination.getModifiers(),
+                                   true, kSyntheticTag);
+
+        createAndPostKeyboardEvent(self, nativeCode, combination.getModifiers(),
+                                   false, kSyntheticTag);
+    }
+
+    return nullptr;
 }

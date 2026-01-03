@@ -45,8 +45,10 @@ inline auto createKeyCombinationBinding() -> KeyCombinationBinding {
         .count = 1};
 
     keyCombinationBinding[Keys::K] = {
-        .array = {Combination({.array = {Keys::RIGHT_CMD}, .count = 1})},
-        .count = 1};
+        .array =
+            {Combination({.array = {Keys::RIGHT_CMD, Keys::T}, .count = 2}),
+             Combination({.array = {Keys::RIGHT_CMD, Keys::W}, .count = 2})},
+        .count = 2};
 
     keyCombinationBinding[Keys::A] = {.array = {Combination(
                                           {.array = {Keys::S}, .count = 1})},
