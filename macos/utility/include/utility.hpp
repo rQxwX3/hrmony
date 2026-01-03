@@ -25,7 +25,7 @@ auto createAndPostKeyboardEvent(const mac::MacOS *self, NativeCode nativeCode,
                                     const comb::Combination &combination)
     -> bool;
 
-[[nodiscard]] auto isBindedKeyPressed(const mac::MacOS *self,
+[[nodiscard]] auto isKeymapInProgress(const mac::MacOS *self,
                                       const comb::Combination &combination)
     -> bool;
 
@@ -35,6 +35,15 @@ auto createAndPostKeyboardEvent(const mac::MacOS *self, NativeCode nativeCode,
 
 [[nodiscard]] auto isProcessingLeaderUp(const mac::MacOS *self) -> bool;
 
+auto sendMultipleRegulars(MacOS *self, const comb::Combination &combination)
+    -> void;
+
+auto processKeymapInProgress(MacOS *self, Event &event,
+                             const comb::Combination &combination) -> void;
+
+auto processFinishedKeymap(MacOS *self, Event &event,
+                           const comb::Combination &combination) -> void;
+
 auto processNoModifiersBinding(MacOS *self, Event &event,
                                const comb::Combination &binding) -> void;
 
@@ -42,7 +51,8 @@ auto processEmptyBinding(MacOS *self, Event &event,
                          const comb::Combination &binding) -> void;
 
 auto processMultipleRegularsBinding(MacOS *self,
-                                    const comb::Combination &binding) -> void;
+                                    const comb::Combination &combination)
+    -> void;
 
 auto processSingleCombinationBinding(MacOS *self, Event &event,
                                      const app::types::Combinations &binding)

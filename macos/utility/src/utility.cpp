@@ -57,7 +57,7 @@ auto mac::util::isHRMModeEnterTriggered(const MacOS *self) -> bool {
     return self->nativeCodeToKey(nativeCode) == leaderKey;
 }
 
-auto mac::util::isBindedKeyPressed(const MacOS *self,
+auto mac::util::isKeymapInProgress(const MacOS *self,
                                    const comb::Combination &combination)
     -> bool {
     if (!self->isHRMMode()) {
@@ -82,6 +82,33 @@ auto mac::util::isKeymapFinished(const MacOS *self,
     return combination.isEmpty() || !combination.containsNoRegulars();
 }
 
+auto mac::util::processKeymapInProgress(MacOS *self, Event &event,
+                                        const comb::Combination &combination)
+    -> void {
+    self->addToCurrentCombination(combination);
+
+    event = nullptr;
+}
+
+auto mac::util::processFinishedKeymap(MacOS *self, Event &event,
+                                      const comb::Combination &combination)
+    -> void {
+    if (combination.containsMultipleRegulars()) {
+        processMultipleRegularsBinding(self, combination);
+
+        event = nullptr;
+        return;
+    }
+
+    if (combination.containsNoModifiers()) {
+        if (combination.isEmpty()) {
+            mac::util::processEmptyBinding(self, event, combination);
+        } else {
+            mac::util::processNoModifiersBinding(self, event, combination);
+        }
+    }
+}
+
 auto mac::util::processNoModifiersBinding(MacOS *self, Event &event,
                                           const comb::Combination &binding)
     -> void {
@@ -103,11 +130,11 @@ auto mac::util::processEmptyBinding(MacOS *self, Event &event,
     self->exitHRMMode();
 }
 
-auto mac::util::processMultipleRegularsBinding(MacOS *self,
-                                               const comb::Combination &binding)
+auto mac::util::sendMultipleRegulars(MacOS *self,
+                                     const comb::Combination &combination)
     -> void {
-    const auto modifiers{binding.getModifiers()};
-    const auto [regularsArray, regularsCount]{binding.getRegulars()};
+    const auto [regularsArray, regularsCount]{combination.getRegulars()};
+    const auto modifiers{combination.getModifiers()};
 
     for (size_t i{0}; i != regularsCount; ++i) {
         const auto regular{regularsArray.at(i)};
@@ -118,6 +145,11 @@ auto mac::util::processMultipleRegularsBinding(MacOS *self,
         createAndPostKeyboardEvent(self, nativeCode, modifiers, false,
                                    mac::util::kSyntheticTag);
     }
+}
+
+auto mac::util::processMultipleRegularsBinding(
+    MacOS *self, const comb::Combination &combination) -> void {
+    sendMultipleRegulars(self, combination);
 
     self->toggleLeaderUpProcessed();
     self->exitHRMMode();
@@ -143,31 +175,14 @@ auto mac::util::processSingleCombinationBinding(
     -> void {
     const auto combination{binding.array.at(0)};
 
-    if (isBindedKeyPressed(self, combination)) {
+    if (isKeymapInProgress(self, combination)) {
         std::cout << "binded key press\n";
-        self->addToCurrentCombination(combination);
-
-        event = nullptr;
-        return;
+        processKeymapInProgress(self, event, combination);
     }
 
     if (isKeymapFinished(self, combination)) {
         std::cout << "keymap finished\n";
-
-        if (combination.containsMultipleRegulars()) {
-            processMultipleRegularsBinding(self, combination);
-
-            event = nullptr;
-            return;
-        }
-
-        if (combination.containsNoModifiers()) {
-            if (combination.isEmpty()) {
-                mac::util::processEmptyBinding(self, event, combination);
-            } else {
-                mac::util::processNoModifiersBinding(self, event, combination);
-            }
-        }
+        processFinishedKeymap(self, event, combination);
     }
 }
 
@@ -179,18 +194,7 @@ auto mac::util::processMultipleCombinationsBinding(
     for (size_t i{0}; i != combinationsInBinding; ++i) {
         const auto combination{binding.array.at(i)};
 
-        for (size_t j{0}; j != combination.getRegulars().count; ++j) {
-            const auto nativeCode{
-                self->keyToNativeCode(combination.getRegulars().array.at(j))};
-
-            createAndPostKeyboardEvent(self, nativeCode,
-                                       combination.getModifiers(), true,
-                                       kSyntheticTag);
-
-            createAndPostKeyboardEvent(self, nativeCode,
-                                       combination.getModifiers(), false,
-                                       kSyntheticTag);
-        }
+        sendMultipleRegulars(self, combination);
     }
 
     event = nullptr;
