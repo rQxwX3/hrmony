@@ -206,15 +206,18 @@ auto mac::util::processKeyPress(CGEventTapProxy proxy, CGEventType type,
     for (size_t i{0}; i != currentBinding.count; ++i) {
         const auto combination{currentBinding.array.at(i)};
 
-        // TODO only supports single-regular combinations
-        const auto nativeCode{
-            self->keyToNativeCode(combination.getRegulars().array.at(0))};
+        for (size_t j{0}; j != combination.getRegulars().count; ++j) {
+            const auto nativeCode{
+                self->keyToNativeCode(combination.getRegulars().array.at(j))};
 
-        createAndPostKeyboardEvent(self, nativeCode, combination.getModifiers(),
-                                   true, kSyntheticTag);
+            createAndPostKeyboardEvent(self, nativeCode,
+                                       combination.getModifiers(), true,
+                                       kSyntheticTag);
 
-        createAndPostKeyboardEvent(self, nativeCode, combination.getModifiers(),
-                                   false, kSyntheticTag);
+            createAndPostKeyboardEvent(self, nativeCode,
+                                       combination.getModifiers(), false,
+                                       kSyntheticTag);
+        }
     }
 
     return nullptr;
