@@ -7,16 +7,22 @@
 namespace grp {
 class Group {
   private:
-    key::Keys m_leader;
+    grp::types::Subgroups m_subgroups;
     grp::types::Bindings m_bindings;
+    key::Keys m_leader;
 
   public:
     Group();
+
     Group(key::Keys leader, const grp::types::Bindings &bindings);
 
   public:
     [[nodiscard]] auto getLeader() const -> key::Keys;
-    [[nodiscard]] auto getBindings() const -> grp::types::Bindings;
+    [[nodiscard]] auto getBindings() const -> const grp::types::Bindings &;
+    [[nodiscard]] auto getSubgroups() const -> const grp::types::Subgroups &;
+
+  public:
+    auto addSubgroup(std::unique_ptr<Group> group) -> void;
 
   public:
     [[nodiscard]] auto isNullGroup() const -> bool;
@@ -50,7 +56,6 @@ inline auto createGlobalGroup() -> grp::Group {
     return Group{key::Keys::RIGHT_CMD, bindings};
 };
 
-const grp::Group globalGroup{createGlobalGroup()};
 const grp::Group nullGroup{};
 } // namespace grp
 

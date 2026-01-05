@@ -5,8 +5,26 @@
 #include <keys.hpp>
 
 #include <array>
+#include <memory>
+
+namespace grp {
+class Group;
+}
 
 namespace grp::types {
+class Subgroups {
+  private:
+    std::array<std::unique_ptr<Group>, key::keysCount> m_array;
+    size_t m_count;
+
+  public:
+    Subgroups();
+
+    auto add(std::unique_ptr<Group> group) -> void;
+
+    auto at(key::Keys key) -> const Group *;
+};
+
 constexpr size_t maxCombinationsInMapping{5};
 
 struct Combinations {

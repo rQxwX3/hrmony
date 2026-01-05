@@ -29,7 +29,7 @@ constexpr auto loadDefaultConfig() -> Config {
 
         .modifierToCGEventFlags = mac::consts::modifierToCGEventFlags,
 
-        .groups = app::types::groups,
+        .groups = app::types::createGroups(),
     };
 
     return config;
