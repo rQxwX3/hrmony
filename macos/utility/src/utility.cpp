@@ -9,8 +9,8 @@ using mac::MacOS;
 
 auto mac::util::createAndPostKeyboardEvent(
     const MacOS *self, const NativeCode nativeCode,
-    const comb::types::Modifiers modifiers, bool isDown, int64_t kSyntheticTag)
-    -> void {
+    const comb::types::Modifiers modifiers, const bool isDown,
+    const int64_t kSyntheticTag) -> void {
     auto *event{CGEventCreateKeyboardEvent(nullptr, nativeCode, isDown)};
 
     self->setEventFlagsToModifiers(event, modifiers);

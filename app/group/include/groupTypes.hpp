@@ -33,31 +33,31 @@ class Bindings {
 };
 
 inline auto createBindings() -> Bindings {
-    Bindings Bindings{{.array = {comb::Combination()}, .count = 1}};
+    Bindings bindings{{.array = {comb::Combination()}, .count = 1}};
 
     using key::Keys, comb::Combination;
 
-    Bindings[Keys::J] = {
+    bindings[Keys::J] = {
         .array = {Combination({.array = {Keys::RIGHT_CMD, Keys::RIGHT_ALT,
                                          Keys::LEFT_CTRL, Keys::LEFT_SHIFT},
                                .count = 4})},
         .count = 1};
 
-    Bindings[Keys::K] = {
+    bindings[Keys::K] = {
         .array =
             {Combination({.array = {Keys::RIGHT_CMD, Keys::T}, .count = 2}),
              Combination({.array = {Keys::RIGHT_CMD, Keys::W}, .count = 2})},
         .count = 2};
 
-    Bindings[Keys::A] = {.array = {Combination(
+    bindings[Keys::A] = {.array = {Combination(
                              {.array = {Keys::S}, .count = 1})},
                          .count = 1},
 
-    Bindings[Keys::S] = {
+    bindings[Keys::S] = {
         .array = {Combination({.array = {Keys::H, Keys::I}, .count = 2})},
         .count = 1};
 
-    return Bindings;
+    return bindings;
 };
 
 const Bindings keyCombinationBinding{createBindings()};
