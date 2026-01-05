@@ -11,12 +11,43 @@ class Group {
     grp::types::Bindings m_bindings;
 
   public:
+    Group();
     Group(key::Keys leader, const grp::types::Bindings &bindings);
 
   public:
     [[nodiscard]] auto getLeader() const -> key::Keys;
     [[nodiscard]] auto getBindings() const -> grp::types::Bindings;
 };
+
+inline auto createGlobalGroup() -> grp::Group {
+    grp::types::Bindings bindings{{.array = {comb::Combination()}, .count = 1}};
+
+    using key::Keys, comb::Combination;
+
+    bindings[Keys::J] = {
+        .array = {Combination({.array = {Keys::RIGHT_CMD, Keys::RIGHT_ALT,
+                                         Keys::LEFT_CTRL, Keys::LEFT_SHIFT},
+                               .count = 4})},
+        .count = 1};
+
+    bindings[Keys::K] = {
+        .array =
+            {Combination({.array = {Keys::RIGHT_CMD, Keys::T}, .count = 2}),
+             Combination({.array = {Keys::RIGHT_CMD, Keys::W}, .count = 2})},
+        .count = 2};
+
+    bindings[Keys::A] = {.array = {Combination(
+                             {.array = {Keys::S}, .count = 1})},
+                         .count = 1},
+
+    bindings[Keys::S] = {
+        .array = {Combination({.array = {Keys::H, Keys::I}, .count = 2})},
+        .count = 1};
+
+    return Group{key::Keys::RIGHT_CMD, bindings};
+};
+
+const Group globalGroup{createGlobalGroup()};
 } // namespace grp
 
 #endif // GROUP_HPP

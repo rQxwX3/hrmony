@@ -1,5 +1,7 @@
 #include <group.hpp>
 
+grp::Group::Group() : m_leader{key::Keys::NULLKEY} {}
+
 grp::Group::Group(const key::Keys leader, const grp::types::Bindings &bindings)
     : m_leader{leader}, m_bindings{bindings} {}
 

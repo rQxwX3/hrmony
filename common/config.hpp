@@ -1,8 +1,8 @@
 #ifndef CONFIG_HPP
 #define CONFIG_HPP
 
+#include <appTypes.hpp>
 #include <constants.hpp>
-#include <groupTypes.hpp>
 #include <keys.hpp>
 #include <platformTypes.hpp>
 
@@ -16,7 +16,7 @@ struct Config {
 
     mac::types::ModifierToCGEventFlags modifierToCGEventFlags;
 
-    // TODO add groups
+    app::types::Groups groups;
 };
 
 constexpr auto loadDefaultConfig() -> Config {
@@ -29,7 +29,7 @@ constexpr auto loadDefaultConfig() -> Config {
 
         .modifierToCGEventFlags = mac::consts::modifierToCGEventFlags,
 
-        // TODO add groups
+        .groups = app::types::groups,
     };
 
     return config;

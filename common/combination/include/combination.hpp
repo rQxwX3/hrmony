@@ -1,4 +1,5 @@
 #ifndef COMBINATION_HPP
+
 #define COMBINATION_HPP
 
 #include <combinationTypes.hpp>

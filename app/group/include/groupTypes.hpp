@@ -19,6 +19,7 @@ class Bindings {
     std::array<Combinations, key::keysCount> m_array;
 
   public:
+    Bindings() : m_array{} {}
     Bindings(const Combinations &combinations) : m_array{combinations} {}
 
     [[nodiscard]] auto at(key::Keys key) const -> Combinations {
@@ -32,35 +33,6 @@ class Bindings {
     }
 };
 
-inline auto createBindings() -> Bindings {
-    Bindings bindings{{.array = {comb::Combination()}, .count = 1}};
-
-    using key::Keys, comb::Combination;
-
-    bindings[Keys::J] = {
-        .array = {Combination({.array = {Keys::RIGHT_CMD, Keys::RIGHT_ALT,
-                                         Keys::LEFT_CTRL, Keys::LEFT_SHIFT},
-                               .count = 4})},
-        .count = 1};
-
-    bindings[Keys::K] = {
-        .array =
-            {Combination({.array = {Keys::RIGHT_CMD, Keys::T}, .count = 2}),
-             Combination({.array = {Keys::RIGHT_CMD, Keys::W}, .count = 2})},
-        .count = 2};
-
-    bindings[Keys::A] = {.array = {Combination(
-                             {.array = {Keys::S}, .count = 1})},
-                         .count = 1},
-
-    bindings[Keys::S] = {
-        .array = {Combination({.array = {Keys::H, Keys::I}, .count = 2})},
-        .count = 1};
-
-    return bindings;
-};
-
-const Bindings keyCombinationBinding{createBindings()};
 } // namespace grp::types
 
 #endif // GROUP_TYPES_HPP
