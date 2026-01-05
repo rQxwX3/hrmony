@@ -72,7 +72,7 @@ auto mac::MacOS::setCurrentNativeCode(NativeCode nativeCode) -> void {
 }
 
 [[nodiscard]] auto mac::MacOS::getBindedCombinations() const
-    -> app::types::Combinations {
+    -> grp::types::Combinations {
     const auto nativeCode{getCurrentNativeCode()};
     const auto key{nativeCodeToKey(nativeCode)};
 

@@ -171,7 +171,7 @@ auto mac::util::processMultipleRegularsBinding(
 }
 
 auto mac::util::processSingleCombinationBinding(
-    MacOS *self, Event &event, const app::types::Combinations &binding)
+    MacOS *self, Event &event, const grp::types::Combinations &binding)
     -> void {
     const auto combination{binding.array.at(0)};
 
@@ -187,7 +187,7 @@ auto mac::util::processSingleCombinationBinding(
 }
 
 auto mac::util::processMultipleCombinationsBinding(
-    MacOS *self, Event &event, const app::types::Combinations &binding)
+    MacOS *self, Event &event, const grp::types::Combinations &binding)
     -> void {
     const auto combinationsInBinding{binding.count};
 

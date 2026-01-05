@@ -1,8 +1,8 @@
 #ifndef CONFIG_HPP
 #define CONFIG_HPP
 
-#include <appTypes.hpp>
 #include <constants.hpp>
+#include <groupTypes.hpp>
 #include <keys.hpp>
 #include <platformTypes.hpp>
 
@@ -16,19 +16,21 @@ struct Config {
 
     mac::types::ModifierToCGEventFlags modifierToCGEventFlags;
 
-    app::types::KeyCombinationBinding keyCombinationBinding;
+    // TODO add groups
 };
 
 constexpr auto loadDefaultConfig() -> Config {
-    Config config{.leaderKey = key::Keys::RIGHT_CMD,
-                  .exitKey = key::Keys::ESC,
+    Config config{
+        .leaderKey = key::Keys::RIGHT_CMD,
+        .exitKey = key::Keys::ESC,
 
-                  .nativeCodeToKey = mac::consts::nativeCodeToKey,
-                  .keyToNativeCode = mac::consts::keyToNativeCode,
+        .nativeCodeToKey = mac::consts::nativeCodeToKey,
+        .keyToNativeCode = mac::consts::keyToNativeCode,
 
-                  .modifierToCGEventFlags = mac::consts::modifierToCGEventFlags,
+        .modifierToCGEventFlags = mac::consts::modifierToCGEventFlags,
 
-                  .keyCombinationBinding = app::types::keyCombinationBinding};
+        // TODO add groups
+    };
 
     return config;
 }

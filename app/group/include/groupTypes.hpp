@@ -1,11 +1,12 @@
-#ifndef APP_TYPES_HPP
-#define APP_TYPES_HPP
+#ifndef GROUP_TYPES_HPP
+#define GROUP_TYPES_HPP
 
 #include <combination.hpp>
 #include <keys.hpp>
 
-namespace app::types {
+#include <array>
 
+namespace grp::types {
 constexpr size_t maxCombinationsInMapping{5};
 
 struct Combinations {
@@ -13,56 +14,53 @@ struct Combinations {
     size_t count = 1;
 };
 
-class KeyCombinationBinding {
+class Bindings {
   private:
     std::array<Combinations, key::keysCount> m_array;
 
   public:
-    constexpr KeyCombinationBinding(const Combinations &combinations)
-        : m_array{combinations} {}
+    Bindings(const Combinations &combinations) : m_array{combinations} {}
 
     [[nodiscard]] auto at(key::Keys key) const -> Combinations {
         // TODO bound check
         return m_array.at(static_cast<size_t>(key));
     }
 
-    constexpr auto operator[](key::Keys key) -> Combinations & {
+    auto operator[](key::Keys key) -> Combinations & {
         // TODO bound check
         return m_array.at(static_cast<size_t>(key));
     }
 };
 
-inline auto createKeyCombinationBinding() -> KeyCombinationBinding {
-    KeyCombinationBinding keyCombinationBinding{
-        {.array = {comb::Combination()}, .count = 1}};
+inline auto createBindings() -> Bindings {
+    Bindings Bindings{{.array = {comb::Combination()}, .count = 1}};
 
     using key::Keys, comb::Combination;
 
-    keyCombinationBinding[Keys::J] = {
+    Bindings[Keys::J] = {
         .array = {Combination({.array = {Keys::RIGHT_CMD, Keys::RIGHT_ALT,
                                          Keys::LEFT_CTRL, Keys::LEFT_SHIFT},
                                .count = 4})},
         .count = 1};
 
-    keyCombinationBinding[Keys::K] = {
+    Bindings[Keys::K] = {
         .array =
             {Combination({.array = {Keys::RIGHT_CMD, Keys::T}, .count = 2}),
              Combination({.array = {Keys::RIGHT_CMD, Keys::W}, .count = 2})},
         .count = 2};
 
-    keyCombinationBinding[Keys::A] = {.array = {Combination(
-                                          {.array = {Keys::S}, .count = 1})},
-                                      .count = 1},
+    Bindings[Keys::A] = {.array = {Combination(
+                             {.array = {Keys::S}, .count = 1})},
+                         .count = 1},
 
-    keyCombinationBinding[Keys::S] = {
+    Bindings[Keys::S] = {
         .array = {Combination({.array = {Keys::H, Keys::I}, .count = 2})},
         .count = 1};
 
-    return keyCombinationBinding;
+    return Bindings;
 };
 
-const KeyCombinationBinding keyCombinationBinding{
-    createKeyCombinationBinding()};
-} // namespace app::types
+const Bindings keyCombinationBinding{createBindings()};
+} // namespace grp::types
 
-#endif // APP_TYPES_HPP
+#endif // GROUP_TYPES_HPP

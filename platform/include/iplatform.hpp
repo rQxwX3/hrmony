@@ -1,7 +1,8 @@
 #ifndef IPLATFORM_HPP
 #define IPLATFORM_HPP
 
-#include <appTypes.hpp>
+#include <combination.hpp>
+#include <groupTypes.hpp>
 #include <platformTypes.hpp>
 
 class IPlatform {
@@ -9,7 +10,7 @@ class IPlatform {
     virtual auto run() -> void = 0;
 
     [[nodiscard]] virtual auto getBindedCombinations(key::Keys key) const
-        -> app::types::Combinations = 0;
+        -> grp::types::Combinations = 0;
 
   public:
     virtual auto addToCurrentCombination(const comb::Combination &combination)

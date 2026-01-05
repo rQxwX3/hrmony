@@ -30,12 +30,14 @@ auto plat::Platform::addToCurrentCombination(
 
 [[nodiscard]] auto
 plat::Platform::getBindedCombinations(const key::Keys key) const
-    -> app::types::Combinations {
+    -> grp::types::Combinations {
     const auto &config{getConfig()};
 
-    const auto &bindedCombination{config.keyCombinationBinding.at(key)};
+    // const auto &bindedCombination{config.keyCombinationBinding.at(key)};
 
-    return config.keyCombinationBinding.at(key);
+    // TODO fix
+    return {};
+    // return config.keyCombinationBinding.at(key);
 }
 
 [[nodiscard]] auto plat::Platform::getConfig() const -> conf::Config {

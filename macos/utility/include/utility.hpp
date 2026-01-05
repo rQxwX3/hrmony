@@ -55,11 +55,11 @@ auto processMultipleRegularsBinding(MacOS *self,
     -> void;
 
 auto processSingleCombinationBinding(MacOS *self, Event &event,
-                                     const app::types::Combinations &binding)
+                                     const grp::types::Combinations &binding)
     -> void;
 
 auto processMultipleCombinationsBinding(MacOS *self, Event &event,
-                                        const app::types::Combinations &binding)
+                                        const grp::types::Combinations &binding)
     -> void;
 } // namespace mac::util
 

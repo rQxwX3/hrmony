@@ -1,5 +1,4 @@
 #include <app.hpp>
-#include <appTypes.hpp>
 #include <config.hpp>
 #include <keys.hpp>
 #include <macos.hpp>
