@@ -17,6 +17,9 @@ class Group {
   public:
     [[nodiscard]] auto getLeader() const -> key::Keys;
     [[nodiscard]] auto getBindings() const -> grp::types::Bindings;
+
+  public:
+    [[nodiscard]] auto isNullGroup() const -> bool;
 };
 
 inline auto createGlobalGroup() -> grp::Group {
@@ -47,7 +50,8 @@ inline auto createGlobalGroup() -> grp::Group {
     return Group{key::Keys::RIGHT_CMD, bindings};
 };
 
-const Group globalGroup{createGlobalGroup()};
+const grp::Group globalGroup{createGlobalGroup()};
+const grp::Group nullGroup{};
 } // namespace grp
 
 #endif // GROUP_HPP

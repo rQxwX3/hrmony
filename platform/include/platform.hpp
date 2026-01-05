@@ -24,8 +24,8 @@ class Platform : public IPlatform {
     Platform(app::App *appPtr = nullptr);
 
   public:
-    auto enterHRMMode() -> void override;
-    auto exitHRMMode() -> void override;
+    auto enterGroup(const grp::Group &group) -> void override;
+    auto exitAllGroups() -> void override;
 
   public:
     auto setCurrentGroup(const grp::Group &group) -> void;

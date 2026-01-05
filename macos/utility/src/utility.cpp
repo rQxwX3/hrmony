@@ -32,7 +32,7 @@ auto mac::util::createAndPostKeyboardEvent(
     return comb::Combination({.array = {key}, .count = 1});
 }
 
-auto mac::util::isHRMModeExitTriggered(const MacOS *self) -> bool {
+auto mac::util::isGroupExitTriggered(const MacOS *self) -> bool {
     if (!self->isHRMMode()) {
         return false;
     }
@@ -44,17 +44,26 @@ auto mac::util::isHRMModeExitTriggered(const MacOS *self) -> bool {
     return self->nativeCodeToKey(nativeCode) == self->getConfig().exitKey;
 }
 
-auto mac::util::isHRMModeEnterTriggered(const MacOS *self) -> bool {
+auto mac::util::getWhichGroupEntered(const MacOS *self) -> grp::Group {
     if (self->isHRMMode()) {
-        return false;
+        return grp::nullGroup;
     }
 
-    const auto leaderKey{self->getConfig().leaderKey};
-    const auto nativeCode{self->getCurrentNativeCode()};
+    const auto groups{self->getConfig().groups};
 
-    // TODO Only works if leaderKey is a modifier (maybe create a single
-    // conversion function for both types)
-    return self->nativeCodeToKey(nativeCode) == leaderKey;
+    const auto nativeCode{self->getCurrentNativeCode()};
+    const auto key{self->nativeCodeToKey(nativeCode)};
+
+    // TODO accomodate for subgroups
+    for (size_t i{0}; i != groups.count; ++i) {
+        const auto &group = groups.array.at(i);
+
+        if (key == group.getLeader()) {
+            return group;
+        }
+    }
+
+    return grp::nullGroup;
 }
 
 auto mac::util::isKeymapInProgress(const MacOS *self,
@@ -115,7 +124,7 @@ auto mac::util::processNoModifiersBinding(MacOS *self, Event &event,
     self->addToCurrentCombination(binding);
     self->setEventToCombination(event, self->getCurrentCombination());
     self->toggleLeaderUpProcessed();
-    self->exitHRMMode();
+    self->exitAllGroups();
 }
 
 auto mac::util::processEmptyBinding(MacOS *self, Event &event,
@@ -127,7 +136,7 @@ auto mac::util::processEmptyBinding(MacOS *self, Event &event,
 
     self->setEventToCombination(event, self->getCurrentCombination());
     self->toggleLeaderUpProcessed();
-    self->exitHRMMode();
+    self->exitAllGroups();
 }
 
 auto mac::util::sendMultipleRegulars(MacOS *self,
@@ -152,7 +161,7 @@ auto mac::util::processMultipleRegularsBinding(
     sendMultipleRegulars(self, combination);
 
     self->toggleLeaderUpProcessed();
-    self->exitHRMMode();
+    self->exitAllGroups();
 }
 
 [[nodiscard]] auto mac::util::isProcessingLeaderUp(const MacOS *self) -> bool {
@@ -176,7 +185,7 @@ auto mac::util::processSingleCombinationBinding(
     const auto combination{binding.array.at(0)};
 
     if (isKeymapInProgress(self, combination)) {
-        std::cout << "binded key press\n";
+        std::cout << "keymap in progress\n";
         processKeymapInProgress(self, event, combination);
     }
 
@@ -211,6 +220,7 @@ auto mac::util::processKeyPress(CGEventTapProxy proxy, CGEventType type,
     self->setCurrentNativeCode(
         CGEventGetIntegerValueField(event, kCGKeyboardEventKeycode));
 
+    // TODO only needed if leader is a modifier
     if (isProcessingLeaderUp(self)) {
         std::cout << "processing leader up\n";
         self->toggleLeaderUpProcessed();
@@ -218,16 +228,16 @@ auto mac::util::processKeyPress(CGEventTapProxy proxy, CGEventType type,
         return nullptr;
     }
 
-    if (isHRMModeEnterTriggered(self)) {
-        std::cout << "entering hrm mode\n";
-        self->enterHRMMode();
+    if (const auto group{getWhichGroupEntered(self)}; !group.isNullGroup()) {
+        std::cout << "entering group\n";
+        self->enterGroup(group);
 
         return nullptr;
     }
 
-    if (isHRMModeExitTriggered(self)) {
+    if (isGroupExitTriggered(self)) {
         std::cout << "exiting hrm mode\n";
-        self->exitHRMMode();
+        self->exitAllGroups();
 
         return nullptr;
     }

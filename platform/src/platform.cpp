@@ -1,8 +1,10 @@
 #include <app.hpp>
+#include <appTypes.hpp>
 #include <config.hpp>
 #include <platform.hpp>
 
-plat::Platform::Platform(app::App *appPtr) : m_appPtr{appPtr} {};
+plat::Platform::Platform(app::App *appPtr)
+    : m_appPtr{appPtr}, m_currentGroup{grp::nullGroup} {};
 
 [[nodiscard]] auto plat::Platform::getCurrentCombination() const
     -> const comb::Combination & {
@@ -65,9 +67,13 @@ plat::Platform::nativeCodeToKey(const NativeCode nativeCode) const
     return m_appPtr->isHRMMode();
 }
 
-auto plat::Platform::enterHRMMode() -> void { m_appPtr->toggleHRMMode(); }
+auto plat::Platform::enterGroup(const grp::Group &group) -> void {
+    setCurrentGroup(group);
+    m_appPtr->toggleHRMMode();
+}
 
-auto plat::Platform::exitHRMMode() -> void {
+auto plat::Platform::exitAllGroups() -> void {
+    setCurrentGroup(grp::nullGroup);
     resetCurrentCombination();
     m_appPtr->toggleHRMMode();
 }

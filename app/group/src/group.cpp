@@ -12,3 +12,7 @@ grp::Group::Group(const key::Keys leader, const grp::types::Bindings &bindings)
 [[nodiscard]] auto grp::Group::getBindings() const -> grp::types::Bindings {
     return m_bindings;
 }
+
+[[nodiscard]] auto grp::Group::isNullGroup() const -> bool {
+    return m_leader == key::Keys::NULLKEY;
+}

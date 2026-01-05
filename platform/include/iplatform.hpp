@@ -2,6 +2,7 @@
 #define IPLATFORM_HPP
 
 #include <combination.hpp>
+#include <group.hpp>
 #include <groupTypes.hpp>
 #include <platformTypes.hpp>
 
@@ -21,8 +22,8 @@ class IPlatform {
     virtual auto setEventToCombination(
         Event &event, const comb::Combination &combination) const -> void = 0;
 
-    virtual auto enterHRMMode() -> void = 0;
-    virtual auto exitHRMMode() -> void = 0;
+    virtual auto enterGroup(const grp::Group &group) -> void = 0;
+    virtual auto exitAllGroups() -> void = 0;
 
   public:
     IPlatform() = default;

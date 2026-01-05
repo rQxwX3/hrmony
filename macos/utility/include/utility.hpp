@@ -17,9 +17,9 @@ auto createAndPostKeyboardEvent(const mac::MacOS *self, NativeCode nativeCode,
 
 [[nodiscard]] auto isSyntheticEvent(const Event &event) -> bool;
 
-[[nodiscard]] auto isHRMModeEnterTriggered(const mac::MacOS *self) -> bool;
+[[nodiscard]] auto getWhichGroupEntered(const mac::MacOS *self) -> grp::Group;
 
-[[nodiscard]] auto isHRMModeExitTriggered(const mac::MacOS *self) -> bool;
+[[nodiscard]] auto isGroupExitTriggered(const mac::MacOS *self) -> bool;
 
 [[nodiscard]] auto isKeymapFinished(const mac::MacOS *self,
                                     const comb::Combination &combination)
