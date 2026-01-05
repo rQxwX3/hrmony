@@ -13,6 +13,10 @@ auto plat::Platform::resetCurrentCombination() -> void {
     m_currentCombination = comb::Combination();
 }
 
+auto plat::Platform::setCurrentGroup(const grp::Group &group) -> void {
+    m_currentGroup = group;
+}
+
 auto plat::Platform::addToCurrentCombination(
     const comb::Combination &combination) -> void {
     const auto [modifiersArray, modifiersCount]{combination.getModifiers()};
@@ -38,6 +42,11 @@ plat::Platform::getBindedCombinations(const key::Keys key) const
     // TODO fix
     return {};
     // return config.keyCombinationBinding.at(key);
+}
+
+[[nodiscard]] auto plat::Platform::getCurrentGroup() const
+    -> const grp::Group & {
+    return m_currentGroup;
 }
 
 [[nodiscard]] auto plat::Platform::getConfig() const -> conf::Config {

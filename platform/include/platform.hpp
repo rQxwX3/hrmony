@@ -3,6 +3,7 @@
 
 #include <combination.hpp>
 #include <config.hpp>
+#include <group.hpp>
 #include <iplatform.hpp>
 #include <platformTypes.hpp>
 
@@ -17,6 +18,8 @@ class Platform : public IPlatform {
 
     comb::Combination m_currentCombination;
 
+    grp::Group m_currentGroup;
+
   public:
     Platform(app::App *appPtr = nullptr);
 
@@ -25,6 +28,8 @@ class Platform : public IPlatform {
     auto exitHRMMode() -> void override;
 
   public:
+    auto setCurrentGroup(const grp::Group &group) -> void;
+
     auto addToCurrentCombination(const comb::Combination &combination)
         -> void override;
 
@@ -37,6 +42,8 @@ class Platform : public IPlatform {
   public:
     [[nodiscard]] auto getCurrentCombination() const
         -> const comb::Combination &;
+
+    [[nodiscard]] auto getCurrentGroup() const -> const grp::Group &;
 
   public:
     [[nodiscard]] auto getBindedCombinations(key::Keys key) const
