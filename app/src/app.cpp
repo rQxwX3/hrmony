@@ -8,8 +8,9 @@
 
 #ifdef __APPLE__
 app::App::App()
-    : m_platform{std::make_unique<mac::MacOS>(this)}, m_running{false},
-      m_HRMMode{false}, m_config{conf::defaultConfig} {}
+    : m_platform{std::make_unique<mac::MacOS>(this)},
+      m_globalGroup{std::make_unique<grp::Group>(grp::createGlobalGroup())},
+      m_running{false}, m_HRMMode{false}, m_config{conf::defaultConfig} {}
 #endif
 
 auto app::App::run() -> void {
@@ -21,6 +22,10 @@ auto app::App::run() -> void {
 
 [[nodiscard]] auto app::App::getConfig() const -> conf::Config {
     return m_config;
+}
+
+[[nodiscard]] auto app::App::getGlobalGroup() const -> const grp::Group * {
+    return m_globalGroup.get();
 }
 
 [[nodiscard]] auto app::App::isHRMMode() const -> bool { return m_HRMMode; }

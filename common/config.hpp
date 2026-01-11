@@ -15,8 +15,6 @@ struct Config {
     plat::types::KeyToNativeCode keyToNativeCode;
 
     mac::types::ModifierToCGEventFlags modifierToCGEventFlags;
-
-    app::types::Groups groups;
 };
 
 constexpr auto loadDefaultConfig() -> Config {
@@ -28,8 +26,6 @@ constexpr auto loadDefaultConfig() -> Config {
         .keyToNativeCode = mac::consts::keyToNativeCode,
 
         .modifierToCGEventFlags = mac::consts::modifierToCGEventFlags,
-
-        .groups = app::types::createGroups(),
     };
 
     return config;

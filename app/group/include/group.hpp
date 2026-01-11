@@ -7,7 +7,7 @@
 namespace grp {
 class Group {
   private:
-    grp::types::Subgroups m_subgroups;
+    // grp::types::Subgroups m_subgroups;
     grp::types::Bindings m_bindings;
     key::Keys m_leader;
 
@@ -18,11 +18,7 @@ class Group {
 
   public:
     [[nodiscard]] auto getLeader() const -> key::Keys;
-    [[nodiscard]] auto getBindings() const -> const grp::types::Bindings &;
-    [[nodiscard]] auto getSubgroups() const -> const grp::types::Subgroups &;
-
-  public:
-    auto addSubgroup(std::unique_ptr<Group> group) -> void;
+    [[nodiscard]] auto getBindings() const & -> const grp::types::Bindings &;
 
   public:
     [[nodiscard]] auto isNullGroup() const -> bool;

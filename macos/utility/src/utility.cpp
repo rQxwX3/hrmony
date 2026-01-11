@@ -49,21 +49,26 @@ auto mac::util::getWhichGroupEntered(const MacOS *self) -> grp::Group {
         return grp::nullGroup;
     }
 
-    const auto groups{self->getConfig().groups};
+    const auto *globalGroup{self->getGlobalGroup()};
 
-    const auto nativeCode{self->getCurrentNativeCode()};
-    const auto key{self->nativeCodeToKey(nativeCode)};
+    // TODO get subgroups of currentGroup
+    // if (!self->getCurrentGroup().isNullGroup()) {
+    //     const auto groups{self->getCurrentGroup()};
+    // }
 
-    // TODO accomodate for subgroups
-    for (size_t i{0}; i != groups.count; ++i) {
-        const auto &group = groups.array.at(i);
+    // const auto nativeCode{self->getCurrentNativeCode()};
+    // const auto key{self->nativeCodeToKey(nativeCode)};
+    //
+    //  TODO go through subgroups of the current group
+    // for (size_t i{0}; i != groups.count; ++i) {
+    //     const auto &group = groups.array.at(i);
+    //
+    //     if (key == group.getLeader()) {
+    //         return group;
+    //     }
+    // }
 
-        if (key == group.getLeader()) {
-            return group;
-        }
-    }
-
-    return grp::nullGroup;
+    return self->getCurrentGroup();
 }
 
 auto mac::util::isKeymapInProgress(const MacOS *self,
