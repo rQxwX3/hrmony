@@ -18,17 +18,17 @@ class Platform : public IPlatform {
 
     comb::Combination m_currentCombination;
 
-    grp::Group m_currentGroup;
+    grp::Group *m_currentGroupPtr;
 
   public:
-    Platform(app::App *appPtr = nullptr);
+    Platform(grp::Group *groupPtr, app::App *appPtr = nullptr);
 
   public:
-    auto enterGroup(const grp::Group &group) -> void override;
+    auto enterGroup(const grp::Group *group) -> void override;
     auto exitAllGroups() -> void override;
 
   public:
-    auto setCurrentGroup(const grp::Group &group) -> void;
+    auto setCurrentGroup(grp::Group *group) -> void;
 
     auto addToCurrentCombination(const comb::Combination &combination)
         -> void override;
@@ -43,7 +43,7 @@ class Platform : public IPlatform {
     [[nodiscard]] auto getCurrentCombination() const
         -> const comb::Combination &;
 
-    [[nodiscard]] auto getCurrentGroup() const -> const grp::Group &;
+    [[nodiscard]] auto getCurrentGroup() const -> const grp::Group *;
 
   public:
     [[nodiscard]] auto getBindedCombinations(key::Keys key) const

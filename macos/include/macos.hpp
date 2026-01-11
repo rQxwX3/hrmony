@@ -18,7 +18,7 @@ class MacOS : public plat::Platform {
     bool m_leaderUpProcessed;
 
   public:
-    MacOS(app::App *appPtr);
+    MacOS(grp::Group *groupPtr, app::App *appPtr);
     ~MacOS() override;
 
   public:

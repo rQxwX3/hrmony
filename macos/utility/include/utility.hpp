@@ -17,7 +17,8 @@ auto createAndPostKeyboardEvent(const mac::MacOS *self, NativeCode nativeCode,
 
 [[nodiscard]] auto isSyntheticEvent(const Event &event) -> bool;
 
-[[nodiscard]] auto getWhichGroupEntered(const mac::MacOS *self) -> grp::Group;
+[[nodiscard]] auto getWhichGroupEntered(const mac::MacOS *self)
+    -> const grp::Group *;
 
 [[nodiscard]] auto isGroupExitTriggered(const mac::MacOS *self) -> bool;
 

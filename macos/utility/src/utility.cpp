@@ -44,9 +44,9 @@ auto mac::util::isGroupExitTriggered(const MacOS *self) -> bool {
     return self->nativeCodeToKey(nativeCode) == self->getConfig().exitKey;
 }
 
-auto mac::util::getWhichGroupEntered(const MacOS *self) -> grp::Group {
+auto mac::util::getWhichGroupEntered(const MacOS *self) -> const grp::Group * {
     if (self->isHRMMode()) {
-        return grp::nullGroup;
+        return nullptr;
     }
 
     const auto *globalGroup{self->getGlobalGroup()};
@@ -233,7 +233,7 @@ auto mac::util::processKeyPress(CGEventTapProxy proxy, CGEventType type,
         return nullptr;
     }
 
-    if (const auto group{getWhichGroupEntered(self)}; !group.isNullGroup()) {
+    if (const auto *group{getWhichGroupEntered(self)}; group != nullptr) {
         std::cout << "entering group\n";
         self->enterGroup(group);
 

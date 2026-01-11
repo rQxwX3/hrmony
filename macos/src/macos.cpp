@@ -87,8 +87,9 @@ auto mac::MacOS::toggleLeaderUpProcessed() -> void {
     m_leaderUpProcessed = !m_leaderUpProcessed;
 }
 
-mac::MacOS::MacOS(app::App *appPtr)
-    : Platform(appPtr), m_leaderUpProcessed{false}, m_currentNativeCode{0} {
+mac::MacOS::MacOS(grp::Group *groupPtr, app::App *appPtr)
+    : Platform(groupPtr, appPtr), m_leaderUpProcessed{false},
+      m_currentNativeCode{0} {
     CGEventMask eventMask{CGEventMaskBit(kCGEventKeyDown) |
                           // CGEventMaskBit(kCGEventKeyUp) |
                           CGEventMaskBit(kCGEventFlagsChanged)};

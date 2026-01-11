@@ -3,8 +3,8 @@
 #include <config.hpp>
 #include <platform.hpp>
 
-plat::Platform::Platform(app::App *appPtr)
-    : m_appPtr{appPtr}, m_currentGroup{grp::nullGroup} {};
+plat::Platform::Platform(grp::Group *groupPtr, app::App *appPtr)
+    : m_appPtr{appPtr}, m_currentGroupPtr{groupPtr} {};
 
 [[nodiscard]] auto plat::Platform::getCurrentCombination() const
     -> const comb::Combination & {
@@ -15,8 +15,8 @@ auto plat::Platform::resetCurrentCombination() -> void {
     m_currentCombination = comb::Combination();
 }
 
-auto plat::Platform::setCurrentGroup(const grp::Group &group) -> void {
-    m_currentGroup = group;
+auto plat::Platform::setCurrentGroup(grp::Group *group) -> void {
+    m_currentGroupPtr = group;
 }
 
 auto plat::Platform::addToCurrentCombination(
@@ -47,8 +47,8 @@ plat::Platform::getBindedCombinations(const key::Keys key) const
 }
 
 [[nodiscard]] auto plat::Platform::getCurrentGroup() const
-    -> const grp::Group & {
-    return m_currentGroup;
+    -> const grp::Group * {
+    return m_currentGroupPtr;
 }
 
 [[nodiscard]] auto plat::Platform::getConfig() const -> conf::Config {
@@ -72,13 +72,13 @@ plat::Platform::nativeCodeToKey(const NativeCode nativeCode) const
     return m_appPtr->isHRMMode();
 }
 
-auto plat::Platform::enterGroup(const grp::Group &group) -> void {
-    setCurrentGroup(group);
+auto plat::Platform::enterGroup(const grp::Group *group) -> void {
+    setCurrentGroup(const_cast<grp::Group *>(group));
     m_appPtr->toggleHRMMode();
 }
 
 auto plat::Platform::exitAllGroups() -> void {
-    setCurrentGroup(grp::nullGroup);
+    setCurrentGroup(nullptr);
     resetCurrentCombination();
     m_appPtr->toggleHRMMode();
 }
