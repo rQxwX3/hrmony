@@ -37,13 +37,7 @@ auto plat::Platform::addToCurrentCombination(
 [[nodiscard]] auto
 plat::Platform::getBindedCombinations(const key::Keys key) const
     -> grp::types::Combinations {
-    const auto &config{getConfig()};
-
-    // const auto &bindedCombination{config.keyCombinationBinding.at(key)};
-
-    // TODO fix
-    return {};
-    // return config.keyCombinationBinding.at(key);
+    return m_currentGroupPtr->getBindings().at(key);
 }
 
 [[nodiscard]] auto plat::Platform::getCurrentGroup() const
@@ -77,8 +71,8 @@ auto plat::Platform::enterGroup(const grp::Group *group) -> void {
     m_appPtr->toggleHRMMode();
 }
 
-auto plat::Platform::exitAllGroups() -> void {
-    setCurrentGroup(nullptr);
+auto plat::Platform::exitToGlobalGroup() -> void {
+    setCurrentGroup(const_cast<grp::Group *>(m_appPtr->getGlobalGroup()));
     resetCurrentCombination();
     m_appPtr->toggleHRMMode();
 }

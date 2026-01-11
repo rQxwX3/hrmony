@@ -25,7 +25,7 @@ class Platform : public IPlatform {
 
   public:
     auto enterGroup(const grp::Group *group) -> void override;
-    auto exitAllGroups() -> void override;
+    auto exitToGlobalGroup() -> void override;
 
   public:
     auto setCurrentGroup(grp::Group *group) -> void;

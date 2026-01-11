@@ -129,7 +129,7 @@ auto mac::util::processNoModifiersBinding(MacOS *self, Event &event,
     self->addToCurrentCombination(binding);
     self->setEventToCombination(event, self->getCurrentCombination());
     self->toggleLeaderUpProcessed();
-    self->exitAllGroups();
+    self->exitToGlobalGroup();
 }
 
 auto mac::util::processEmptyBinding(MacOS *self, Event &event,
@@ -141,7 +141,7 @@ auto mac::util::processEmptyBinding(MacOS *self, Event &event,
 
     self->setEventToCombination(event, self->getCurrentCombination());
     self->toggleLeaderUpProcessed();
-    self->exitAllGroups();
+    self->exitToGlobalGroup();
 }
 
 auto mac::util::sendMultipleRegulars(MacOS *self,
@@ -166,7 +166,7 @@ auto mac::util::processMultipleRegularsBinding(
     sendMultipleRegulars(self, combination);
 
     self->toggleLeaderUpProcessed();
-    self->exitAllGroups();
+    self->exitToGlobalGroup();
 }
 
 [[nodiscard]] auto mac::util::isProcessingLeaderUp(const MacOS *self) -> bool {
@@ -242,7 +242,7 @@ auto mac::util::processKeyPress(CGEventTapProxy proxy, CGEventType type,
 
     if (isGroupExitTriggered(self)) {
         std::cout << "exiting hrm mode\n";
-        self->exitAllGroups();
+        self->exitToGlobalGroup();
 
         return nullptr;
     }

@@ -23,7 +23,7 @@ class IPlatform {
         Event &event, const comb::Combination &combination) const -> void = 0;
 
     virtual auto enterGroup(const grp::Group *group) -> void = 0;
-    virtual auto exitAllGroups() -> void = 0;
+    virtual auto exitToGlobalGroup() -> void = 0;
 
   public:
     IPlatform() = default;
