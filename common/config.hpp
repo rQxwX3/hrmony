@@ -8,7 +8,6 @@
 
 namespace conf {
 struct Config {
-    key::Keys leaderKey;
     key::Keys exitKey;
 
     plat::types::NativeCodeToKey nativeCodeToKey;
@@ -19,7 +18,6 @@ struct Config {
 
 constexpr auto loadDefaultConfig() -> Config {
     Config config{
-        .leaderKey = key::Keys::RIGHT_CMD,
         .exitKey = key::Keys::ESC,
 
         .nativeCodeToKey = mac::consts::nativeCodeToKey,

@@ -49,26 +49,12 @@ auto mac::util::getWhichGroupEntered(const MacOS *self) -> const grp::Group * {
         return nullptr;
     }
 
-    const auto *globalGroup{self->getGlobalGroup()};
+    const auto *currentGroup{self->getCurrentGroup()};
 
-    // TODO get subgroups of currentGroup
-    // if (!self->getCurrentGroup().isNullGroup()) {
-    //     const auto groups{self->getCurrentGroup()};
-    // }
+    const auto nativeCode{self->getCurrentNativeCode()};
+    const auto key{self->nativeCodeToKey(nativeCode)};
 
-    // const auto nativeCode{self->getCurrentNativeCode()};
-    // const auto key{self->nativeCodeToKey(nativeCode)};
-    //
-    //  TODO go through subgroups of the current group
-    // for (size_t i{0}; i != groups.count; ++i) {
-    //     const auto &group = groups.array.at(i);
-    //
-    //     if (key == group.getLeader()) {
-    //         return group;
-    //     }
-    // }
-
-    return self->getCurrentGroup();
+    return currentGroup->getSubgroup(key);
 }
 
 auto mac::util::isKeymapInProgress(const MacOS *self,
@@ -178,10 +164,10 @@ auto mac::util::processMultipleRegularsBinding(
         return false;
     }
 
-    const auto config{self->getConfig()};
+    const auto *currentGroup{self->getCurrentGroup()};
     const auto nativeCode{self->getCurrentNativeCode()};
 
-    return config.leaderKey == self->nativeCodeToKey(nativeCode);
+    return currentGroup->getLeader() == self->nativeCodeToKey(nativeCode);
 }
 
 auto mac::util::processSingleCombinationBinding(

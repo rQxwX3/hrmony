@@ -4,24 +4,25 @@
 #include <groupTypes.hpp>
 #include <keys.hpp>
 
+#include <memory>
+
 namespace grp {
 class Group {
   private:
-    // grp::types::Subgroups m_subgroups;
+    std::unique_ptr<grp::types::Subgroups> m_subgroups;
     grp::types::Bindings m_bindings;
     key::Keys m_leader;
 
   public:
-    Group();
-
     Group(key::Keys leader, const grp::types::Bindings &bindings);
 
   public:
     [[nodiscard]] auto getLeader() const -> key::Keys;
     [[nodiscard]] auto getBindings() const & -> const grp::types::Bindings &;
+    [[nodiscard]] auto getSubgroup(key::Keys leader) const -> const Group *;
 
   public:
-    [[nodiscard]] auto isNullGroup() const -> bool;
+    auto addSubgroup(std::unique_ptr<Group> groupPtr) -> void;
 };
 
 inline auto createGlobalGroup() -> grp::Group {
@@ -49,10 +50,13 @@ inline auto createGlobalGroup() -> grp::Group {
         .array = {Combination({.array = {Keys::H, Keys::I}, .count = 2})},
         .count = 1};
 
-    return Group{key::Keys::RIGHT_CMD, bindings};
-};
+    auto group{Group{key::Keys::NULLKEY, {}}};
 
-const grp::Group nullGroup{};
+    group.addSubgroup(std::make_unique<Group>(Keys::RIGHT_CMD, bindings));
+    group.addSubgroup(std::make_unique<Group>(Keys::LEFT_CMD, bindings));
+
+    return group;
+};
 } // namespace grp
 
 #endif // GROUP_HPP

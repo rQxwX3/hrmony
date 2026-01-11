@@ -17,8 +17,9 @@ class Subgroups {
     std::array<std::unique_ptr<Group>, key::keysCount> m_array;
 
   public:
-    auto addSubgroup(key::Keys leader, std::unique_ptr<grp::Group> group)
-        -> void;
+    auto set(std::unique_ptr<Group> group) -> void;
+
+    [[nodiscard]] auto at(key::Keys leader) const -> const Group *;
 };
 
 constexpr size_t maxCombinationsInMapping{5};
