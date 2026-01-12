@@ -1,10 +1,9 @@
 #ifndef GROUP_HPP
 #define GROUP_HPP
 
-#include <groupTypes.hpp>
+#include <action.hpp>
 #include <keys.hpp>
 
-#include <iostream>
 #include <memory>
 
 namespace grp {

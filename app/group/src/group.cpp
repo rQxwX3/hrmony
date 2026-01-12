@@ -1,5 +1,4 @@
 #include <group.hpp>
-#include <groupTypes.hpp>
 
 grp::Group::Group(const key::Keys leader)
     : m_leader{leader}, m_actions{std::make_unique<grp::types::Actions>()} {}

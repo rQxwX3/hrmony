@@ -3,7 +3,6 @@
 
 #include <app.hpp>
 #include <combination.hpp>
-#include <groupTypes.hpp>
 #include <platform.hpp>
 
 #include <ApplicationServices/ApplicationServices.h>

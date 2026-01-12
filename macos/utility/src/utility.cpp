@@ -1,4 +1,3 @@
-#include <groupTypes.hpp>
 #include <keys.hpp>
 #include <macos.hpp>
 #include <utility.hpp>

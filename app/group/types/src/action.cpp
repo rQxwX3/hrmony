@@ -1,5 +1,5 @@
+#include <action.hpp>
 #include <group.hpp>
-#include <groupTypes.hpp>
 
 grp::types::Action::Action() : variant{std::unique_ptr<Group>{}} {}
 

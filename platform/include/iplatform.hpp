@@ -3,7 +3,6 @@
 
 #include <combination.hpp>
 #include <group.hpp>
-#include <groupTypes.hpp>
 #include <platformTypes.hpp>
 
 class IPlatform {

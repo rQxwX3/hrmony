@@ -1,5 +1,5 @@
-#ifndef GROUP_TYPES_HPP
-#define GROUP_TYPES_HPP
+#ifndef ACTION_HPP
+#define ACTION_HPP
 
 #include <combination.hpp>
 #include <keys.hpp>
@@ -20,18 +20,22 @@ struct Combinations {
     size_t count = 1;
 };
 
-struct Action {
+class Action {
     using Variant = std::variant<Combinations, std::unique_ptr<Group>>;
 
+  private:
     Variant variant;
 
+  public:
     Action();
     Action(Variant variant);
 
+  public:
     [[nodiscard]] auto isBinding() const -> bool;
     [[nodiscard]] auto isSubgroup() const -> bool;
     [[nodiscard]] auto isEmpty() const -> bool;
 
+  public:
     [[nodiscard]] auto getSubgroup() const -> const Group *;
     [[nodiscard]] auto getBinding() const & -> const Combinations &;
 };
@@ -39,4 +43,4 @@ struct Action {
 using Actions = std::array<Action, key::keysCount>;
 } // namespace grp::types
 
-#endif // GROUP_TYPES_HPP
+#endif // ACTION_HPP
