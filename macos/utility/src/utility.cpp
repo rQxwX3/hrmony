@@ -234,7 +234,13 @@ auto mac::util::processKeyPress(CGEventTapProxy proxy, CGEventType type,
     if (groupAction.isSubgroup()) {
         std::cout << "entering group\n";
 
-        self->enterGroup(groupAction.getSubgroup());
+        const auto subgroup{groupAction.getSubgroup()};
+
+        if (!subgroup.has_value()) {
+            // TODO
+        }
+
+        self->enterGroup(*groupAction.getSubgroup());
 
         return nullptr;
     }
@@ -244,10 +250,14 @@ auto mac::util::processKeyPress(CGEventTapProxy proxy, CGEventType type,
 
         const auto combinations{groupAction.getBinding()};
 
-        if (combinations.count == 1) {
-            processSingleCombinationBinding(self, event, combinations);
+        if (!combinations.has_value()) {
+            // TODO
+        }
+
+        if (combinations->count == 1) {
+            processSingleCombinationBinding(self, event, *combinations);
         } else {
-            processMultipleCombinationsBinding(self, event, combinations);
+            processMultipleCombinationsBinding(self, event, *combinations);
         }
     }
 

@@ -1,17 +1,31 @@
 #include <action.hpp>
 #include <group.hpp>
+#include <optional>
 
 grp::types::Action::Action() : variant{std::unique_ptr<Group>{}} {}
 
 grp::types::Action::Action(Variant variant) : variant{std::move(variant)} {}
 
-[[nodiscard]] auto grp::types::Action::getSubgroup() const -> const Group * {
-    return std::get<std::unique_ptr<Group>>(variant).get();
+[[nodiscard]] auto grp::types::Action::getSubgroup() const
+    -> std::optional<const Group *> {
+    const auto *subgroup{std::get_if<std::unique_ptr<Group>>(&variant)};
+
+    if (subgroup == nullptr) {
+        return {};
+    }
+
+    return subgroup->get();
 }
 
-[[nodiscard]] auto
-grp::types::Action::getBinding() const & -> const Combinations & {
-    return std::get<grp::types::Combinations>(variant);
+[[nodiscard]] auto grp::types::Action::getBinding() const
+    -> std::optional<const Combinations> {
+    const auto *binding{std::get_if<grp::types::Combinations>(&variant)};
+
+    if (nullptr == binding) {
+        return {};
+    }
+
+    return *binding;
 }
 
 [[nodiscard]] auto grp::types::Action::isBinding() const -> bool {

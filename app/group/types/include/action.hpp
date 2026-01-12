@@ -6,6 +6,7 @@
 
 #include <array>
 #include <memory>
+#include <optional>
 #include <variant>
 
 namespace grp {
@@ -36,8 +37,8 @@ class Action {
     [[nodiscard]] auto isEmpty() const -> bool;
 
   public:
-    [[nodiscard]] auto getSubgroup() const -> const Group *;
-    [[nodiscard]] auto getBinding() const & -> const Combinations &;
+    [[nodiscard]] auto getSubgroup() const -> std::optional<const Group *>;
+    [[nodiscard]] auto getBinding() const -> std::optional<const Combinations>;
 };
 
 using Actions = std::array<Action, key::keysCount>;
