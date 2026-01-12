@@ -4,12 +4,13 @@
 #include <groupTypes.hpp>
 #include <keys.hpp>
 
+#include <iostream>
 #include <memory>
 
 namespace grp {
 class Group {
   private:
-    grp::types::Actions m_actions;
+    std::unique_ptr<grp::types::Actions> m_actions;
     key::Keys m_leader;
 
   public:
@@ -17,11 +18,14 @@ class Group {
 
   public:
     [[nodiscard]] auto getLeader() const -> key::Keys;
-    [[nodiscard]] auto getAction(key::Keys key) const -> grp::types::Action *;
+
+    [[nodiscard]] auto
+    getAction(key::Keys key) const & -> const types::Action &;
 
   public:
     auto addAction(key::Keys key, const grp::types::Combinations &combinations)
         -> void;
+
     auto addAction(std::unique_ptr<grp::Group> group) -> void;
 };
 

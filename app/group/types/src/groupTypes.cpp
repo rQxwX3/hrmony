@@ -1,33 +1,28 @@
 #include <group.hpp>
 #include <groupTypes.hpp>
 
-grp::types::Binding::Binding(const Combinations &combinations)
-    : m_combinations{combinations} {}
+grp::types::Action::Action() : variant{std::unique_ptr<Group>{}} {}
 
-grp::types::Binding::~Binding() = default;
+grp::types::Action::Action(Variant variant) : variant{std::move(variant)} {}
 
-[[nodiscard]] auto grp::types::Binding::getType() const -> const Type {
-    return Type::Binding;
+[[nodiscard]] auto grp::types::Action::getSubgroup() const -> const Group * {
+    return std::get<std::unique_ptr<Group>>(variant).get();
 }
 
-grp::types::Subgroup::Subgroup(std::unique_ptr<grp::Group> group)
-    : m_group{std::move(group)} {}
-
-grp::types::Subgroup::~Subgroup() = default;
-
-[[nodiscard]] auto grp::types::Binding::getBinding() const -> Combinations {
-    return m_combinations;
+[[nodiscard]] auto
+grp::types::Action::getBinding() const & -> const Combinations & {
+    return std::get<grp::types::Combinations>(variant);
 }
 
-[[nodiscard]] auto grp::types::Subgroup::getType() const -> const Type {
-    return Type::Subgroup;
+[[nodiscard]] auto grp::types::Action::isBinding() const -> bool {
+    return std::holds_alternative<Combinations>(variant);
 }
 
-[[nodiscard]] auto grp::types::Subgroup::getGroup() const
-    -> const grp::Group * {
-    return m_group.get();
+[[nodiscard]] auto grp::types::Action::isSubgroup() const -> bool {
+    return std::holds_alternative<std::unique_ptr<Group>>(variant) &&
+           getSubgroup() != nullptr;
 }
 
-[[nodiscard]] auto grp::types::Subgroup::getLeader() const -> key::Keys {
-    return m_group->getLeader();
+[[nodiscard]] auto grp::types::Action::isEmpty() const -> bool {
+    return !isBinding() && getSubgroup() == nullptr;
 }

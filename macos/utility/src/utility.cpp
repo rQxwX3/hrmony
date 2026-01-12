@@ -45,7 +45,8 @@ auto mac::util::isGroupExitTriggered(const MacOS *self) -> bool {
     return self->nativeCodeToKey(nativeCode) == self->getConfig().exitKey;
 }
 
-auto mac::util::getGroupAction(const MacOS *self) -> grp::types::Action * {
+auto mac::util::getGroupAction(const MacOS *self)
+    -> const grp::types::Action & {
     const auto *currentGroup{self->getCurrentGroup()};
 
     const auto nativeCode{self->getCurrentNativeCode()};
@@ -223,30 +224,32 @@ auto mac::util::processKeyPress(CGEventTapProxy proxy, CGEventType type,
         return nullptr;
     }
 
-    auto *groupAction{getGroupAction(self)};
-    if (groupAction == nullptr) {
+    const auto &groupAction{getGroupAction(self)};
+
+    if (groupAction.isEmpty()) {
         mac::util::processEmptyBinding(self, event, {});
+
         return event;
     }
 
-    if (groupAction->getType() == grp::types::Action::Type::Subgroup) {
+    if (groupAction.isSubgroup()) {
         std::cout << "entering group\n";
-        const auto *subgroup{dynamic_cast<grp::types::Subgroup *>(groupAction)};
 
-        self->enterGroup(subgroup->getGroup());
+        self->enterGroup(groupAction.getSubgroup());
 
         return nullptr;
     }
 
-    std::cout << "getting binding\n";
+    if (groupAction.isBinding()) {
+        std::cout << "getting binding\n";
 
-    const auto *binding{dynamic_cast<grp::types::Binding *>(groupAction)};
-    const auto combinations{binding->getBinding()};
+        const auto combinations{groupAction.getBinding()};
 
-    if (combinations.count == 1) {
-        processSingleCombinationBinding(self, event, combinations);
-    } else {
-        processMultipleCombinationsBinding(self, event, combinations);
+        if (combinations.count == 1) {
+            processSingleCombinationBinding(self, event, combinations);
+        } else {
+            processMultipleCombinationsBinding(self, event, combinations);
+        }
     }
 
     return event;

@@ -6,38 +6,13 @@
 
 #include <array>
 #include <memory>
+#include <variant>
 
 namespace grp {
 class Group;
 }
 
 namespace grp::types {
-struct Action {
-    enum class Type : uint8_t { Subgroup, Binding };
-
-    [[nodiscard]] virtual auto getType() const -> const Type = 0;
-
-    virtual ~Action() = default;
-};
-
-using Actions = std::array<std::unique_ptr<Action>, key::keysCount>;
-
-class Subgroup : public Action {
-  private:
-    std::unique_ptr<grp::Group> m_group;
-
-  public:
-    Subgroup(std::unique_ptr<grp::Group> group);
-    ~Subgroup() override;
-
-  public:
-    [[nodiscard]] auto getType() const -> const Type override;
-
-  public:
-    [[nodiscard]] auto getGroup() const -> const grp::Group *;
-    [[nodiscard]] auto getLeader() const -> key::Keys;
-};
-
 struct Combinations {
     static constexpr size_t maxCombinationsInMapping{5};
 
@@ -45,20 +20,23 @@ struct Combinations {
     size_t count = 1;
 };
 
-class Binding : public Action {
-  private:
-    Combinations m_combinations;
+struct Action {
+    using Variant = std::variant<Combinations, std::unique_ptr<Group>>;
 
-  public:
-    Binding(const Combinations &combinations);
-    ~Binding() override;
+    Variant variant;
 
-  public:
-    [[nodiscard]] auto getType() const -> const Type override;
+    Action();
+    Action(Variant variant);
 
-  public:
-    [[nodiscard]] auto getBinding() const -> Combinations;
+    [[nodiscard]] auto isBinding() const -> bool;
+    [[nodiscard]] auto isSubgroup() const -> bool;
+    [[nodiscard]] auto isEmpty() const -> bool;
+
+    [[nodiscard]] auto getSubgroup() const -> const Group *;
+    [[nodiscard]] auto getBinding() const & -> const Combinations &;
 };
+
+using Actions = std::array<Action, key::keysCount>;
 } // namespace grp::types
 
 #endif // GROUP_TYPES_HPP
