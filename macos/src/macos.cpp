@@ -71,14 +71,6 @@ auto mac::MacOS::setCurrentNativeCode(NativeCode nativeCode) -> void {
     return m_currentNativeCode;
 }
 
-[[nodiscard]] auto mac::MacOS::getBindedCombinations() const
-    -> grp::types::Combinations {
-    const auto nativeCode{getCurrentNativeCode()};
-    const auto key{nativeCodeToKey(nativeCode)};
-
-    return plat::Platform::getBindedCombinations(nativeCodeToKey(nativeCode));
-}
-
 [[nodiscard]] auto mac::MacOS::isLeaderUpProcessed() const -> bool {
     return m_leaderUpProcessed;
 }

@@ -12,42 +12,53 @@ class Group;
 }
 
 namespace grp::types {
-class Subgroups {
-  private:
-    std::array<std::unique_ptr<Group>, key::keysCount> m_array;
+struct Action {
+    enum class Type : uint8_t { Subgroup, Binding };
 
-  public:
-    auto set(std::unique_ptr<Group> group) -> void;
+    [[nodiscard]] virtual auto getType() const -> const Type = 0;
 
-    [[nodiscard]] auto at(key::Keys leader) const -> const Group *;
+    virtual ~Action() = default;
 };
 
-constexpr size_t maxCombinationsInMapping{5};
+using Actions = std::array<std::unique_ptr<Action>, key::keysCount>;
+
+class Subgroup : public Action {
+  private:
+    std::unique_ptr<grp::Group> m_group;
+
+  public:
+    Subgroup(std::unique_ptr<grp::Group> group);
+    ~Subgroup() override;
+
+  public:
+    [[nodiscard]] auto getType() const -> const Type override;
+
+  public:
+    [[nodiscard]] auto getGroup() const -> const grp::Group *;
+    [[nodiscard]] auto getLeader() const -> key::Keys;
+};
 
 struct Combinations {
-    std::array<comb::Combination, maxCombinationsInMapping> array;
+    static constexpr size_t maxCombinationsInMapping{5};
+
+    std::array<comb::Combination, maxCombinationsInMapping> combinations;
     size_t count = 1;
 };
 
-class Bindings {
+class Binding : public Action {
   private:
-    std::array<Combinations, key::keysCount> m_array;
+    Combinations m_combinations;
 
   public:
-    Bindings() : m_array{} {}
-    Bindings(const Combinations &combinations) : m_array{combinations} {}
+    Binding(const Combinations &combinations);
+    ~Binding() override;
 
-    [[nodiscard]] auto at(key::Keys key) const -> Combinations {
-        // TODO bound check
-        return m_array.at(static_cast<size_t>(key));
-    }
+  public:
+    [[nodiscard]] auto getType() const -> const Type override;
 
-    auto operator[](key::Keys key) -> Combinations & {
-        // TODO bound check
-        return m_array.at(static_cast<size_t>(key));
-    }
+  public:
+    [[nodiscard]] auto getBinding() const -> Combinations;
 };
-
 } // namespace grp::types
 
 #endif // GROUP_TYPES_HPP

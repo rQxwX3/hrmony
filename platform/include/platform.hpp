@@ -46,9 +46,6 @@ class Platform : public IPlatform {
     [[nodiscard]] auto getCurrentGroup() const -> const grp::Group *;
 
   public:
-    [[nodiscard]] auto getBindedCombinations(key::Keys key) const
-        -> grp::types::Combinations override;
-
     [[nodiscard]] auto getConfig() const -> conf::Config;
 
     [[nodiscard]] auto getGlobalGroup() const -> const grp::Group *;

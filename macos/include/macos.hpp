@@ -48,9 +48,6 @@ class MacOS : public plat::Platform {
   public:
     [[nodiscard]] auto getCurrentNativeCode() const -> NativeCode;
 
-    [[nodiscard]] auto getBindedCombinations() const
-        -> grp::types::Combinations;
-
   public:
     [[nodiscard]] auto isLeaderUpProcessed() const -> bool;
 

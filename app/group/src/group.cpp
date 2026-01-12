@@ -1,23 +1,27 @@
 #include <group.hpp>
+#include <groupTypes.hpp>
 
-grp::Group::Group(const key::Keys leader, const grp::types::Bindings &bindings)
-    : m_leader{leader}, m_bindings{bindings},
-      m_subgroups(std::make_unique<grp::types::Subgroups>()) {}
+grp::Group::Group(const key::Keys leader) : m_leader{leader}, m_actions{} {}
 
 [[nodiscard]] auto grp::Group::getLeader() const -> key::Keys {
     return m_leader;
 }
 
-[[nodiscard]] auto
-grp::Group::getBindings() const & -> const grp::types::Bindings & {
-    return m_bindings;
+[[nodiscard]] auto grp::Group::getAction(key::Keys key) const
+    -> grp::types::Action * {
+    return m_actions.at(static_cast<size_t>(key)).get();
 }
 
-[[nodiscard]] auto grp::Group::getSubgroup(key::Keys leader) const
-    -> const Group * {
-    return m_subgroups->at(leader);
+auto grp::Group::addAction(key::Keys key,
+                           const grp::types::Combinations &combinations)
+    -> void {
+    m_actions.at(static_cast<size_t>(key)) =
+        std::make_unique<grp::types::Binding>(combinations);
 }
 
-auto grp::Group::addSubgroup(std::unique_ptr<Group> groupPtr) -> void {
-    m_subgroups->set(std::move(groupPtr));
+auto grp::Group::addAction(std::unique_ptr<grp::Group> group) -> void {
+    const auto actionsIndex{static_cast<size_t>(group->getLeader())};
+
+    m_actions.at(actionsIndex) =
+        std::make_unique<grp::types::Subgroup>(std::move(group));
 }

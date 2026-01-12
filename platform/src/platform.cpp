@@ -34,12 +34,6 @@ auto plat::Platform::addToCurrentCombination(
     }
 }
 
-[[nodiscard]] auto
-plat::Platform::getBindedCombinations(const key::Keys key) const
-    -> grp::types::Combinations {
-    return m_currentGroupPtr->getBindings().at(key);
-}
-
 [[nodiscard]] auto plat::Platform::getCurrentGroup() const
     -> const grp::Group * {
     return m_currentGroupPtr;

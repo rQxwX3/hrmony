@@ -10,9 +10,6 @@ class IPlatform {
   public:
     virtual auto run() -> void = 0;
 
-    [[nodiscard]] virtual auto getBindedCombinations(key::Keys key) const
-        -> grp::types::Combinations = 0;
-
   public:
     virtual auto addToCurrentCombination(const comb::Combination &combination)
         -> void = 0;

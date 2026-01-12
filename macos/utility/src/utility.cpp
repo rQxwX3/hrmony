@@ -1,3 +1,4 @@
+#include <groupTypes.hpp>
 #include <keys.hpp>
 #include <macos.hpp>
 #include <utility.hpp>
@@ -44,17 +45,13 @@ auto mac::util::isGroupExitTriggered(const MacOS *self) -> bool {
     return self->nativeCodeToKey(nativeCode) == self->getConfig().exitKey;
 }
 
-auto mac::util::getWhichGroupEntered(const MacOS *self) -> const grp::Group * {
-    if (self->isHRMMode()) {
-        return nullptr;
-    }
-
+auto mac::util::getGroupAction(const MacOS *self) -> grp::types::Action * {
     const auto *currentGroup{self->getCurrentGroup()};
 
     const auto nativeCode{self->getCurrentNativeCode()};
     const auto key{self->nativeCodeToKey(nativeCode)};
 
-    return currentGroup->getSubgroup(key);
+    return self->getCurrentGroup()->getAction(key);
 }
 
 auto mac::util::isKeymapInProgress(const MacOS *self,
@@ -173,7 +170,7 @@ auto mac::util::processMultipleRegularsBinding(
 auto mac::util::processSingleCombinationBinding(
     MacOS *self, Event &event, const grp::types::Combinations &binding)
     -> void {
-    const auto combination{binding.array.at(0)};
+    const auto combination{binding.combinations.at(0)};
 
     if (isKeymapInProgress(self, combination)) {
         std::cout << "keymap in progress\n";
@@ -192,7 +189,7 @@ auto mac::util::processMultipleCombinationsBinding(
     const auto combinationsInBinding{binding.count};
 
     for (size_t i{0}; i != combinationsInBinding; ++i) {
-        const auto combination{binding.array.at(i)};
+        const auto combination{binding.combinations.at(i)};
 
         sendMultipleRegulars(self, combination);
     }
@@ -219,13 +216,6 @@ auto mac::util::processKeyPress(CGEventTapProxy proxy, CGEventType type,
         return nullptr;
     }
 
-    if (const auto *group{getWhichGroupEntered(self)}; group != nullptr) {
-        std::cout << "entering group\n";
-        self->enterGroup(group);
-
-        return nullptr;
-    }
-
     if (isGroupExitTriggered(self)) {
         std::cout << "exiting hrm mode\n";
         self->exitToGlobalGroup();
@@ -233,12 +223,30 @@ auto mac::util::processKeyPress(CGEventTapProxy proxy, CGEventType type,
         return nullptr;
     }
 
-    const auto currentBinding{self->getBindedCombinations()};
+    auto *groupAction{getGroupAction(self)};
+    if (groupAction == nullptr) {
+        mac::util::processEmptyBinding(self, event, {});
+        return event;
+    }
 
-    if (currentBinding.count == 1) {
-        processSingleCombinationBinding(self, event, currentBinding);
+    if (groupAction->getType() == grp::types::Action::Type::Subgroup) {
+        std::cout << "entering group\n";
+        const auto *subgroup{dynamic_cast<grp::types::Subgroup *>(groupAction)};
+
+        self->enterGroup(subgroup->getGroup());
+
+        return nullptr;
+    }
+
+    std::cout << "getting binding\n";
+
+    const auto *binding{dynamic_cast<grp::types::Binding *>(groupAction)};
+    const auto combinations{binding->getBinding()};
+
+    if (combinations.count == 1) {
+        processSingleCombinationBinding(self, event, combinations);
     } else {
-        processMultipleCombinationsBinding(self, event, currentBinding);
+        processMultipleCombinationsBinding(self, event, combinations);
     }
 
     return event;
