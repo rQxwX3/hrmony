@@ -43,11 +43,6 @@ auto plat::Platform::addToCurrentCombination(
     return m_appPtr->getConfig();
 }
 
-[[nodiscard]] auto plat::Platform::getGlobalGroup() const
-    -> const grp::Group * {
-    return m_appPtr->getGlobalGroup();
-}
-
 [[nodiscard]] auto
 plat::Platform::nativeCodeToKey(const NativeCode nativeCode) const
     -> key::Keys {

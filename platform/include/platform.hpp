@@ -48,8 +48,6 @@ class Platform : public IPlatform {
   public:
     [[nodiscard]] auto getConfig() const -> conf::Config;
 
-    [[nodiscard]] auto getGlobalGroup() const -> const grp::Group *;
-
     [[nodiscard]] auto isHRMMode() const -> bool;
 };
 } // namespace plat
