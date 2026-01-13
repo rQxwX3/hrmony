@@ -5,6 +5,7 @@
 
 #include <ApplicationServices/ApplicationServices.h>
 #include <array>
+#include <optional>
 
 namespace mac::types {
 using NativeModifier = CGEventFlags;
@@ -23,7 +24,8 @@ class ModifierToCGEventFlags {
                           key::modifiersEnumOffset);
     }
 
-    [[nodiscard]] auto at(key::Keys modifier) const -> CGEventFlags;
+    [[nodiscard]] auto at(key::Keys modifier) const
+        -> std::optional<CGEventFlags>;
 };
 
 } // namespace mac::types

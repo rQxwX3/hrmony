@@ -12,7 +12,13 @@ auto mac::MacOS::setEventFlagsToModifiers(
     NativeModifier modifierBitMask{0};
 
     for (size_t i{0}; i != modifiersCount; ++i) {
-        modifierBitMask |= modifierToCGEventFlags(modifiersArray.at(i));
+        const auto cgEventFlags{modifierToCGEventFlags(modifiersArray.at(i))};
+
+        if (!cgEventFlags.has_value()) {
+            // TODO
+        }
+
+        modifierBitMask |= *cgEventFlags;
     }
 
     CGEventSetFlags(event, modifierBitMask);
@@ -36,16 +42,14 @@ auto mac::MacOS::setEventToCombination(
 }
 
 [[nodiscard]] auto mac::MacOS::modifierToCGEventFlags(key::Keys modifier) const
-    -> CGEventFlags {
+    -> std::optional<CGEventFlags> {
 
     if (!key::isModifier(modifier)) {
-        // TODO
-        return 0;
+        return {};
     }
 
     const auto &config{getConfig()};
 
-    // TODO bound check
     return config.modifierToCGEventFlags.at(modifier);
 }
 

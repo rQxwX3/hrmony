@@ -6,6 +6,7 @@
 #include <platform.hpp>
 
 #include <ApplicationServices/ApplicationServices.h>
+#include <optional>
 
 namespace mac {
 class MacOS : public plat::Platform {
@@ -25,7 +26,7 @@ class MacOS : public plat::Platform {
 
   public:
     [[nodiscard]] auto modifierToCGEventFlags(key::Keys modifier) const
-        -> CGEventFlags;
+        -> std::optional<CGEventFlags>;
 
     [[nodiscard]] auto nativeCodeToKey(NativeCode nativeCode) const
         -> key::Keys;
