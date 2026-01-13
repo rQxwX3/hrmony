@@ -12,9 +12,7 @@ namespace mac {
 class MacOS : public plat::Platform {
   private:
     CFRunLoopRef m_runLoopRef;
-
     NativeCode m_currentNativeCode;
-
     bool m_leaderUpProcessed;
 
   public:
@@ -29,23 +27,11 @@ class MacOS : public plat::Platform {
         -> std::optional<CGEventFlags>;
 
   public:
-    auto setEventFlagsToModifiers(Event &event,
-                                  comb::types::Modifiers modifiers) const
-        -> void;
-
-    auto setEventToCombination(Event &event,
-                               const comb::Combination &combination) const
-        -> void override;
-
-  public:
     auto setCurrentNativeCode(NativeCode nativeCode) -> void;
-
-  public:
     [[nodiscard]] auto getCurrentNativeCode() const -> NativeCode;
 
   public:
     [[nodiscard]] auto isLeaderUpProcessed() const -> bool;
-
     auto toggleLeaderUpProcessed() -> void;
 
   public:

@@ -15,9 +15,6 @@ class IPlatform {
 
     virtual auto resetCurrentCombination() -> void = 0;
 
-    virtual auto setEventToCombination(
-        Event &event, const comb::Combination &combination) const -> void = 0;
-
     virtual auto enterGroup(const grp::Group *group) -> void = 0;
     virtual auto exitToGlobalGroup() -> void = 0;
 

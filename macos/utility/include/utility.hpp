@@ -10,6 +10,9 @@ constexpr int64_t kSyntheticTag{0xC0FFEE};
 auto setEventFlagsToModifiers(const MacOS *self, Event &event,
                               comb::types::Modifiers modifiers) -> void;
 
+auto setEventToCombination(const MacOS *self, Event &event,
+                           const comb::Combination &combination) -> void;
+
 auto createAndPostKeyboardEvent(const mac::MacOS *self, NativeCode nativeCode,
                                 comb::types::Modifiers modifiers, bool isDown,
                                 int64_t kSyntheticTag = 0) -> void;

@@ -5,28 +5,6 @@
 
 #include <ApplicationServices/ApplicationServices.h>
 
-auto mac::MacOS::setEventToCombination(
-    Event &event, const comb::Combination &combination) const -> void {
-    setEventFlagsToModifiers(event, combination.getModifiers());
-
-    const auto [regularsArray, regularsCount]{combination.getRegulars()};
-
-    const auto config{getConfig()};
-
-    // TODO This doesn't support multi-key
-    // combinations, and it shouldn't
-    for (size_t i{0}; i != regularsCount; ++i) {
-        const auto nativeCode{config.keyToNativeCode.at(regularsArray.at(i))};
-
-        if (!nativeCode.has_value()) {
-            // TODO
-        }
-
-        CGEventSetIntegerValueField(event, kCGKeyboardEventKeycode,
-                                    nativeCode.value());
-    }
-}
-
 [[nodiscard]] auto mac::MacOS::modifierToCGEventFlags(key::Keys modifier) const
     -> std::optional<CGEventFlags> {
 

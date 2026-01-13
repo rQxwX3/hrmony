@@ -28,6 +28,29 @@ auto mac::util::setEventFlagsToModifiers(const MacOS *self, Event &event,
     CGEventSetFlags(event, modifierBitMask);
 }
 
+auto mac::util::setEventToCombination(const MacOS *self, Event &event,
+                                      const comb::Combination &combination)
+    -> void {
+    setEventFlagsToModifiers(self, event, combination.getModifiers());
+
+    const auto [regularsArray, regularsCount]{combination.getRegulars()};
+
+    const auto config{self->getConfig()};
+
+    // TODO This doesn't support multi-key
+    // combinations, and it shouldn't
+    for (size_t i{0}; i != regularsCount; ++i) {
+        const auto nativeCode{config.keyToNativeCode.at(regularsArray.at(i))};
+
+        if (!nativeCode.has_value()) {
+            // TODO
+        }
+
+        CGEventSetIntegerValueField(event, kCGKeyboardEventKeycode,
+                                    nativeCode.value());
+    }
+}
+
 auto mac::util::createAndPostKeyboardEvent(
     const MacOS *self, const NativeCode nativeCode,
     const comb::types::Modifiers modifiers, const bool isDown,
@@ -144,7 +167,7 @@ auto mac::util::processNoModifiersBinding(MacOS *self, Event &event,
                                           const comb::Combination &binding)
     -> void {
     self->addToCurrentCombination(binding);
-    self->setEventToCombination(event, self->getCurrentCombination());
+    setEventToCombination(self, event, self->getCurrentCombination());
     self->toggleLeaderUpProcessed();
     self->exitToGlobalGroup();
 }
@@ -156,7 +179,8 @@ auto mac::util::processEmptyBinding(MacOS *self, Event &event,
 
     self->addToCurrentCombination(nativeCodeCombination);
 
-    self->setEventToCombination(event, self->getCurrentCombination());
+    setEventToCombination(self, event, self->getCurrentCombination());
+
     self->toggleLeaderUpProcessed();
     self->exitToGlobalGroup();
 }
