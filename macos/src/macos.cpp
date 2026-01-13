@@ -5,25 +5,6 @@
 
 #include <ApplicationServices/ApplicationServices.h>
 
-auto mac::MacOS::setEventFlagsToModifiers(
-    Event &event, comb::types::Modifiers modifiers) const -> void {
-    const auto [modifiersArray, modifiersCount]{modifiers};
-
-    NativeModifier modifierBitMask{0};
-
-    for (size_t i{0}; i != modifiersCount; ++i) {
-        const auto cgEventFlags{modifierToCGEventFlags(modifiersArray.at(i))};
-
-        if (!cgEventFlags.has_value()) {
-            // TODO
-        }
-
-        modifierBitMask |= *cgEventFlags;
-    }
-
-    CGEventSetFlags(event, modifierBitMask);
-}
-
 auto mac::MacOS::setEventToCombination(
     Event &event, const comb::Combination &combination) const -> void {
     setEventFlagsToModifiers(event, combination.getModifiers());

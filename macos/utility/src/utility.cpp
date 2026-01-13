@@ -7,13 +7,34 @@
 using key::Keys;
 using mac::MacOS;
 
+auto mac::util::setEventFlagsToModifiers(const MacOS *self, Event &event,
+                                         comb::types::Modifiers modifiers)
+    -> void {
+    const auto [modifiersArray, modifiersCount]{modifiers};
+
+    NativeModifier modifierBitMask{0};
+
+    for (size_t i{0}; i != modifiersCount; ++i) {
+        const auto cgEventFlags{
+            self->modifierToCGEventFlags(modifiersArray.at(i))};
+
+        if (!cgEventFlags.has_value()) {
+            // TODO
+        }
+
+        modifierBitMask |= *cgEventFlags;
+    }
+
+    CGEventSetFlags(event, modifierBitMask);
+}
+
 auto mac::util::createAndPostKeyboardEvent(
     const MacOS *self, const NativeCode nativeCode,
     const comb::types::Modifiers modifiers, const bool isDown,
     const int64_t kSyntheticTag) -> void {
     auto *event{CGEventCreateKeyboardEvent(nullptr, nativeCode, isDown)};
 
-    self->setEventFlagsToModifiers(event, modifiers);
+    setEventFlagsToModifiers(self, event, modifiers);
 
     if (kSyntheticTag != 0) {
         CGEventSetIntegerValueField(event, kCGEventSourceUserData,
