@@ -15,9 +15,7 @@ namespace plat {
 class Platform : public IPlatform {
   private:
     app::App *m_appPtr;
-
     comb::Combination m_currentCombination;
-
     grp::Group *m_currentGroupPtr;
 
   public:

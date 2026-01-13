@@ -1,5 +1,4 @@
 #include <app.hpp>
-
 #include <logger.hpp>
 
 auto main() -> int {

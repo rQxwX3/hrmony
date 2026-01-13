@@ -40,3 +40,25 @@ grp::types::Action::Action(Variant variant) : variant{std::move(variant)} {}
 [[nodiscard]] auto grp::types::Action::isEmpty() const -> bool {
     return !isBinding() && getSubgroup() == nullptr;
 }
+
+[[nodiscard]] auto
+grp::types::Actions::at(key::Keys key) const & -> const Action & {
+    const auto index{static_cast<size_t>(key)};
+
+    if (index > m_array.size() || index < 0) {
+        // TODO
+    }
+
+    return m_array.at(index);
+}
+
+[[nodiscard]] auto
+grp::types::Actions::at(key::Keys key) & -> grp::types::Action & {
+    const auto index{static_cast<size_t>(key)};
+
+    if (index > m_array.size() || index < 0) {
+        // TODO
+    }
+
+    return m_array.at(index);
+}

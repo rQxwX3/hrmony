@@ -41,7 +41,14 @@ class Action {
     [[nodiscard]] auto getBinding() const -> std::optional<const Combinations>;
 };
 
-using Actions = std::array<Action, key::keysCount>;
+class Actions {
+  private:
+    std::array<grp::types::Action, key::keysCount> m_array;
+
+  public:
+    [[nodiscard]] auto at(key::Keys key) const & -> const grp::types::Action &;
+    [[nodiscard]] auto at(key::Keys key) & -> grp::types::Action &;
+};
 } // namespace grp::types
 
 #endif // ACTION_HPP

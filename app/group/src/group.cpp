@@ -9,17 +9,17 @@ grp::Group::Group(const key::Keys leader)
 
 [[nodiscard]] auto
 grp::Group::getAction(key::Keys key) const & -> const grp::types::Action & {
-    return m_actions->at(static_cast<size_t>(key));
+    return m_actions->at(key);
 }
 
 auto grp::Group::addAction(key::Keys key,
                            const grp::types::Combinations &combinations)
     -> void {
-    m_actions->at(static_cast<size_t>(key)) = grp::types::Action(combinations);
+    m_actions->at(key) = grp::types::Action(combinations);
 }
 
 auto grp::Group::addAction(std::unique_ptr<grp::Group> group) -> void {
-    const auto actionsIndex{static_cast<size_t>(group->getLeader())};
+    const auto leader{group->getLeader()};
 
-    m_actions->at(actionsIndex) = grp::types::Action(std::move(group));
+    m_actions->at(leader) = grp::types::Action(std::move(group));
 }
