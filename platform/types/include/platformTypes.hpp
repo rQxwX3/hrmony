@@ -29,7 +29,7 @@ class KeyToNativeCode {
     std::array<NativeCode, key::keysCount> m_array;
 
   public:
-    [[nodiscard]] auto at(key::Keys key) const -> NativeCode;
+    [[nodiscard]] auto at(key::Keys key) const -> std::optional<NativeCode>;
 
     constexpr auto operator[](key::Keys key) -> NativeCode & {
         if (key::isModifier(key)) {

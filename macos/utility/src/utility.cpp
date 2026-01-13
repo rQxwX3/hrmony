@@ -150,9 +150,13 @@ auto mac::util::sendMultipleRegulars(MacOS *self,
         const auto regular{regularsArray.at(i)};
         const auto nativeCode{self->keyToNativeCode(regular)};
 
-        createAndPostKeyboardEvent(self, nativeCode, modifiers, true,
+        if (!nativeCode.has_value()) {
+            // TODO
+        }
+
+        createAndPostKeyboardEvent(self, nativeCode.value(), modifiers, true,
                                    mac::util::kSyntheticTag);
-        createAndPostKeyboardEvent(self, nativeCode, modifiers, false,
+        createAndPostKeyboardEvent(self, nativeCode.value(), modifiers, false,
                                    mac::util::kSyntheticTag);
     }
 }
@@ -274,9 +278,10 @@ auto mac::util::processKeyPress(CGEventTapProxy proxy, CGEventType type,
         }
 
         if (combinations->count == 1) {
-            processSingleCombinationBinding(self, event, *combinations);
+            processSingleCombinationBinding(self, event, combinations.value());
         } else {
-            processMultipleCombinationsBinding(self, event, *combinations);
+            processMultipleCombinationsBinding(self, event,
+                                               combinations.value());
         }
     }
 

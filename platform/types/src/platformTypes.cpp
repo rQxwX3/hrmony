@@ -16,10 +16,16 @@ using mac::types::NativeCode, mac::types::NativeModifier,
         return {};
     }
 
-    return m_array.at(static_cast<size_t>(nativeCode));
+    return m_array.at(index);
 }
 
 [[nodiscard]] auto plat::types::KeyToNativeCode::at(key::Keys key) const
-    -> NativeCode {
-    return m_array.at(static_cast<size_t>(key));
+    -> std::optional<NativeCode> {
+    const auto index{static_cast<size_t>(key)};
+
+    if (index > m_array.size() || index < 0) {
+        return {};
+    }
+
+    return m_array.at(index);
 }

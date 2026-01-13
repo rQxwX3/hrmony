@@ -53,6 +53,13 @@ plat::Platform::nativeCodeToKey(const NativeCode nativeCode) const
     return config.nativeCodeToKey.at(nativeCode);
 }
 
+[[nodiscard]] auto plat::Platform::keyToNativeCode(key::Keys key) const
+    -> std::optional<NativeCode> {
+    const auto config{getConfig()};
+
+    return config.keyToNativeCode.at(key);
+}
+
 [[nodiscard]] auto plat::Platform::isHRMMode() const -> bool {
     return m_appPtr->isHRMMode();
 }

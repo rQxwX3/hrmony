@@ -35,9 +35,14 @@ auto mac::MacOS::setEventToCombination(
     // TODO This doesn't support multi-key
     // combinations, and it shouldn't
     for (size_t i{0}; i != regularsCount; ++i) {
-        CGEventSetIntegerValueField(
-            event, kCGKeyboardEventKeycode,
-            config.keyToNativeCode.at(regularsArray.at(i)));
+        const auto nativeCode{config.keyToNativeCode.at(regularsArray.at(i))};
+
+        if (!nativeCode.has_value()) {
+            // TODO
+        }
+
+        CGEventSetIntegerValueField(event, kCGKeyboardEventKeycode,
+                                    nativeCode.value());
     }
 }
 
@@ -55,21 +60,6 @@ auto mac::MacOS::setEventToCombination(
 
 auto mac::MacOS::setCurrentNativeCode(NativeCode nativeCode) -> void {
     m_currentNativeCode = nativeCode;
-}
-
-// [[nodiscard]] auto mac::MacOS::nativeCodeToKey(NativeCode nativeCode) const
-//     -> key::Keys {
-//     const auto config{getConfig()};
-//
-//     // TODO bound check
-//     return config.nativeCodeToKey.at(nativeCode);
-// }
-
-[[nodiscard]] auto mac::MacOS::keyToNativeCode(key::Keys key) const
-    -> NativeCode {
-    const auto config{getConfig()};
-
-    return config.keyToNativeCode.at(key);
 }
 
 [[nodiscard]] auto mac::MacOS::getCurrentNativeCode() const -> NativeCode {
