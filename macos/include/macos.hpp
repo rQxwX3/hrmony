@@ -28,8 +28,8 @@ class MacOS : public plat::Platform {
     [[nodiscard]] auto modifierToCGEventFlags(key::Keys modifier) const
         -> std::optional<CGEventFlags>;
 
-    [[nodiscard]] auto nativeCodeToKey(NativeCode nativeCode) const
-        -> key::Keys;
+    // [[nodiscard]] auto nativeCodeToKey(NativeCode nativeCode) const
+    //     -> key::Keys;
 
     [[nodiscard]] auto keyToNativeCode(key::Keys key) const -> NativeCode;
 

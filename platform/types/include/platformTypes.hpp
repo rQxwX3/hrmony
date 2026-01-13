@@ -16,7 +16,8 @@ class NativeCodeToKey {
     std::array<key::Keys, maxKeyCode> m_array;
 
   public:
-    [[nodiscard]] auto at(NativeCode nativeCode) const -> key::Keys;
+    [[nodiscard]] auto at(NativeCode nativeCode) const
+        -> std::optional<key::Keys>;
 
     constexpr auto operator[](NativeCode nativeCode) -> key::Keys & {
         return m_array.at(static_cast<size_t>(nativeCode));

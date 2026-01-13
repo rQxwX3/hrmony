@@ -3,6 +3,8 @@
 #include <config.hpp>
 #include <platform.hpp>
 
+#include <optional>
+
 plat::Platform::Platform(grp::Group *groupPtr, app::App *appPtr)
     : m_appPtr{appPtr}, m_currentGroupPtr{groupPtr} {};
 
@@ -45,7 +47,7 @@ auto plat::Platform::addToCurrentCombination(
 
 [[nodiscard]] auto
 plat::Platform::nativeCodeToKey(const NativeCode nativeCode) const
-    -> key::Keys {
+    -> std::optional<key::Keys> {
     const auto config{getConfig()};
 
     return config.nativeCodeToKey.at(nativeCode);

@@ -29,7 +29,11 @@ auto mac::util::createAndPostKeyboardEvent(
     const MacOS *self, const NativeCode nativeCode) -> comb::Combination {
     const auto key{self->nativeCodeToKey(nativeCode)};
 
-    return comb::Combination({.array = {key}, .count = 1});
+    if (!key.has_value()) {
+        // TODO
+    }
+
+    return comb::Combination({.array = {key.value()}, .count = 1});
 }
 
 auto mac::util::isGroupExitTriggered(const MacOS *self) -> bool {
@@ -40,8 +44,13 @@ auto mac::util::isGroupExitTriggered(const MacOS *self) -> bool {
     const auto exitKey{self->getConfig().exitKey};
     const auto nativeCode{self->getCurrentNativeCode()};
 
-    // TODO Only works if exitKey is a key
-    return self->nativeCodeToKey(nativeCode) == self->getConfig().exitKey;
+    const auto key{self->nativeCodeToKey(nativeCode)};
+
+    if (!key.has_value()) {
+        // TODO
+    }
+
+    return key == exitKey;
 }
 
 auto mac::util::getGroupAction(const MacOS *self)
@@ -51,7 +60,11 @@ auto mac::util::getGroupAction(const MacOS *self)
     const auto nativeCode{self->getCurrentNativeCode()};
     const auto key{self->nativeCodeToKey(nativeCode)};
 
-    return self->getCurrentGroup()->getAction(key);
+    if (!key.has_value()) {
+        // TODO
+    }
+
+    return self->getCurrentGroup()->getAction(key.value());
 }
 
 auto mac::util::isKeymapInProgress(const MacOS *self,
@@ -164,7 +177,13 @@ auto mac::util::processMultipleRegularsBinding(
     const auto *currentGroup{self->getCurrentGroup()};
     const auto nativeCode{self->getCurrentNativeCode()};
 
-    return currentGroup->getLeader() == self->nativeCodeToKey(nativeCode);
+    const auto key{self->nativeCodeToKey(nativeCode)};
+
+    if (!key.has_value()) {
+        // TODO
+    }
+
+    return currentGroup->getLeader() == key;
 }
 
 auto mac::util::processSingleCombinationBinding(

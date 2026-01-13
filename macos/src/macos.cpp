@@ -57,13 +57,14 @@ auto mac::MacOS::setCurrentNativeCode(NativeCode nativeCode) -> void {
     m_currentNativeCode = nativeCode;
 }
 
-[[nodiscard]] auto mac::MacOS::nativeCodeToKey(NativeCode nativeCode) const
-    -> key::Keys {
-    const auto config{getConfig()};
+// [[nodiscard]] auto mac::MacOS::nativeCodeToKey(NativeCode nativeCode) const
+//     -> key::Keys {
+//     const auto config{getConfig()};
+//
+//     // TODO bound check
+//     return config.nativeCodeToKey.at(nativeCode);
+// }
 
-    // TODO bound check
-    return config.nativeCodeToKey.at(nativeCode);
-}
 [[nodiscard]] auto mac::MacOS::keyToNativeCode(key::Keys key) const
     -> NativeCode {
     const auto config{getConfig()};

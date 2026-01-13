@@ -37,7 +37,7 @@ class Platform : public IPlatform {
 
   public:
     [[nodiscard]] auto nativeCodeToKey(NativeCode nativeCode) const
-        -> key::Keys;
+        -> std::optional<key::Keys>;
 
   public:
     [[nodiscard]] auto getCurrentCombination() const
