@@ -8,8 +8,8 @@
 plt::Platform::Platform(grp::Group *groupPtr, app::App *appPtr)
     : m_appPtr{appPtr}, m_currentGroupPtr{groupPtr} {};
 
-[[nodiscard]] auto plt::Platform::getCurrentCombination() const
-    -> const comb::Combination & {
+[[nodiscard]] auto
+plt::Platform::getCurrentCombination() const & -> const comb::Combination & {
     return m_currentCombination;
 }
 

@@ -41,8 +41,8 @@ class Platform : public IPlatform {
         -> std::optional<NativeCode>;
 
   public:
-    [[nodiscard]] auto getCurrentCombination() const
-        -> const comb::Combination &;
+    [[nodiscard]] auto
+    getCurrentCombination() const & -> const comb::Combination &;
 
     [[nodiscard]] auto getCurrentGroup() const -> const grp::Group *;
 

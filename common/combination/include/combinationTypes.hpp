@@ -24,7 +24,6 @@ struct Keys {
     std::array<key::Keys, maxKeymapKeys> array;
     size_t count;
 };
-
 } // namespace comb::types
 
 #endif // COMBINATION_TYPES_HPP

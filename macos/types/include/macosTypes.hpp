@@ -13,13 +13,12 @@ using Event = CGEventRef;
 
 constexpr size_t maxKeyCode{128};
 
-const auto modifierToCGEventFlagsConverter = [](key::Keys modifier) -> size_t {
-    return static_cast<size_t>(modifier) - key::modifiersEnumOffset;
-};
-
 using ModifierToCGEventFlagsType =
     hrm::IndexMap<key::Keys, CGEventFlags, key::modifiersCount,
-                  modifierToCGEventFlagsConverter>;
+                  [](key::Keys modifier) -> size_t {
+                      return static_cast<size_t>(modifier) -
+                             key::modifiersEnumOffset;
+                  }>;
 
 ModifierToCGEventFlagsType ModifierToCGEventFlags{};
 } // namespace mac::types

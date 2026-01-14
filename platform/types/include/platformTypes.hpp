@@ -11,25 +11,23 @@ using mac::types::NativeCode, mac::types::NativeModifier,
 #endif // __APPLE__
 
 namespace plt::types {
-constexpr auto nativeCodeToKeyConverter{[](NativeCode nativeCode) -> size_t {
-    return static_cast<size_t>(nativeCode);
-}};
-
 using NativeCodeToKeyType =
-    hrm::IndexMap<NativeCode, key::Keys, maxKeyCode, nativeCodeToKeyConverter>;
+    hrm::IndexMap<NativeCode, key::Keys, maxKeyCode,
+                  [](NativeCode nativeCode) -> size_t {
+                      return static_cast<size_t>(nativeCode);
+                  }>;
 
 NativeCodeToKeyType NativeCodeToKey{};
 
-constexpr auto keyToNativeCodeConverter{[](key::Keys key) -> size_t {
-    if (key::isModifier(key)) {
-        return static_cast<size_t>(key) - 1;
-    }
+using KeyToNativeCodeType =
+    hrm::IndexMap<key::Keys, NativeCode, key::keysCount,
+                  [](key::Keys key) -> size_t {
+                      if (key::isModifier(key)) {
+                          return static_cast<size_t>(key) - 1;
+                      }
 
-    return static_cast<size_t>(key);
-}};
-
-using KeyToNativeCodeType = hrm::IndexMap<key::Keys, NativeCode, key::keysCount,
-                                          keyToNativeCodeConverter>;
+                      return static_cast<size_t>(key);
+                  }>;
 
 KeyToNativeCodeType KeyToNativeCode{};
 
