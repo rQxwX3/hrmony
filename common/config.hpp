@@ -11,19 +11,20 @@ struct Config {
     key::Keys exitKey;
 
     plat::types::NativeCodeToKeyType nativeCodeToKey;
-    plat::types::KeyToNativeCode keyToNativeCode;
+    plat::types::KeyToNativeCodeType keyToNativeCode;
 
     mac::types::ModifierToCGEventFlags modifierToCGEventFlags;
 };
 
 constexpr auto loadDefaultConfig() -> Config {
     mac::consts::createNativeCodeToKey();
+    mac::consts::createKeyToNativeCode();
 
     Config config{
         .exitKey = key::Keys::ESC,
 
         .nativeCodeToKey = plat::types::NativeCodeToKey,
-        .keyToNativeCode = mac::consts::keyToNativeCode,
+        .keyToNativeCode = plat::types::KeyToNativeCode,
 
         .modifierToCGEventFlags = mac::consts::modifierToCGEventFlags,
     };

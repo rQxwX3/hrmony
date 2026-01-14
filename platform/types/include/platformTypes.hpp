@@ -12,44 +12,44 @@ using mac::types::NativeCode, mac::types::NativeModifier,
 #endif // __APPLE__
 
 namespace plat::types {
-constexpr auto converter{[](NativeCode nativeCode) -> size_t {
+constexpr auto nativeCodeToKeyConverter{[](NativeCode nativeCode) -> size_t {
     return static_cast<size_t>(nativeCode);
 }};
 
 using NativeCodeToKeyType =
-    hrm::IndexMap<NativeCode, key::Keys, maxKeyCode, converter>;
+    hrm::IndexMap<NativeCode, key::Keys, maxKeyCode, nativeCodeToKeyConverter>;
 
 NativeCodeToKeyType NativeCodeToKey{};
 
-// class NativeCodeToKey {
+constexpr auto keyToNativeCodeConverter{[](key::Keys key) -> size_t {
+    if (key::isModifier(key)) {
+        return static_cast<size_t>(key) - 1;
+    }
+
+    return static_cast<size_t>(key);
+}};
+
+using KeyToNativeCodeType = hrm::IndexMap<key::Keys, NativeCode, key::keysCount,
+                                          keyToNativeCodeConverter>;
+
+KeyToNativeCodeType KeyToNativeCode{};
+
+// class KeyToNativeCode {
 //   private:
-//     std::array<key::Keys, maxKeyCode> m_array;
+//     std::array<NativeCode, key::keysCount> m_array;
 //
 //   public:
-//     [[nodiscard]] auto at(NativeCode nativeCode) const
-//         -> std::optional<key::Keys>;
+//     [[nodiscard]] auto at(key::Keys key) const -> std::optional<NativeCode>;
 //
-//     constexpr auto operator[](NativeCode nativeCode) -> key::Keys & {
-//         return m_array.at(static_cast<size_t>(nativeCode));
+//     constexpr auto operator[](key::Keys key) -> NativeCode & {
+//         if (key::isModifier(key)) {
+//             // Subtracting 1 is required because of Keys::m_regularsCount
+//             return m_array.at(static_cast<size_t>(key) - 1);
+//         }
+//
+//         return m_array.at(static_cast<size_t>(key));
 //     }
 // };
-
-class KeyToNativeCode {
-  private:
-    std::array<NativeCode, key::keysCount> m_array;
-
-  public:
-    [[nodiscard]] auto at(key::Keys key) const -> std::optional<NativeCode>;
-
-    constexpr auto operator[](key::Keys key) -> NativeCode & {
-        if (key::isModifier(key)) {
-            // Subtracting 1 is required because of Keys::m_regularsCount
-            return m_array.at(static_cast<size_t>(key) - 1);
-        }
-
-        return m_array.at(static_cast<size_t>(key));
-    }
-};
 } // namespace plat::types
 
 #endif // PLATFORM_TYPES_HPP

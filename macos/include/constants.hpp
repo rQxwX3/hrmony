@@ -33,34 +33,25 @@ constexpr auto createNativeCodeToKey() -> void {
     NativeCodeToKey[58] = Keys::RIGHT_ALT;
 };
 
-// constexpr plat::types::NativeCodeToKey
-// nativeCodeToKey{createNativeCodeToKey()};
+constexpr auto createKeyToNativeCode() -> void {
+    using ::key::Keys, plat::types::KeyToNativeCode;
 
-constexpr auto createKeyToNativeCode() -> plat::types::KeyToNativeCode {
-    plat::types::KeyToNativeCode keyToNativeCode{};
+    KeyToNativeCode[Keys::A] = 0;
+    KeyToNativeCode[Keys::S] = 1;
+    KeyToNativeCode[Keys::H] = 4;
+    KeyToNativeCode[Keys::V] = 9;
+    KeyToNativeCode[Keys::W] = 13;
+    KeyToNativeCode[Keys::T] = 17;
+    KeyToNativeCode[Keys::W] = 13;
+    KeyToNativeCode[Keys::I] = 34;
+    KeyToNativeCode[Keys::J] = 38;
+    KeyToNativeCode[Keys::K] = 40;
 
-    using ::key::Keys;
-
-    keyToNativeCode[Keys::A] = 0;
-    keyToNativeCode[Keys::S] = 1;
-    keyToNativeCode[Keys::H] = 4;
-    keyToNativeCode[Keys::V] = 9;
-    keyToNativeCode[Keys::W] = 13;
-    keyToNativeCode[Keys::T] = 17;
-    keyToNativeCode[Keys::W] = 13;
-    keyToNativeCode[Keys::I] = 34;
-    keyToNativeCode[Keys::J] = 38;
-    keyToNativeCode[Keys::K] = 40;
-
-    keyToNativeCode[Keys::RIGHT_CMD] = 55;
-    keyToNativeCode[Keys::LEFT_CTRL] = 59;
-    keyToNativeCode[Keys::LEFT_SHIFT] = 60;
-    keyToNativeCode[Keys::RIGHT_ALT] = 58;
-
-    return keyToNativeCode;
+    KeyToNativeCode[Keys::RIGHT_CMD] = 55;
+    KeyToNativeCode[Keys::LEFT_CTRL] = 59;
+    KeyToNativeCode[Keys::LEFT_SHIFT] = 60;
+    KeyToNativeCode[Keys::RIGHT_ALT] = 58;
 }
-
-constexpr plat::types::KeyToNativeCode keyToNativeCode{createKeyToNativeCode()};
 
 using mac::types::ModifierToCGEventFlags;
 
