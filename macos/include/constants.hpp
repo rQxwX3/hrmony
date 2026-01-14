@@ -8,36 +8,33 @@
 #include <ApplicationServices/ApplicationServices.h>
 
 namespace mac::consts {
-constexpr auto createNativeCodeToKey() -> plat::types::NativeCodeToKey {
-    plat::types::NativeCodeToKey nativeCodeToKey{};
+constexpr auto createNativeCodeToKey() -> void {
+    using ::key::Keys, plat::types::NativeCodeToKey;
 
-    using ::key::Keys;
+    NativeCodeToKey[0] = Keys::A;
+    NativeCodeToKey[1] = Keys::S;
+    NativeCodeToKey[2] = Keys::D;
+    NativeCodeToKey[3] = Keys::F;
+    NativeCodeToKey[4] = Keys::H;
+    NativeCodeToKey[9] = Keys::V;
+    NativeCodeToKey[12] = Keys::Q;
+    NativeCodeToKey[13] = Keys::W;
+    NativeCodeToKey[17] = Keys::T;
+    NativeCodeToKey[37] = Keys::L;
+    NativeCodeToKey[34] = Keys::I;
+    NativeCodeToKey[38] = Keys::J;
+    NativeCodeToKey[40] = Keys::K;
+    NativeCodeToKey[41] = Keys::SEMICOLON;
 
-    nativeCodeToKey[0] = Keys::A;
-    nativeCodeToKey[1] = Keys::S;
-    nativeCodeToKey[2] = Keys::D;
-    nativeCodeToKey[3] = Keys::F;
-    nativeCodeToKey[4] = Keys::H;
-    nativeCodeToKey[9] = Keys::V;
-    nativeCodeToKey[12] = Keys::Q;
-    nativeCodeToKey[13] = Keys::W;
-    nativeCodeToKey[17] = Keys::T;
-    nativeCodeToKey[37] = Keys::L;
-    nativeCodeToKey[34] = Keys::I;
-    nativeCodeToKey[38] = Keys::J;
-    nativeCodeToKey[40] = Keys::K;
-    nativeCodeToKey[41] = Keys::SEMICOLON;
-
-    nativeCodeToKey[54] = Keys::RIGHT_CMD;
-    nativeCodeToKey[55] = Keys::LEFT_CMD;
-    nativeCodeToKey[59] = Keys::LEFT_CTRL;
-    nativeCodeToKey[60] = Keys::LEFT_SHIFT;
-    nativeCodeToKey[58] = Keys::RIGHT_ALT;
-
-    return nativeCodeToKey;
+    NativeCodeToKey[54] = Keys::RIGHT_CMD;
+    NativeCodeToKey[55] = Keys::LEFT_CMD;
+    NativeCodeToKey[59] = Keys::LEFT_CTRL;
+    NativeCodeToKey[60] = Keys::LEFT_SHIFT;
+    NativeCodeToKey[58] = Keys::RIGHT_ALT;
 };
 
-constexpr plat::types::NativeCodeToKey nativeCodeToKey{createNativeCodeToKey()};
+// constexpr plat::types::NativeCodeToKey
+// nativeCodeToKey{createNativeCodeToKey()};
 
 constexpr auto createKeyToNativeCode() -> plat::types::KeyToNativeCode {
     plat::types::KeyToNativeCode keyToNativeCode{};

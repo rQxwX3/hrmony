@@ -2,6 +2,7 @@
 #define PLATFORM_TYPES_HPP
 
 #include <array>
+#include <indexmap.hpp>
 #include <keys.hpp>
 
 #ifdef __APPLE__
@@ -11,18 +12,27 @@ using mac::types::NativeCode, mac::types::NativeModifier,
 #endif // __APPLE__
 
 namespace plat::types {
-class NativeCodeToKey {
-  private:
-    std::array<key::Keys, maxKeyCode> m_array;
+constexpr auto converter{[](NativeCode nativeCode) -> size_t {
+    return static_cast<size_t>(nativeCode);
+}};
 
-  public:
-    [[nodiscard]] auto at(NativeCode nativeCode) const
-        -> std::optional<key::Keys>;
+using NativeCodeToKeyType =
+    hrm::IndexMap<NativeCode, key::Keys, maxKeyCode, converter>;
 
-    constexpr auto operator[](NativeCode nativeCode) -> key::Keys & {
-        return m_array.at(static_cast<size_t>(nativeCode));
-    }
-};
+NativeCodeToKeyType NativeCodeToKey{};
+
+// class NativeCodeToKey {
+//   private:
+//     std::array<key::Keys, maxKeyCode> m_array;
+//
+//   public:
+//     [[nodiscard]] auto at(NativeCode nativeCode) const
+//         -> std::optional<key::Keys>;
+//
+//     constexpr auto operator[](NativeCode nativeCode) -> key::Keys & {
+//         return m_array.at(static_cast<size_t>(nativeCode));
+//     }
+// };
 
 class KeyToNativeCode {
   private:

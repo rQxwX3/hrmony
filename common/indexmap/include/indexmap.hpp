@@ -7,24 +7,20 @@
 #include <optional>
 
 namespace hrm {
-template <typename Converter, typename From>
+template <auto Converter, typename From>
 concept IndexConverter =
-    std::invocable<Converter, From> &&
-    std::same_as<std::invoke_result_t<Converter, From>, std::size_t>;
+    std::invocable<decltype(Converter), From> &&
+    std::same_as<std::invoke_result_t<decltype(Converter), From>, std::size_t>;
 
-template <typename From, typename To, size_t N, typename IndexConverter>
+template <typename From, typename To, size_t N, auto Converter>
+    requires IndexConverter<Converter, From>
 class IndexMap {
   private:
-    IndexConverter m_converter;
     std::array<To, N> m_array;
 
   public:
-    explicit IndexMap(IndexConverter converter)
-        : m_converter{std::move(converter)} {}
-
-  public:
     [[nodiscard]] auto at(From value) const -> std::optional<To> {
-        const auto index{m_converter(value)};
+        const auto index{Converter(value)};
 
         if (index > N) {
             return {};
@@ -34,7 +30,7 @@ class IndexMap {
     }
 
     [[nodiscard]] auto at(From value) -> std::optional<To> {
-        const auto index{m_converter(value)};
+        const auto index{Converter(value)};
 
         if (index > N) {
             return {};
@@ -44,12 +40,8 @@ class IndexMap {
     }
 
   public:
-    [[nodiscard]] auto operator[](From value) const & -> const To & {
-        return m_array[m_converter(value)];
-    }
-
-    [[nodiscard]] auto operator[](From value) & -> To & {
-        return m_array[m_converter(value)];
+    [[nodiscard]] auto constexpr operator[](From value) & -> To & {
+        return m_array[Converter(value)];
     }
 };
 } // namespace hrm
