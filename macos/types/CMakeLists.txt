@@ -1,5 +1,5 @@
-add_library(macosTypes STATIC src/macosTypes.cpp)
+add_library(macosTypes INTERFACE)
 
-target_include_directories(macosTypes PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
+target_include_directories(macosTypes INTERFACE ${CMAKE_CURRENT_SOURCE_DIR}/include)
 
-target_link_libraries(macosTypes PUBLIC common)
+target_link_libraries(macosTypes INTERFACE common)

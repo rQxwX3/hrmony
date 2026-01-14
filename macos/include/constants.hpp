@@ -53,23 +53,14 @@ constexpr auto createKeyToNativeCode() -> void {
     KeyToNativeCode[Keys::RIGHT_ALT] = 58;
 }
 
-using mac::types::ModifierToCGEventFlags;
+constexpr auto createModifierToCGEventFlags() -> void {
+    using ::key::Keys, mac::types::ModifierToCGEventFlags;
 
-constexpr auto createModifierToCGEventFlags() -> ModifierToCGEventFlags {
-    ModifierToCGEventFlags modifierToCGEventFlags{};
-
-    using ::key::Keys;
-
-    modifierToCGEventFlags[Keys::RIGHT_CMD] = kCGEventFlagMaskCommand;
-    modifierToCGEventFlags[Keys::LEFT_CTRL] = kCGEventFlagMaskControl;
-    modifierToCGEventFlags[Keys::LEFT_SHIFT] = kCGEventFlagMaskShift;
-    modifierToCGEventFlags[Keys::RIGHT_ALT] = kCGEventFlagMaskAlternate;
-
-    return modifierToCGEventFlags;
+    ModifierToCGEventFlags[Keys::RIGHT_CMD] = kCGEventFlagMaskCommand;
+    ModifierToCGEventFlags[Keys::LEFT_CTRL] = kCGEventFlagMaskControl;
+    ModifierToCGEventFlags[Keys::LEFT_SHIFT] = kCGEventFlagMaskShift;
+    ModifierToCGEventFlags[Keys::RIGHT_ALT] = kCGEventFlagMaskAlternate;
 }
-
-constexpr ModifierToCGEventFlags modifierToCGEventFlags{
-    createModifierToCGEventFlags()};
 } // namespace mac::consts
 
 #endif // MACOS_CONSTANTS_HPP
