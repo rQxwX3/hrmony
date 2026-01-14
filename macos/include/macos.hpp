@@ -9,7 +9,7 @@
 #include <optional>
 
 namespace mac {
-class MacOS : public plat::Platform {
+class MacOS : public plt::Platform {
   private:
     CFRunLoopRef m_runLoopRef;
     NativeCode m_currentNativeCode;

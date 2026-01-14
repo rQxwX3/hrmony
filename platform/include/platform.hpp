@@ -11,7 +11,7 @@ namespace app {
 class App;
 }
 
-namespace plat {
+namespace plt {
 class Platform : public IPlatform {
   private:
     app::App *m_appPtr;
@@ -51,6 +51,6 @@ class Platform : public IPlatform {
 
     [[nodiscard]] auto isHRMMode() const -> bool;
 };
-} // namespace plat
+} // namespace plt
 
 #endif // PLATFORM_HPP

@@ -10,8 +10,8 @@ namespace conf {
 struct Config {
     key::Keys exitKey;
 
-    plat::types::NativeCodeToKeyType nativeCodeToKey;
-    plat::types::KeyToNativeCodeType keyToNativeCode;
+    plt::types::NativeCodeToKeyType nativeCodeToKey;
+    plt::types::KeyToNativeCodeType keyToNativeCode;
 
     mac::types::ModifierToCGEventFlagsType modifierToCGEventFlags;
 };
@@ -24,8 +24,8 @@ constexpr auto loadDefaultConfig() -> Config {
     Config config{
         .exitKey = key::Keys::ESC,
 
-        .nativeCodeToKey = plat::types::NativeCodeToKey,
-        .keyToNativeCode = plat::types::KeyToNativeCode,
+        .nativeCodeToKey = plt::types::NativeCodeToKey,
+        .keyToNativeCode = plt::types::KeyToNativeCode,
 
         .modifierToCGEventFlags = mac::types::ModifierToCGEventFlags,
     };

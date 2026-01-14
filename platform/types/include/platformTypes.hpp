@@ -10,7 +10,7 @@ using mac::types::NativeCode, mac::types::NativeModifier,
     mac::types::maxKeyCode, mac::types::Event;
 #endif // __APPLE__
 
-namespace plat::types {
+namespace plt::types {
 constexpr auto nativeCodeToKeyConverter{[](NativeCode nativeCode) -> size_t {
     return static_cast<size_t>(nativeCode);
 }};
@@ -33,6 +33,6 @@ using KeyToNativeCodeType = hrm::IndexMap<key::Keys, NativeCode, key::keysCount,
 
 KeyToNativeCodeType KeyToNativeCode{};
 
-} // namespace plat::types
+} // namespace plt::types
 
 #endif // PLATFORM_TYPES_HPP

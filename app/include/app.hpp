@@ -11,7 +11,7 @@ namespace app {
 class App {
   private:
     std::unique_ptr<grp::Group> m_globalGroup;
-    std::unique_ptr<plat::Platform> m_platform;
+    std::unique_ptr<plt::Platform> m_platform;
 
     conf::Config m_config;
 

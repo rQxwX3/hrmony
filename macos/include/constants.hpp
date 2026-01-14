@@ -9,7 +9,7 @@
 
 namespace mac::consts {
 constexpr auto createNativeCodeToKey() -> void {
-    using ::key::Keys, plat::types::NativeCodeToKey;
+    using ::key::Keys, plt::types::NativeCodeToKey;
 
     NativeCodeToKey[0] = Keys::A;
     NativeCodeToKey[1] = Keys::S;
@@ -34,7 +34,7 @@ constexpr auto createNativeCodeToKey() -> void {
 };
 
 constexpr auto createKeyToNativeCode() -> void {
-    using ::key::Keys, plat::types::KeyToNativeCode;
+    using ::key::Keys, plt::types::KeyToNativeCode;
 
     KeyToNativeCode[Keys::A] = 0;
     KeyToNativeCode[Keys::S] = 1;

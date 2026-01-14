@@ -5,23 +5,23 @@
 
 #include <optional>
 
-plat::Platform::Platform(grp::Group *groupPtr, app::App *appPtr)
+plt::Platform::Platform(grp::Group *groupPtr, app::App *appPtr)
     : m_appPtr{appPtr}, m_currentGroupPtr{groupPtr} {};
 
-[[nodiscard]] auto plat::Platform::getCurrentCombination() const
+[[nodiscard]] auto plt::Platform::getCurrentCombination() const
     -> const comb::Combination & {
     return m_currentCombination;
 }
 
-auto plat::Platform::resetCurrentCombination() -> void {
+auto plt::Platform::resetCurrentCombination() -> void {
     m_currentCombination = comb::Combination();
 }
 
-auto plat::Platform::setCurrentGroup(grp::Group *group) -> void {
+auto plt::Platform::setCurrentGroup(grp::Group *group) -> void {
     m_currentGroupPtr = group;
 }
 
-auto plat::Platform::addToCurrentCombination(
+auto plt::Platform::addToCurrentCombination(
     const comb::Combination &combination) -> void {
     const auto [modifiersArray, modifiersCount]{combination.getModifiers()};
 
@@ -36,40 +36,40 @@ auto plat::Platform::addToCurrentCombination(
     }
 }
 
-[[nodiscard]] auto plat::Platform::getCurrentGroup() const
+[[nodiscard]] auto plt::Platform::getCurrentGroup() const
     -> const grp::Group * {
     return m_currentGroupPtr;
 }
 
-[[nodiscard]] auto plat::Platform::getConfig() const -> conf::Config {
+[[nodiscard]] auto plt::Platform::getConfig() const -> conf::Config {
     return m_appPtr->getConfig();
 }
 
 [[nodiscard]] auto
-plat::Platform::nativeCodeToKey(const NativeCode nativeCode) const
+plt::Platform::nativeCodeToKey(const NativeCode nativeCode) const
     -> std::optional<key::Keys> {
     const auto config{getConfig()};
 
     return config.nativeCodeToKey.at(nativeCode);
 }
 
-[[nodiscard]] auto plat::Platform::keyToNativeCode(key::Keys key) const
+[[nodiscard]] auto plt::Platform::keyToNativeCode(key::Keys key) const
     -> std::optional<NativeCode> {
     const auto config{getConfig()};
 
     return config.keyToNativeCode.at(key);
 }
 
-[[nodiscard]] auto plat::Platform::isHRMMode() const -> bool {
+[[nodiscard]] auto plt::Platform::isHRMMode() const -> bool {
     return m_appPtr->isHRMMode();
 }
 
-auto plat::Platform::enterGroup(const grp::Group *group) -> void {
+auto plt::Platform::enterGroup(const grp::Group *group) -> void {
     setCurrentGroup(const_cast<grp::Group *>(group));
     m_appPtr->toggleHRMMode();
 }
 
-auto plat::Platform::exitToGlobalGroup() -> void {
+auto plt::Platform::exitToGlobalGroup() -> void {
     setCurrentGroup(const_cast<grp::Group *>(m_appPtr->getGlobalGroup()));
     resetCurrentCombination();
     m_appPtr->toggleHRMMode();
