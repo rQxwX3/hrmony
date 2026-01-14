@@ -10,10 +10,10 @@ namespace conf {
 struct Config {
     key::Keys exitKey;
 
-    plt::types::NativeCodeToKeyType nativeCodeToKey;
-    plt::types::KeyToNativeCodeType keyToNativeCode;
+    plt::types::NativeCodeToKey nativeCodeToKey;
+    plt::types::KeyToNativeCode keyToNativeCode;
 
-    mac::types::ModifierToCGEventFlagsType modifierToCGEventFlags;
+    mac::types::ModifierToCGEventFlags modifierToCGEventFlags;
 };
 
 constexpr auto loadDefaultConfig() -> Config {
@@ -33,8 +33,6 @@ constexpr auto loadDefaultConfig() -> Config {
 
     return config;
 }
-
-const Config defaultConfig{loadDefaultConfig()};
 } // namespace conf
 
 #endif // CONFIG_HPP

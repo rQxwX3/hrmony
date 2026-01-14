@@ -10,13 +10,13 @@ using mac::types::NativeCode, mac::types::maxKeyCode;
 #endif // __APPLE__
 
 namespace plt::types {
-using NativeCodeToKeyType =
+using NativeCodeToKey =
     hrm::IndexMap<NativeCode, key::Keys, maxKeyCode,
                   [](NativeCode nativeCode) -> size_t {
                       return static_cast<size_t>(nativeCode);
                   }>;
 
-using KeyToNativeCodeType =
+using KeyToNativeCode =
     hrm::IndexMap<key::Keys, NativeCode, key::keysCount,
                   [](key::Keys key) -> size_t {
                       if (key::isModifier(key)) {

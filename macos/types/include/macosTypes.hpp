@@ -13,7 +13,7 @@ using Event = CGEventRef;
 
 constexpr size_t maxKeyCode{128};
 
-using ModifierToCGEventFlagsType =
+using ModifierToCGEventFlags =
     hrm::IndexMap<key::Keys, CGEventFlags, key::modifiersCount,
                   [](key::Keys modifier) -> size_t {
                       return static_cast<size_t>(modifier) -
