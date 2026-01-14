@@ -8,9 +8,9 @@ mac::types::ModifierToCGEventFlags::at(key::Keys modifier) const
     -> std::optional<CGEventFlags> {
     const auto index{static_cast<size_t>(modifier) - key::modifiersEnumOffset};
 
-    if (index > m_array.size() || index < 0) {
+    if (index > m_array.size()) {
         return {};
     }
 
-    return m_array.at(index);
+    return m_array[index];
 }

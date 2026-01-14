@@ -12,20 +12,20 @@ using mac::types::NativeCode, mac::types::NativeModifier,
     -> std::optional<key::Keys> {
     const auto index{static_cast<size_t>(nativeCode)};
 
-    if (index > m_array.size() || index < 0) {
+    if (index > m_array.size()) {
         return {};
     }
 
-    return m_array.at(index);
+    return m_array[index];
 }
 
 [[nodiscard]] auto plat::types::KeyToNativeCode::at(key::Keys key) const
     -> std::optional<NativeCode> {
     const auto index{static_cast<size_t>(key)};
 
-    if (index > m_array.size() || index < 0) {
+    if (index > m_array.size()) {
         return {};
     }
 
-    return m_array.at(index);
+    return m_array[index];
 }
