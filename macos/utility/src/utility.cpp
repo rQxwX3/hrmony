@@ -5,7 +5,7 @@
 #include <iostream>
 
 using key::Keys;
-using mac::MacOS;
+using mac::MacOS, mac::types::Event, mac::types::NativeModifier;
 
 auto mac::util::setEventFlagsToModifiers(const MacOS *self, Event &event,
                                          comb::types::Modifiers modifiers)

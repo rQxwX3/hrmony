@@ -5,6 +5,8 @@
 #include <macos.hpp>
 
 namespace mac::util {
+using mac::types::Event;
+
 constexpr int64_t kSyntheticTag{0xC0FFEE};
 
 auto setEventFlagsToModifiers(const MacOS *self, Event &event,

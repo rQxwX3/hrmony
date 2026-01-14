@@ -19,8 +19,6 @@ using ModifierToCGEventFlagsType =
                       return static_cast<size_t>(modifier) -
                              key::modifiersEnumOffset;
                   }>;
-
-ModifierToCGEventFlagsType ModifierToCGEventFlags{};
 } // namespace mac::types
 
 #endif // MACOS_TYPES_HPP

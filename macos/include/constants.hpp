@@ -8,8 +8,12 @@
 #include <ApplicationServices/ApplicationServices.h>
 
 namespace mac::consts {
-constexpr auto createNativeCodeToKey() -> void {
-    using ::key::Keys, plt::types::NativeCodeToKey;
+using ::key::Keys;
+using mac::types::ModifierToCGEventFlagsType;
+using plt::types::NativeCodeToKeyType, plt::types::KeyToNativeCodeType;
+
+constexpr auto createNativeCodeToKey() -> NativeCodeToKeyType {
+    NativeCodeToKeyType NativeCodeToKey;
 
     NativeCodeToKey[0] = Keys::A;
     NativeCodeToKey[1] = Keys::S;
@@ -31,10 +35,12 @@ constexpr auto createNativeCodeToKey() -> void {
     NativeCodeToKey[59] = Keys::LEFT_CTRL;
     NativeCodeToKey[60] = Keys::LEFT_SHIFT;
     NativeCodeToKey[58] = Keys::RIGHT_ALT;
+
+    return NativeCodeToKey;
 };
 
-constexpr auto createKeyToNativeCode() -> void {
-    using ::key::Keys, plt::types::KeyToNativeCode;
+constexpr auto createKeyToNativeCode() -> KeyToNativeCodeType {
+    KeyToNativeCodeType KeyToNativeCode;
 
     KeyToNativeCode[Keys::A] = 0;
     KeyToNativeCode[Keys::S] = 1;
@@ -51,15 +57,19 @@ constexpr auto createKeyToNativeCode() -> void {
     KeyToNativeCode[Keys::LEFT_CTRL] = 59;
     KeyToNativeCode[Keys::LEFT_SHIFT] = 60;
     KeyToNativeCode[Keys::RIGHT_ALT] = 58;
+
+    return KeyToNativeCode;
 }
 
-constexpr auto createModifierToCGEventFlags() -> void {
-    using ::key::Keys, mac::types::ModifierToCGEventFlags;
+constexpr auto createModifierToCGEventFlags() -> ModifierToCGEventFlagsType {
+    ModifierToCGEventFlagsType ModifierToCGEventFlags;
 
     ModifierToCGEventFlags[Keys::RIGHT_CMD] = kCGEventFlagMaskCommand;
     ModifierToCGEventFlags[Keys::LEFT_CTRL] = kCGEventFlagMaskControl;
     ModifierToCGEventFlags[Keys::LEFT_SHIFT] = kCGEventFlagMaskShift;
     ModifierToCGEventFlags[Keys::RIGHT_ALT] = kCGEventFlagMaskAlternate;
+
+    return ModifierToCGEventFlags;
 }
 } // namespace mac::consts
 

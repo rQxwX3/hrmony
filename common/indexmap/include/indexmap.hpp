@@ -19,6 +19,9 @@ class IndexMap {
     std::array<To, N> m_array;
 
   public:
+    constexpr IndexMap() = default;
+
+  public:
     [[nodiscard]] auto at(From value) const -> std::optional<To> {
         const auto index{Converter(value)};
 

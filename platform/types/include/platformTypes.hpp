@@ -6,8 +6,7 @@
 
 #ifdef __APPLE__
 #include <macosTypes.hpp>
-using mac::types::NativeCode, mac::types::NativeModifier,
-    mac::types::maxKeyCode, mac::types::Event;
+using mac::types::NativeCode, mac::types::maxKeyCode;
 #endif // __APPLE__
 
 namespace plt::types {
@@ -16,8 +15,6 @@ using NativeCodeToKeyType =
                   [](NativeCode nativeCode) -> size_t {
                       return static_cast<size_t>(nativeCode);
                   }>;
-
-NativeCodeToKeyType NativeCodeToKey{};
 
 using KeyToNativeCodeType =
     hrm::IndexMap<key::Keys, NativeCode, key::keysCount,
@@ -28,9 +25,6 @@ using KeyToNativeCodeType =
 
                       return static_cast<size_t>(key);
                   }>;
-
-KeyToNativeCodeType KeyToNativeCode{};
-
 } // namespace plt::types
 
 #endif // PLATFORM_TYPES_HPP

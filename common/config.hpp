@@ -24,10 +24,11 @@ constexpr auto loadDefaultConfig() -> Config {
     Config config{
         .exitKey = key::Keys::ESC,
 
-        .nativeCodeToKey = plt::types::NativeCodeToKey,
-        .keyToNativeCode = plt::types::KeyToNativeCode,
-
-        .modifierToCGEventFlags = mac::types::ModifierToCGEventFlags,
+#ifdef __APPLE__
+        .nativeCodeToKey = mac::consts::createNativeCodeToKey(),
+        .keyToNativeCode = mac::consts::createKeyToNativeCode(),
+        .modifierToCGEventFlags = mac::consts::createModifierToCGEventFlags(),
+#endif
     };
 
     return config;
