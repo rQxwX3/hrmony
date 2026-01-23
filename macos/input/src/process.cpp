@@ -52,7 +52,7 @@ auto emptyBinding(MacOS *self, Event &event, const comb::Combination &binding)
 
 auto multipleRegularsBinding(MacOS *self, const comb::Combination &combination)
     -> void {
-    send::multipleRegulars(self, combination);
+    send::containingRegulars(self, combination);
 
     self->toggleLeaderUpProcessed();
     self->exitToGlobalGroup();
@@ -99,7 +99,7 @@ auto multipleCombinationsBinding(MacOS *self, Event &event,
     for (size_t i{0}; i != combinationsInBinding; ++i) {
         const auto combination{binding.combinations.at(i)};
 
-        send::multipleRegulars(self, combination);
+        send::containingRegulars(self, combination);
     }
 
     event = nullptr;
