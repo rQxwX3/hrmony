@@ -2,13 +2,22 @@
 #include <group.hpp>
 #include <optional>
 
-grp::types::Action::Action() : variant{std::unique_ptr<Group>{}} {}
+namespace grp::types {
 
-grp::types::Action::Action(Variant variant) : variant{std::move(variant)} {}
+Action::Action()
+    : m_variant{std::unique_ptr<Group>{}}, m_type{Action::Type::NULLACTION} {}
 
-[[nodiscard]] auto grp::types::Action::getSubgroup() const
-    -> std::optional<const Group *> {
-    const auto *subgroup{std::get_if<std::unique_ptr<Group>>(&variant)};
+Action::Action(Variant variant)
+    : m_variant{std::move(variant)}, m_type{Action::Type::NULLACTION} {
+    if (std::holds_alternative<Combinations>(m_variant)) {
+        m_type = Action::Type::BINDING;
+    } else if (std::holds_alternative<std::unique_ptr<Group>>(m_variant)) {
+        m_type = Action::Type::SUBGROUP;
+    }
+}
+
+[[nodiscard]] auto Action::getSubgroup() const -> std::optional<const Group *> {
+    const auto *subgroup{std::get_if<std::unique_ptr<Group>>(&m_variant)};
 
     if (subgroup == nullptr) {
         return {};
@@ -17,9 +26,9 @@ grp::types::Action::Action(Variant variant) : variant{std::move(variant)} {}
     return subgroup->get();
 }
 
-[[nodiscard]] auto grp::types::Action::getBinding() const
+[[nodiscard]] auto Action::getBinding() const
     -> std::optional<const Combinations> {
-    const auto *binding{std::get_if<grp::types::Combinations>(&variant)};
+    const auto *binding{std::get_if<grp::types::Combinations>(&m_variant)};
 
     if (nullptr == binding) {
         return {};
@@ -28,21 +37,9 @@ grp::types::Action::Action(Variant variant) : variant{std::move(variant)} {}
     return *binding;
 }
 
-[[nodiscard]] auto grp::types::Action::isBinding() const -> bool {
-    return std::holds_alternative<Combinations>(variant);
-}
+[[nodiscard]] auto Action::getType() const -> Action::Type { return m_type; }
 
-[[nodiscard]] auto grp::types::Action::isSubgroup() const -> bool {
-    return std::holds_alternative<std::unique_ptr<Group>>(variant) &&
-           getSubgroup() != nullptr;
-}
-
-[[nodiscard]] auto grp::types::Action::isEmpty() const -> bool {
-    return !isBinding() && getSubgroup() == nullptr;
-}
-
-[[nodiscard]] auto
-grp::types::Actions::at(key::Keys key) const & -> const Action & {
+[[nodiscard]] auto Actions::at(key::Keys key) const & -> const Action & {
     const auto index{static_cast<size_t>(key)};
 
     if (index > m_array.size()) {
@@ -52,8 +49,7 @@ grp::types::Actions::at(key::Keys key) const & -> const Action & {
     return m_array[index];
 }
 
-[[nodiscard]] auto
-grp::types::Actions::at(key::Keys key) & -> grp::types::Action & {
+[[nodiscard]] auto Actions::at(key::Keys key) & -> grp::types::Action & {
     const auto index{static_cast<size_t>(key)};
 
     if (index > m_array.size()) {
@@ -62,3 +58,4 @@ grp::types::Actions::at(key::Keys key) & -> grp::types::Action & {
 
     return m_array[index];
 }
+} // namespace grp::types

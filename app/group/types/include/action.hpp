@@ -22,23 +22,22 @@ struct Combinations {
 };
 
 class Action {
+  public:
     using Variant = std::variant<Combinations, std::unique_ptr<Group>>;
+    using Type = enum class Type : uint8_t { SUBGROUP, NULLACTION, BINDING };
 
   private:
-    Variant variant;
+    Variant m_variant;
+    Type m_type;
 
   public:
     Action();
     Action(Variant variant);
 
   public:
-    [[nodiscard]] auto isBinding() const -> bool;
-    [[nodiscard]] auto isSubgroup() const -> bool;
-    [[nodiscard]] auto isEmpty() const -> bool;
-
-  public:
     [[nodiscard]] auto getSubgroup() const -> std::optional<const Group *>;
     [[nodiscard]] auto getBinding() const -> std::optional<const Combinations>;
+    [[nodiscard]] auto getType() const -> Action::Type;
 };
 
 class Actions {

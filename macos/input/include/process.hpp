@@ -29,9 +29,14 @@ auto multipleCombinationsBinding(MacOS *self, Event &event,
 
 auto emptyAction(MacOS *self, Event &event) -> void;
 
-auto subgroupAction(MacOS *self, const grp::types::Action &action);
+auto subgroupAction(MacOS *self, Event &event, const grp::types::Action &action)
+    -> void;
 
-auto bindingAction(MacOS *self, const grp::types::Action &action, Event &event);
+auto bindingAction(MacOS *self, Event &event, const grp::types::Action &action)
+    -> void;
+
+auto groupAction(MacOS *self, Event &event, const grp::types::Action &action)
+    -> void;
 
 auto keyPress(CGEventTapProxy proxy, CGEventType type, CGEventRef event,
               void *refcon) -> CGEventRef;

@@ -110,7 +110,8 @@ auto emptyAction(MacOS *self, Event &event) -> void {
     self->exitToGlobalGroup();
 }
 
-auto subgroupAction(MacOS *self, const grp::types::Action &action) {
+auto subgroupAction(MacOS *self, Event &event, const grp::types::Action &action)
+    -> void {
     std::cout << "entering group\n";
 
     const auto subgroup{action.getSubgroup()};
@@ -120,10 +121,11 @@ auto subgroupAction(MacOS *self, const grp::types::Action &action) {
     }
 
     self->enterGroup(subgroup.value());
+    event = nullptr;
 }
 
-auto bindingAction(MacOS *self, const grp::types::Action &action,
-                   Event &event) {
+auto bindingAction(MacOS *self, Event &event, const grp::types::Action &action)
+    -> void {
     const auto combinations{action.getBinding()};
 
     if (!combinations.has_value()) {
@@ -134,6 +136,26 @@ auto bindingAction(MacOS *self, const grp::types::Action &action,
         process::singleCombinationBinding(self, event, combinations.value());
     } else {
         process::multipleCombinationsBinding(self, event, combinations.value());
+    }
+}
+
+auto groupAction(MacOS *self, Event &event, const grp::types::Action &action)
+    -> void {
+    const auto actionType{action.getType()};
+
+    switch (actionType) {
+        using grp::types::Action;
+
+    case Action::Type::NULLACTION:
+        process::emptyAction(self, event);
+        break;
+
+    case Action::Type::BINDING:
+        process::bindingAction(self, event, action);
+        break;
+
+    case Action::Type::SUBGROUP:
+        process::subgroupAction(self, event, action);
     }
 }
 
@@ -173,22 +195,7 @@ auto keyPress(CGEventTapProxy proxy, CGEventType type, CGEventRef event,
     const auto *currentGroup{self->getCurrentGroup()};
     const auto &groupAction{currentGroup->getAction(key.value())};
 
-    if (groupAction.isEmpty()) {
-        process::emptyAction(self, event);
-
-        return event;
-    }
-
-    if (groupAction.isSubgroup()) {
-        process::subgroupAction(self, groupAction);
-
-        return nullptr;
-    }
-
-    if (groupAction.isBinding()) {
-        process::bindingAction(self, groupAction, event);
-    }
-
+    process::groupAction(self, event, groupAction);
     return event;
 }
 } // namespace mac::input::process
