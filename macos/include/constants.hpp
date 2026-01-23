@@ -12,6 +12,8 @@ using ::key::Keys;
 using mac::types::ModifierToCGEventFlags;
 using plt::types::NativeCodeToKey, plt::types::KeyToNativeCode;
 
+constexpr int64_t kSyntheticTag{0xC0FFEE};
+
 constexpr auto createNativeCodeToKey() -> NativeCodeToKey {
     NativeCodeToKey nativeCodeToKey;
 

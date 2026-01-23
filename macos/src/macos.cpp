@@ -1,7 +1,7 @@
 #include <app.hpp>
 #include <constants.hpp>
 #include <macos.hpp>
-#include <utility.hpp>
+#include <process.hpp>
 
 #include <ApplicationServices/ApplicationServices.h>
 
@@ -42,7 +42,7 @@ mac::MacOS::MacOS(grp::Group *groupPtr, app::App *appPtr)
 
     CFMachPortRef machPortRef{CGEventTapCreate(
         kCGSessionEventTap, kCGHeadInsertEventTap, kCGEventTapOptionDefault,
-        eventMask, mac::util::processKeyPress, this)};
+        eventMask, mac::input::process::keyPress, this)};
 
     if (nullptr == machPortRef) {
         // TODO

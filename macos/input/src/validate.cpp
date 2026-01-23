@@ -1,0 +1,69 @@
+#include <keys.hpp>
+#include <macos.hpp>
+#include <validate.hpp>
+
+namespace mac::input::validate {
+[[nodiscard]] auto groupExitTriggered(const MacOS *self) -> bool {
+    if (!self->isHRMMode()) {
+        return false;
+    }
+
+    const auto exitKey{self->getConfig().exitKey};
+    const auto nativeCode{self->getCurrentNativeCode()};
+
+    const auto key{self->nativeCodeToKey(nativeCode)};
+
+    if (!key.has_value()) {
+        // TODO
+    }
+
+    return key == exitKey;
+}
+
+[[nodiscard]] auto keymapInProgress(const MacOS *self,
+                                    const comb::Combination &combination)
+    -> bool {
+    if (!self->isHRMMode()) {
+        return false;
+    }
+
+    return combination.containsNoRegulars() && !combination.isEmpty() &&
+           !combination.containsNoModifiers();
+}
+
+[[nodiscard]] auto syntheticEvent(const Event &event) -> bool {
+    return CGEventGetIntegerValueField(event, kCGEventSourceUserData) ==
+           mac::consts::kSyntheticTag;
+}
+
+[[nodiscard]] auto keymapFinished(const MacOS *self,
+                                  const comb::Combination &combination)
+    -> bool {
+    if (!self->isHRMMode()) {
+        return false;
+    }
+
+    return combination.isEmpty() || !combination.containsNoRegulars();
+}
+
+[[nodiscard]] auto processingLeaderUp(const MacOS *self) -> bool {
+    if (self->isLeaderUpProcessed()) {
+        return false;
+    }
+
+    if (!self->isHRMMode()) {
+        return false;
+    }
+
+    const auto *currentGroup{self->getCurrentGroup()};
+    const auto nativeCode{self->getCurrentNativeCode()};
+
+    const auto key{self->nativeCodeToKey(nativeCode)};
+
+    if (!key.has_value()) {
+        // TODO
+    }
+
+    return currentGroup->getLeader() == key;
+}
+} // namespace mac::input::validate
