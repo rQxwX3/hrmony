@@ -4,7 +4,6 @@
 #include <combination.hpp>
 #include <config.hpp>
 #include <group.hpp>
-#include <iplatform.hpp>
 #include <platformTypes.hpp>
 
 namespace app {
@@ -12,7 +11,7 @@ class App;
 }
 
 namespace plt {
-class Platform : public IPlatform {
+class Platform {
   private:
     app::App *m_appPtr;
     comb::Combination m_currentCombination;
@@ -20,18 +19,19 @@ class Platform : public IPlatform {
 
   public:
     Platform(grp::Group *groupPtr, app::App *appPtr = nullptr);
+    virtual auto run() -> void = 0;
+    virtual ~Platform() = default;
 
   public:
-    auto enterGroup(const grp::Group *group) -> void override;
-    auto exitToGlobalGroup() -> void override;
+    auto enterGroup(const grp::Group *group) -> void;
+    auto exitToGlobalGroup() -> void;
 
   public:
     auto setCurrentGroup(grp::Group *group) -> void;
 
-    auto addToCurrentCombination(const comb::Combination &combination)
-        -> void override;
+    auto addToCurrentCombination(const comb::Combination &combination) -> void;
 
-    auto resetCurrentCombination() -> void override;
+    auto resetCurrentCombination() -> void;
 
   public:
     [[nodiscard]] auto nativeCodeToKey(NativeCode nativeCode) const
