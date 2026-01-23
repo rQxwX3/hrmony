@@ -16,22 +16,22 @@ namespace mac::input::validate {
     return key == exitKey;
 }
 
-[[nodiscard]] auto keymapInProgress(const MacOS *self,
+[[nodiscard]] auto inputInProgress(const MacOS *self,
                                     const comb::Combination &combination)
     -> bool {
-    return combination.containsNoRegulars() && !combination.isEmpty() &&
+    return combination.containsNoRegulars() &&
            !combination.containsNoModifiers();
+}
+
+[[nodiscard]] auto inputFinished(const MacOS *self,
+                                  const comb::Combination &combination)
+    -> bool {
+    return combination.isEmpty() || !combination.containsNoRegulars();
 }
 
 [[nodiscard]] auto syntheticEvent(const Event &event) -> bool {
     return CGEventGetIntegerValueField(event, kCGEventSourceUserData) ==
            mac::consts::kSyntheticTag;
-}
-
-[[nodiscard]] auto keymapFinished(const MacOS *self,
-                                  const comb::Combination &combination)
-    -> bool {
-    return combination.isEmpty() || !combination.containsNoRegulars();
 }
 
 [[nodiscard]] auto processingLeaderUp(const MacOS *self) -> bool {

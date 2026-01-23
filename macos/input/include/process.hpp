@@ -8,14 +8,14 @@ namespace mac::input::process {
 using key::Keys;
 using mac::MacOS, mac::types::Event, mac::types::NativeModifier;
 
-auto keymapInProgress(MacOS *self, Event &event,
-                      const comb::Combination &combination) -> void;
+auto inputInProgress(MacOS *self, Event &event,
+                     const comb::Combination &combination) -> void;
 
-auto finishedKeymap(MacOS *self, Event &event,
-                    const comb::Combination &combination) -> void;
+auto finishedInput(MacOS *self, Event &event,
+                   const comb::Combination &combination) -> void;
 
-auto noModifiersBinding(MacOS *self, Event &event,
-                        const comb::Combination &binding) -> void;
+auto singleRegularBinding(MacOS *self, Event &event,
+                          const comb::Combination &binding) -> void;
 
 auto multipleRegularsBinding(MacOS *self, const comb::Combination &combination)
     -> void;

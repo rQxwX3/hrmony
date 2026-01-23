@@ -10,14 +10,14 @@ using mac::MacOS, mac::types::Event, mac::types::NativeModifier;
 
 [[nodiscard]] auto groupExitTriggered(const MacOS *self) -> bool;
 
-[[nodiscard]] auto keymapInProgress(const MacOS *self,
-                                    const comb::Combination &combination)
+[[nodiscard]] auto inputInProgress(const MacOS *self,
+                                   const comb::Combination &combination)
     -> bool;
 
-[[nodiscard]] auto syntheticEvent(const Event &event) -> bool;
+[[nodiscard]] auto inputFinished(const MacOS *self,
+                                 const comb::Combination &combination) -> bool;
 
-[[nodiscard]] auto keymapFinished(const MacOS *self,
-                                  const comb::Combination &combination) -> bool;
+[[nodiscard]] auto syntheticEvent(const Event &event) -> bool;
 
 [[nodiscard]] auto processingLeaderUp(const MacOS *self) -> bool;
 } // namespace mac::input::validate
