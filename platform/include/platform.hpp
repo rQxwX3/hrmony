@@ -48,8 +48,6 @@ class Platform : public IPlatform {
 
   public:
     [[nodiscard]] auto getConfig() const -> conf::Config;
-
-    [[nodiscard]] auto isHRMMode() const -> bool;
 };
 } // namespace plt
 

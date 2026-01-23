@@ -60,17 +60,11 @@ plt::Platform::nativeCodeToKey(const NativeCode nativeCode) const
     return config.keyToNativeCode.at(key);
 }
 
-[[nodiscard]] auto plt::Platform::isHRMMode() const -> bool {
-    return m_appPtr->isHRMMode();
-}
-
 auto plt::Platform::enterGroup(const grp::Group *group) -> void {
     setCurrentGroup(const_cast<grp::Group *>(group));
-    m_appPtr->toggleHRMMode();
 }
 
 auto plt::Platform::exitToGlobalGroup() -> void {
     setCurrentGroup(const_cast<grp::Group *>(m_appPtr->getGlobalGroup()));
     resetCurrentCombination();
-    m_appPtr->toggleHRMMode();
 }

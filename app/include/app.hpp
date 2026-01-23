@@ -16,18 +16,15 @@ class App {
     conf::Config m_config;
 
     bool m_running;
-    bool m_HRMMode;
 
   public:
     App();
 
   public:
     auto run() -> void;
-    auto toggleHRMMode() -> void;
 
   public:
     [[nodiscard]] auto isRunning() const -> bool;
-    [[nodiscard]] auto isHRMMode() const -> bool;
 
     [[nodiscard]] auto getConfig() const -> conf::Config;
     [[nodiscard]] auto getGlobalGroup() const -> const grp::Group *;

@@ -4,10 +4,6 @@
 
 namespace mac::input::validate {
 [[nodiscard]] auto groupExitTriggered(const MacOS *self) -> bool {
-    if (!self->isHRMMode()) {
-        return false;
-    }
-
     const auto exitKey{self->getConfig().exitKey};
     const auto nativeCode{self->getCurrentNativeCode()};
 
@@ -23,10 +19,6 @@ namespace mac::input::validate {
 [[nodiscard]] auto keymapInProgress(const MacOS *self,
                                     const comb::Combination &combination)
     -> bool {
-    if (!self->isHRMMode()) {
-        return false;
-    }
-
     return combination.containsNoRegulars() && !combination.isEmpty() &&
            !combination.containsNoModifiers();
 }
@@ -39,19 +31,11 @@ namespace mac::input::validate {
 [[nodiscard]] auto keymapFinished(const MacOS *self,
                                   const comb::Combination &combination)
     -> bool {
-    if (!self->isHRMMode()) {
-        return false;
-    }
-
     return combination.isEmpty() || !combination.containsNoRegulars();
 }
 
 [[nodiscard]] auto processingLeaderUp(const MacOS *self) -> bool {
     if (self->isLeaderUpProcessed()) {
-        return false;
-    }
-
-    if (!self->isHRMMode()) {
         return false;
     }
 

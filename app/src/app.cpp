@@ -10,7 +10,7 @@
 app::App::App()
     : m_globalGroup{std::make_unique<grp::Group>(grp::createGlobalGroup())},
       m_platform{std::make_unique<mac::MacOS>(m_globalGroup.get(), this)},
-      m_running{false}, m_HRMMode{false}, m_config{conf::loadDefaultConfig()} {}
+      m_running{false}, m_config{conf::loadDefaultConfig()} {}
 #endif
 
 auto app::App::run() -> void {
@@ -27,7 +27,3 @@ auto app::App::run() -> void {
 [[nodiscard]] auto app::App::getGlobalGroup() const -> const grp::Group * {
     return m_globalGroup.get();
 }
-
-[[nodiscard]] auto app::App::isHRMMode() const -> bool { return m_HRMMode; }
-
-auto app::App::toggleHRMMode() -> void { m_HRMMode = !m_HRMMode; }
