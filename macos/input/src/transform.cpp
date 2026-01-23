@@ -45,16 +45,4 @@ auto eventToCombination(const MacOS *self, Event &event,
                                     nativeCode.value());
     }
 }
-
-auto eventToFields(const MacOS *self, Event &event, const NativeCode nativeCode,
-                   const comb::types::Modifiers modifiers, const bool isDown,
-                   const int64_t kSyntheticTag) -> void {
-    CGEventSetIntegerValueField(event, kCGKeyboardEventKeycode, nativeCode);
-    eventFlagsToModifiers(self, event, modifiers);
-
-    CGEventSetIntegerValueField(event, kCGEventSourceUserData, kSyntheticTag);
-    CGEventSetType(event, (isDown) ? kCGEventKeyDown : kCGEventKeyUp);
-
-    CGEventPost(kCGHIDEventTap, event);
-}
 } // namespace mac::input::transform
