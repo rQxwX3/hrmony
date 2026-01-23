@@ -17,8 +17,8 @@ auto finishedInput(MacOS *self, Event &event,
 auto singleRegularBinding(MacOS *self, Event &event,
                           const comb::Combination &binding) -> void;
 
-auto multipleRegularsBinding(MacOS *self, const comb::Combination &combination)
-    -> void;
+auto multipleRegularsBinding(MacOS *self, Event &event,
+                             const comb::Combination &combination) -> void;
 
 auto singleCombinationBinding(MacOS *self, Event &event,
                               const grp::types::Combinations &binding) -> void;

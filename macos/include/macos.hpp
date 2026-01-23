@@ -17,10 +17,8 @@ class MacOS : public plt::Platform {
 
   public:
     MacOS(grp::Group *groupPtr, app::App *appPtr);
-    ~MacOS() override;
-
-  public:
     auto run() -> void override;
+    ~MacOS() override;
 
   public:
     [[nodiscard]] auto modifierToCGEventFlags(key::Keys modifier) const

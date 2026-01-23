@@ -14,9 +14,6 @@ using mac::MacOS, mac::types::Event, mac::types::NativeModifier;
                                    const comb::Combination &combination)
     -> bool;
 
-[[nodiscard]] auto inputFinished(const MacOS *self,
-                                 const comb::Combination &combination) -> bool;
-
 [[nodiscard]] auto syntheticEvent(const Event &event) -> bool;
 
 [[nodiscard]] auto processingLeaderUp(const MacOS *self) -> bool;

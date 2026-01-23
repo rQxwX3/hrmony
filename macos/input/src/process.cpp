@@ -23,38 +23,37 @@ auto inputInProgress(MacOS *self, Event &event,
     event = nullptr;
 }
 
-auto singleRegularBinding(MacOS *self, Event &event,
-                          const comb::Combination &binding) -> void {
-    self->addToCurrentCombination(binding);
-    set::eventToCombination(self, event, self->getCurrentCombination());
-    self->toggleLeaderUpProcessed();
-    self->exitToGlobalGroup();
-}
-
-auto multipleRegularsBinding(MacOS *self, const comb::Combination &combination)
-    -> void {
-    send::containingRegulars(self, combination);
-
-    self->toggleLeaderUpProcessed();
-    self->exitToGlobalGroup();
-}
-
 auto finishedInput(MacOS *self, Event &event,
                    const comb::Combination &combination) -> void {
-    if (combination.containsMultipleRegulars()) {
-        process::multipleRegularsBinding(self, combination);
-
-        event = nullptr;
+    if (combination.isEmpty()) {
+        process::emptyAction(self, event);
         return;
     }
 
-    if (combination.containsNoModifiers()) {
-        if (combination.isEmpty()) {
-            process::emptyAction(self, event);
-        } else {
-            process::singleRegularBinding(self, event, combination);
-        }
+    if (combination.containsMultipleRegulars()) {
+        process::multipleRegularsBinding(self, event, combination);
+    } else {
+        process::singleRegularBinding(self, event, combination);
     }
+}
+
+auto singleRegularBinding(MacOS *self, Event &event,
+                          const comb::Combination &binding) -> void {
+    self->addToCurrentCombination(binding);
+    set::eventToSingleRegularCombination(self, event,
+                                         self->getCurrentCombination());
+    self->toggleLeaderUpProcessed();
+    self->exitToGlobalGroup();
+}
+
+auto multipleRegularsBinding(MacOS *self, Event &event,
+                             const comb::Combination &combination) -> void {
+    send::multipleRegulars(self, combination);
+
+    self->toggleLeaderUpProcessed();
+    self->exitToGlobalGroup();
+
+    event = nullptr;
 }
 
 auto singleCombinationBinding(MacOS *self, Event &event,
@@ -64,9 +63,7 @@ auto singleCombinationBinding(MacOS *self, Event &event,
     if (is::inputInProgress(self, combination)) {
         std::cout << "keymap in progress\n";
         process::inputInProgress(self, event, combination);
-    }
-
-    if (is::inputFinished(self, combination)) {
+    } else {
         std::cout << "keymap finished\n";
         process::finishedInput(self, event, combination);
     }
@@ -80,7 +77,7 @@ auto multipleCombinationsBinding(MacOS *self, Event &event,
     for (size_t i{0}; i != combinationsInBinding; ++i) {
         const auto combination{binding.combinations.at(i)};
 
-        send::containingRegulars(self, combination);
+        send::multipleRegulars(self, combination);
     }
 
     event = nullptr;
@@ -99,7 +96,15 @@ auto emptyAction(MacOS *self, Event &event) -> void {
 
     self->addToCurrentCombination(nativeCodeCombination);
 
-    set::eventToCombination(self, event, self->getCurrentCombination());
+    const auto currentCombination{self->getCurrentCombination()};
+
+    if (currentCombination.containsMultipleRegulars()) {
+        // TODO
+        return;
+    }
+
+    set::eventToSingleRegularCombination(self, event,
+                                         self->getCurrentCombination());
 
     self->toggleLeaderUpProcessed();
     self->exitToGlobalGroup();
@@ -125,7 +130,7 @@ auto bindingAction(MacOS *self, const grp::types::Action &action,
         // TODO
     }
 
-    if (combinations->count == 1) {
+    if (1 == combinations->count) {
         process::singleCombinationBinding(self, event, combinations.value());
     } else {
         process::multipleCombinationsBinding(self, event, combinations.value());

@@ -17,16 +17,10 @@ namespace mac::input::validate {
 }
 
 [[nodiscard]] auto inputInProgress(const MacOS *self,
-                                    const comb::Combination &combination)
+                                   const comb::Combination &combination)
     -> bool {
     return combination.containsNoRegulars() &&
            !combination.containsNoModifiers();
-}
-
-[[nodiscard]] auto inputFinished(const MacOS *self,
-                                  const comb::Combination &combination)
-    -> bool {
-    return combination.isEmpty() || !combination.containsNoRegulars();
 }
 
 [[nodiscard]] auto syntheticEvent(const Event &event) -> bool {

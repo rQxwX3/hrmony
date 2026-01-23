@@ -11,8 +11,9 @@ using mac::MacOS, mac::types::Event, mac::types::NativeModifier;
 auto eventFlagsToModifiers(const MacOS *self, Event &event,
                            comb::types::Modifiers modifiers) -> void;
 
-auto eventToCombination(const MacOS *self, Event &event,
-                        const comb::Combination &combination) -> void;
+auto eventToSingleRegularCombination(const MacOS *self, Event &event,
+                                     const comb::Combination &combination)
+    -> void;
 
 auto eventToFields(const MacOS *self, Event &event, NativeCode nativeCode,
                    comb::types::Modifiers modifiers, bool isDown,

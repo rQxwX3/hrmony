@@ -8,7 +8,7 @@ namespace mac::input::dispatch {
 using key::Keys;
 using mac::MacOS, mac::types::Event, mac::types::NativeModifier;
 
-auto containingRegulars(MacOS *self, const comb::Combination &combination)
+auto multipleRegulars(MacOS *self, const comb::Combination &combination)
     -> void;
 } // namespace mac::input::dispatch
 

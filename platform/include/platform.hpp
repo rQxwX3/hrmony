@@ -28,22 +28,18 @@ class Platform {
 
   public:
     auto setCurrentGroup(grp::Group *group) -> void;
-
     auto addToCurrentCombination(const comb::Combination &combination) -> void;
-
     auto resetCurrentCombination() -> void;
 
   public:
     [[nodiscard]] auto nativeCodeToKey(NativeCode nativeCode) const
         -> std::optional<key::Keys>;
-
     [[nodiscard]] auto keyToNativeCode(key::Keys key) const
         -> std::optional<NativeCode>;
 
   public:
     [[nodiscard]] auto
     getCurrentCombination() const & -> const comb::Combination &;
-
     [[nodiscard]] auto getCurrentGroup() const -> const grp::Group *;
 
   public:

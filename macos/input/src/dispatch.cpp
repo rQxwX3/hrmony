@@ -6,7 +6,7 @@
 namespace mac::input::dispatch {
 namespace set = mac::input::transform;
 
-auto containingRegulars(MacOS *self, const comb::Combination &combination)
+auto multipleRegulars(MacOS *self, const comb::Combination &combination)
     -> void {
     const auto [regularsArray, regularsCount]{combination.getRegulars()};
     const auto modifiers{combination.getModifiers()};
