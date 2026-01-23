@@ -15,9 +15,10 @@ auto setEventFlagsToModifiers(const MacOS *self, Event &event,
 auto setEventToCombination(const MacOS *self, Event &event,
                            const comb::Combination &combination) -> void;
 
-auto createAndPostKeyboardEvent(const mac::MacOS *self, NativeCode nativeCode,
-                                comb::types::Modifiers modifiers, bool isDown,
-                                int64_t kSyntheticTag = 0) -> void;
+auto setAndPostKeyboardEvent(const mac::MacOS *self, Event &event,
+                             NativeCode nativeCode,
+                             comb::types::Modifiers modifiers, bool isDown,
+                             int64_t kSyntheticTag = 0) -> void;
 
 [[nodiscard]] auto createCombinationFromNativeCode(const mac::MacOS *self,
                                                    NativeCode nativeCode)

@@ -51,22 +51,18 @@ auto mac::util::setEventToCombination(const MacOS *self, Event &event,
     }
 }
 
-auto mac::util::createAndPostKeyboardEvent(
-    const MacOS *self, const NativeCode nativeCode,
-    const comb::types::Modifiers modifiers, const bool isDown,
-    const int64_t kSyntheticTag) -> void {
-    auto *event{CGEventCreateKeyboardEvent(nullptr, nativeCode, isDown)};
-
+auto mac::util::setAndPostKeyboardEvent(const MacOS *self, Event &event,
+                                        const NativeCode nativeCode,
+                                        const comb::types::Modifiers modifiers,
+                                        const bool isDown,
+                                        const int64_t kSyntheticTag) -> void {
+    CGEventSetIntegerValueField(event, kCGKeyboardEventKeycode, nativeCode);
     setEventFlagsToModifiers(self, event, modifiers);
 
-    if (kSyntheticTag != 0) {
-        CGEventSetIntegerValueField(event, kCGEventSourceUserData,
-                                    kSyntheticTag);
-    }
+    CGEventSetIntegerValueField(event, kCGEventSourceUserData, kSyntheticTag);
+    CGEventSetType(event, (isDown) ? kCGEventKeyDown : kCGEventKeyUp);
 
     CGEventPost(kCGHIDEventTap, event);
-
-    CFRelease(event);
 }
 
 [[nodiscard]] auto mac::util::createCombinationFromNativeCode(
@@ -191,6 +187,8 @@ auto mac::util::sendMultipleRegulars(MacOS *self,
     const auto [regularsArray, regularsCount]{combination.getRegulars()};
     const auto modifiers{combination.getModifiers()};
 
+    auto *event{CGEventCreateKeyboardEvent(nullptr, 0, false)};
+
     for (size_t i{0}; i != regularsCount; ++i) {
         const auto regular{regularsArray.at(i)};
         const auto nativeCode{self->keyToNativeCode(regular)};
@@ -199,11 +197,19 @@ auto mac::util::sendMultipleRegulars(MacOS *self,
             // TODO
         }
 
-        createAndPostKeyboardEvent(self, nativeCode.value(), modifiers, true,
-                                   mac::util::kSyntheticTag);
-        createAndPostKeyboardEvent(self, nativeCode.value(), modifiers, false,
-                                   mac::util::kSyntheticTag);
+        setAndPostKeyboardEvent(self, event, nativeCode.value(), modifiers,
+                                true, mac::util::kSyntheticTag);
+        setAndPostKeyboardEvent(self, event, nativeCode.value(), modifiers,
+                                false, mac::util::kSyntheticTag);
+
+        // createAndPostKeyboardEvent(self, nativeCode.value(), modifiers, true,
+        //                            mac::util::kSyntheticTag);
+        // createAndPostKeyboardEvent(self, nativeCode.value(), modifiers,
+        // false,
+        //                            mac::util::kSyntheticTag);
     }
+
+    CFRelease(event);
 }
 
 auto mac::util::processMultipleRegularsBinding(
