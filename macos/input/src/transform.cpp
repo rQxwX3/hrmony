@@ -4,6 +4,7 @@
 
 namespace mac::input::transform {
 namespace set = mac::input::transform;
+
 auto eventFlagsToModifiers(const MacOS *self, Event &event,
                            comb::types::Modifiers modifiers) -> void {
     const auto [modifiersArray, modifiersCount]{modifiers};
@@ -22,7 +23,7 @@ auto eventFlagsToModifiers(const MacOS *self, Event &event,
     }
 
     CGEventSetFlags(event, modifierBitMask);
-} // namespace mac::input::transform
+}
 
 auto eventToCombination(const MacOS *self, Event &event,
                         const comb::Combination &combination) -> void {

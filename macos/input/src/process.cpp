@@ -31,25 +31,6 @@ auto noModifiersBinding(MacOS *self, Event &event,
     self->exitToGlobalGroup();
 }
 
-auto emptyBinding(MacOS *self, Event &event, const comb::Combination &binding)
-    -> void {
-    const auto key{self->nativeCodeToKey(self->getCurrentNativeCode())};
-
-    if (!key.has_value()) {
-        // TODO
-    }
-
-    const auto nativeCodeCombination{
-        comb::Combination({.array = {key.value()}, .count = 1})};
-
-    self->addToCurrentCombination(nativeCodeCombination);
-
-    set::eventToCombination(self, event, self->getCurrentCombination());
-
-    self->toggleLeaderUpProcessed();
-    self->exitToGlobalGroup();
-}
-
 auto multipleRegularsBinding(MacOS *self, const comb::Combination &combination)
     -> void {
     send::containingRegulars(self, combination);
@@ -69,7 +50,7 @@ auto finishedKeymap(MacOS *self, Event &event,
 
     if (combination.containsNoModifiers()) {
         if (combination.isEmpty()) {
-            process::emptyBinding(self, event, combination);
+            process::emptyAction(self, event);
         } else {
             process::noModifiersBinding(self, event, combination);
         }
@@ -103,6 +84,52 @@ auto multipleCombinationsBinding(MacOS *self, Event &event,
     }
 
     event = nullptr;
+}
+
+auto emptyAction(MacOS *self, Event &event) -> void {
+    const auto nativeCode{self->getCurrentNativeCode()};
+    const auto key{self->nativeCodeToKey(nativeCode)};
+
+    if (!key.has_value()) {
+        // TODO
+    }
+
+    const auto nativeCodeCombination{
+        comb::Combination({.array = {key.value()}, .count = 1})};
+
+    self->addToCurrentCombination(nativeCodeCombination);
+
+    set::eventToCombination(self, event, self->getCurrentCombination());
+
+    self->toggleLeaderUpProcessed();
+    self->exitToGlobalGroup();
+}
+
+auto subgroupAction(MacOS *self, const grp::types::Action &action) {
+    std::cout << "entering group\n";
+
+    const auto subgroup{action.getSubgroup()};
+
+    if (!subgroup.has_value()) {
+        // TODO
+    }
+
+    self->enterGroup(subgroup.value());
+}
+
+auto bindingAction(MacOS *self, const grp::types::Action &action,
+                   Event &event) {
+    const auto combinations{action.getBinding()};
+
+    if (!combinations.has_value()) {
+        // TODO
+    }
+
+    if (combinations->count == 1) {
+        process::singleCombinationBinding(self, event, combinations.value());
+    } else {
+        process::multipleCombinationsBinding(self, event, combinations.value());
+    }
 }
 
 auto keyPress(CGEventTapProxy proxy, CGEventType type, CGEventRef event,
@@ -142,39 +169,19 @@ auto keyPress(CGEventTapProxy proxy, CGEventType type, CGEventRef event,
     const auto &groupAction{currentGroup->getAction(key.value())};
 
     if (groupAction.isEmpty()) {
-        process::emptyBinding(self, event, {});
+        process::emptyAction(self, event);
 
         return event;
     }
 
     if (groupAction.isSubgroup()) {
-        std::cout << "entering group\n";
-
-        const auto subgroup{groupAction.getSubgroup()};
-
-        if (!subgroup.has_value()) {
-            // TODO
-        }
-
-        self->enterGroup(*groupAction.getSubgroup());
+        process::subgroupAction(self, groupAction);
 
         return nullptr;
     }
 
     if (groupAction.isBinding()) {
-        const auto combinations{groupAction.getBinding()};
-
-        if (!combinations.has_value()) {
-            // TODO
-        }
-
-        if (combinations->count == 1) {
-            process::singleCombinationBinding(self, event,
-                                              combinations.value());
-        } else {
-            process::multipleCombinationsBinding(self, event,
-                                                 combinations.value());
-        }
+        process::bindingAction(self, groupAction, event);
     }
 
     return event;
