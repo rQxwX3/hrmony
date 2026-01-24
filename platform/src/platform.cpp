@@ -6,7 +6,7 @@
 #include <optional>
 
 plt::Platform::Platform(grp::Group *groupPtr, app::App *appPtr)
-    : m_appPtr{appPtr}, m_currentGroupPtr{groupPtr} {};
+    : m_appPtr{appPtr}, m_currentNativeCode{0}, m_currentGroupPtr{groupPtr} {};
 
 [[nodiscard]] auto
 plt::Platform::getCurrentCombination() const & -> const comb::Combination & {
@@ -41,6 +41,18 @@ auto plt::Platform::addToCurrentCombination(
     return m_currentGroupPtr;
 }
 
+[[nodiscard]] auto plt::Platform::getGroupAction() const
+    -> const grp::types::Action & {
+    const auto key{nativeCodeToKey(m_currentNativeCode)};
+
+    if (!key.has_value()) {
+        // TODO
+    }
+
+    const auto *currentGroup{getCurrentGroup()};
+    return currentGroup->getAction(key.value());
+}
+
 [[nodiscard]] auto plt::Platform::getConfig() const -> conf::Config {
     return m_appPtr->getConfig();
 }
@@ -60,6 +72,10 @@ plt::Platform::nativeCodeToKey(const NativeCode nativeCode) const
     return config.keyToNativeCode.at(key);
 }
 
+[[nodiscard]] auto plt::Platform::getCurrentNativeCode() const -> NativeCode {
+    return m_currentNativeCode;
+}
+
 auto plt::Platform::enterGroup(const grp::Group *group) -> void {
     setCurrentGroup(const_cast<grp::Group *>(group));
 }
@@ -67,4 +83,8 @@ auto plt::Platform::enterGroup(const grp::Group *group) -> void {
 auto plt::Platform::exitToGlobalGroup() -> void {
     setCurrentGroup(const_cast<grp::Group *>(m_appPtr->getGlobalGroup()));
     resetCurrentCombination();
+}
+
+auto plt::Platform::setCurrentNativeCode(NativeCode nativeCode) -> void {
+    m_currentNativeCode = nativeCode;
 }

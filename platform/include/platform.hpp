@@ -14,6 +14,7 @@ namespace plt {
 class Platform {
   private:
     app::App *m_appPtr;
+    NativeCode m_currentNativeCode;
     comb::Combination m_currentCombination;
     grp::Group *m_currentGroupPtr;
 
@@ -27,6 +28,7 @@ class Platform {
     auto exitToGlobalGroup() -> void;
 
   public:
+    auto setCurrentNativeCode(NativeCode nativeCode) -> void;
     auto setCurrentGroup(grp::Group *group) -> void;
     auto addToCurrentCombination(const comb::Combination &combination) -> void;
     auto resetCurrentCombination() -> void;
@@ -38,9 +40,11 @@ class Platform {
         -> std::optional<NativeCode>;
 
   public:
+    [[nodiscard]] auto getCurrentNativeCode() const -> NativeCode;
     [[nodiscard]] auto
     getCurrentCombination() const & -> const comb::Combination &;
     [[nodiscard]] auto getCurrentGroup() const -> const grp::Group *;
+    [[nodiscard]] auto getGroupAction() const -> const grp::types::Action &;
 
   public:
     [[nodiscard]] auto getConfig() const -> conf::Config;

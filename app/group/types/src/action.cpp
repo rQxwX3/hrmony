@@ -5,10 +5,10 @@
 namespace grp::types {
 
 Action::Action()
-    : m_variant{std::unique_ptr<Group>{}}, m_type{Action::Type::NULLACTION} {}
+    : m_variant{std::unique_ptr<Group>{}}, m_type{Action::Type::EMPTY} {}
 
 Action::Action(Variant variant)
-    : m_variant{std::move(variant)}, m_type{Action::Type::NULLACTION} {
+    : m_variant{std::move(variant)}, m_type{Action::Type::EMPTY} {
     if (std::holds_alternative<Combinations>(m_variant)) {
         m_type = Action::Type::BINDING;
     } else if (std::holds_alternative<std::unique_ptr<Group>>(m_variant)) {

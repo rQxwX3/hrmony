@@ -31,11 +31,11 @@ auto finishedInput(MacOS *self, Event &event,
         using Type = comb::Combination::Type;
 
     case Type::SINGLE_REGULAR:
-        process::singleRegularBinding(self, event, combination);
+        process::singleRegularCombination(self, event, combination);
         break;
 
     case Type::MULTIPLE_REGULARS:
-        process::multipleRegularsBinding(self, event, combination);
+        process::multipleRegularsCombination(self, event, combination);
         break;
 
     case Type::EMPTY:
@@ -43,17 +43,17 @@ auto finishedInput(MacOS *self, Event &event,
     }
 }
 
-auto singleRegularBinding(MacOS *self, Event &event,
-                          const comb::Combination &binding) -> void {
-    self->addToCurrentCombination(binding);
+auto singleRegularCombination(MacOS *self, Event &event,
+                              const comb::Combination &combination) -> void {
+    self->addToCurrentCombination(combination);
     set::eventToSingleRegularCombination(self, event,
                                          self->getCurrentCombination());
     self->toggleLeaderUpProcessed();
     self->exitToGlobalGroup();
 }
 
-auto multipleRegularsBinding(MacOS *self, Event &event,
-                             const comb::Combination &combination) -> void {
+auto multipleRegularsCombination(MacOS *self, Event &event,
+                                 const comb::Combination &combination) -> void {
     send::multipleRegulars(self, combination);
 
     self->toggleLeaderUpProcessed();
@@ -145,8 +145,8 @@ auto bindingAction(MacOS *self, Event &event, const grp::types::Action &action)
     }
 }
 
-auto groupAction(MacOS *self, Event &event, const grp::types::Action &action)
-    -> void {
+auto groupActions(MacOS *self, Event &event) -> void {
+    const auto &action(self->getGroupAction());
     const auto actionType{action.getType()};
 
     switch (actionType) {
@@ -165,6 +165,25 @@ auto groupAction(MacOS *self, Event &event, const grp::types::Action &action)
     }
 }
 
+[[nodiscard]] auto auxiliaryEvents(MacOS *self) -> bool {
+    if (is::groupExitTriggered(self)) {
+        std::cout << "exiting hrm mode\n";
+        self->exitToGlobalGroup();
+
+        return true;
+    }
+
+    // TODO only needed if leader is a modifier
+    if (is::processingLeaderUp(self)) {
+        std::cout << "processing leader up\n";
+        self->toggleLeaderUpProcessed();
+
+        return true;
+    }
+
+    return false;
+}
+
 auto keyPress(CGEventTapProxy proxy, CGEventType type, CGEventRef event,
               void *refcon) -> CGEventRef {
     if (is::syntheticEvent(event)) {
@@ -176,32 +195,11 @@ auto keyPress(CGEventTapProxy proxy, CGEventType type, CGEventRef event,
     self->setCurrentNativeCode(
         CGEventGetIntegerValueField(event, kCGKeyboardEventKeycode));
 
-    // TODO only needed if leader is a modifier
-    if (is::processingLeaderUp(self)) {
-        std::cout << "processing leader up\n";
-        self->toggleLeaderUpProcessed();
-
+    if (process::auxiliaryEvents(self)) {
         return nullptr;
     }
 
-    if (is::groupExitTriggered(self)) {
-        std::cout << "exiting hrm mode\n";
-        self->exitToGlobalGroup();
-
-        return nullptr;
-    }
-
-    const auto nativeCode{self->getCurrentNativeCode()};
-    const auto key{self->nativeCodeToKey(nativeCode)};
-
-    if (!key.has_value()) {
-        // TODO
-    }
-
-    const auto *currentGroup{self->getCurrentGroup()};
-    const auto &groupAction{currentGroup->getAction(key.value())};
-
-    process::groupAction(self, event, groupAction);
+    process::groupActions(self, event);
     return event;
 }
 } // namespace mac::input::process

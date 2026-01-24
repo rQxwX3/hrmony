@@ -17,14 +17,6 @@
     return config.modifierToCGEventFlags.at(modifier);
 }
 
-auto mac::MacOS::setCurrentNativeCode(NativeCode nativeCode) -> void {
-    m_currentNativeCode = nativeCode;
-}
-
-[[nodiscard]] auto mac::MacOS::getCurrentNativeCode() const -> NativeCode {
-    return m_currentNativeCode;
-}
-
 [[nodiscard]] auto mac::MacOS::isLeaderUpProcessed() const -> bool {
     return m_leaderUpProcessed;
 }
@@ -34,8 +26,7 @@ auto mac::MacOS::toggleLeaderUpProcessed() -> void {
 }
 
 mac::MacOS::MacOS(grp::Group *groupPtr, app::App *appPtr)
-    : Platform(groupPtr, appPtr), m_leaderUpProcessed{false},
-      m_currentNativeCode{0} {
+    : Platform(groupPtr, appPtr), m_leaderUpProcessed{false} {
     CGEventMask eventMask{CGEventMaskBit(kCGEventKeyDown) |
                           // CGEventMaskBit(kCGEventKeyUp) |
                           CGEventMaskBit(kCGEventFlagsChanged)};

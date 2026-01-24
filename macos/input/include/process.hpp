@@ -14,11 +14,11 @@ auto inputInProgress(MacOS *self, Event &event,
 auto finishedInput(MacOS *self, Event &event,
                    const comb::Combination &combination) -> void;
 
-auto singleRegularBinding(MacOS *self, Event &event,
-                          const comb::Combination &binding) -> void;
+auto singleRegularCombination(MacOS *self, Event &event,
+                              const comb::Combination &combination) -> void;
 
-auto multipleRegularsBinding(MacOS *self, Event &event,
-                             const comb::Combination &combination) -> void;
+auto multipleRegularsCombination(MacOS *self, Event &event,
+                                 const comb::Combination &combination) -> void;
 
 auto singleCombinationBinding(MacOS *self, Event &event,
                               const grp::types::Combinations &binding) -> void;
@@ -35,8 +35,9 @@ auto subgroupAction(MacOS *self, Event &event, const grp::types::Action &action)
 auto bindingAction(MacOS *self, Event &event, const grp::types::Action &action)
     -> void;
 
-auto groupAction(MacOS *self, Event &event, const grp::types::Action &action)
-    -> void;
+auto groupActions(MacOS *self, Event &event) -> void;
+
+[[nodiscard]] auto auxiliaryEvents(MacOS *self) -> bool;
 
 auto keyPress(CGEventTapProxy proxy, CGEventType type, CGEventRef event,
               void *refcon) -> CGEventRef;
