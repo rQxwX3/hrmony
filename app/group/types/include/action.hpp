@@ -24,7 +24,7 @@ struct Combinations {
 class Action {
   public:
     using Variant = std::variant<Combinations, std::unique_ptr<Group>>;
-    using Type = enum class Type : uint8_t { SUBGROUP, NULLACTION, BINDING };
+    using Type = enum class Type : uint8_t { EMPTY, BINDING, SUBGROUP };
 
   private:
     Variant m_variant;

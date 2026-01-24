@@ -25,15 +25,21 @@ auto inputInProgress(MacOS *self, Event &event,
 
 auto finishedInput(MacOS *self, Event &event,
                    const comb::Combination &combination) -> void {
-    if (combination.isEmpty()) {
-        process::emptyAction(self, event);
-        return;
-    }
+    const auto combinationType{combination.getType()};
 
-    if (combination.containsMultipleRegulars()) {
-        process::multipleRegularsBinding(self, event, combination);
-    } else {
+    switch (combinationType) {
+        using Type = comb::Combination::Type;
+
+    case Type::SINGLE_REGULAR:
         process::singleRegularBinding(self, event, combination);
+        break;
+
+    case Type::MULTIPLE_REGULARS:
+        process::multipleRegularsBinding(self, event, combination);
+        break;
+
+    case Type::EMPTY:
+        process::emptyAction(self, event);
     }
 }
 
@@ -144,18 +150,18 @@ auto groupAction(MacOS *self, Event &event, const grp::types::Action &action)
     const auto actionType{action.getType()};
 
     switch (actionType) {
-        using grp::types::Action;
+        using Type = grp::types::Action::Type;
 
-    case Action::Type::NULLACTION:
-        process::emptyAction(self, event);
-        break;
-
-    case Action::Type::BINDING:
+    case Type::BINDING:
         process::bindingAction(self, event, action);
         break;
 
-    case Action::Type::SUBGROUP:
+    case Type::SUBGROUP:
         process::subgroupAction(self, event, action);
+        break;
+
+    case Type::EMPTY:
+        process::emptyAction(self, event);
     }
 }
 

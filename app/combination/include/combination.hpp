@@ -6,9 +6,17 @@
 
 namespace comb {
 class Combination {
+  public:
+    using Type = enum class Type : uint8_t {
+        EMPTY,
+        SINGLE_REGULAR,
+        MULTIPLE_REGULARS
+    };
+
   private:
     comb::types::Modifiers m_modifiers;
     comb::types::Regulars m_regulars;
+    Type m_type;
 
   public:
     Combination();
@@ -26,6 +34,7 @@ class Combination {
     [[nodiscard]] auto getModifiers() const -> comb::types::Modifiers;
     [[nodiscard]] auto getRegulars() const -> comb::types::Regulars;
     [[nodiscard]] auto getKeys() const -> comb::types::Keys;
+    [[nodiscard]] auto getType() const -> comb::Combination::Type;
 
   public:
     [[nodiscard]] auto isEmpty() const -> bool;
