@@ -1,8 +1,0 @@
-add_library(common INTERFACE)
-
-target_include_directories(common INTERFACE ${CMAKE_CURRENT_SOURCE_DIR})
-
-add_subdirectory(combination)
-add_subdirectory(indexmap)
-
-target_link_libraries(common INTERFACE macos macosTypes platformTypes group indexmap)
