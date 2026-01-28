@@ -37,7 +37,7 @@ auto bindingAction(MacOS *self, Event &event, const grp::types::Action &action)
 
 auto groupActions(MacOS *self, Event &event) -> void;
 
-[[nodiscard]] auto auxiliaryEvents(MacOS *self) -> bool;
+auto auxiliaryEvents(MacOS *self) -> void;
 
 auto keyPress(CGEventTapProxy proxy, CGEventType type, CGEventRef event,
               void *refcon) -> CGEventRef;

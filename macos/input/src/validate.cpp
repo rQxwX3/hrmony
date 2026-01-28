@@ -27,21 +27,4 @@ namespace mac::input::validate {
     return CGEventGetIntegerValueField(event, kCGEventSourceUserData) ==
            mac::consts::kSyntheticTag;
 }
-
-[[nodiscard]] auto processingLeaderUp(const MacOS *self) -> bool {
-    if (self->isLeaderUpProcessed()) {
-        return false;
-    }
-
-    const auto *currentGroup{self->getCurrentGroup()};
-    const auto nativeCode{self->getCurrentNativeCode()};
-
-    const auto key{self->nativeCodeToKey(nativeCode)};
-
-    if (!key.has_value()) {
-        // TODO
-    }
-
-    return currentGroup->getLeader() == key;
-}
 } // namespace mac::input::validate

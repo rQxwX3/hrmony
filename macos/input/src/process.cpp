@@ -48,16 +48,14 @@ auto singleRegularCombination(MacOS *self, Event &event,
     self->addToCurrentCombination(combination);
     set::eventToSingleRegularCombination(self, event,
                                          self->getCurrentCombination());
-    self->toggleLeaderUpProcessed();
-    self->exitToGlobalGroup();
+    self->resetCurrentGroup();
 }
 
 auto multipleRegularsCombination(MacOS *self, Event &event,
                                  const comb::Combination &combination) -> void {
     send::multipleRegulars(self, combination);
 
-    self->toggleLeaderUpProcessed();
-    self->exitToGlobalGroup();
+    self->resetCurrentGroup();
 
     event = nullptr;
 }
@@ -112,21 +110,37 @@ auto emptyAction(MacOS *self, Event &event) -> void {
     set::eventToSingleRegularCombination(self, event,
                                          self->getCurrentCombination());
 
-    self->toggleLeaderUpProcessed();
-    self->exitToGlobalGroup();
+    self->resetCurrentGroup();
 }
 
 auto subgroupAction(MacOS *self, Event &event, const grp::types::Action &action)
     -> void {
-    std::cout << "entering group\n";
-
     const auto subgroup{action.getSubgroup()};
 
     if (!subgroup.has_value()) {
         // TODO
     }
 
-    self->enterGroup(subgroup.value());
+    if (subgroup.value()->isGlobalSubgroup()) {
+        const auto leaderUpToBeProcessed{self->getLeaderUpToBeProcessed()};
+
+        if (key::Keys::NULLKEY == leaderUpToBeProcessed) {
+            self->setLeaderUpToBeProcessed(subgroup.value()->getLeader());
+
+            return;
+        }
+
+        const auto nativeCode{
+            CGEventGetIntegerValueField(event, kCGKeyboardEventKeycode)};
+        const auto key{self->nativeCodeToKey(nativeCode)};
+
+        if (key != leaderUpToBeProcessed) {
+            return;
+        }
+    }
+
+    std::cout << "entering group\n";
+    self->setCurrentGroup(subgroup.value());
     event = nullptr;
 }
 
@@ -165,23 +179,14 @@ auto groupActions(MacOS *self, Event &event) -> void {
     }
 }
 
-[[nodiscard]] auto auxiliaryEvents(MacOS *self) -> bool {
+auto auxiliaryEvents(MacOS *self) -> void {
+    // TODO should be a subgroup action defined
     if (is::groupExitTriggered(self)) {
         std::cout << "exiting hrm mode\n";
-        self->exitToGlobalGroup();
+        self->resetCurrentGroup();
 
-        return true;
+        return;
     }
-
-    // TODO only needed if leader is a modifier
-    if (is::processingLeaderUp(self)) {
-        std::cout << "processing leader up\n";
-        self->toggleLeaderUpProcessed();
-
-        return true;
-    }
-
-    return false;
 }
 
 auto keyPress(CGEventTapProxy proxy, CGEventType type, CGEventRef event,
@@ -195,10 +200,7 @@ auto keyPress(CGEventTapProxy proxy, CGEventType type, CGEventRef event,
     self->setCurrentNativeCode(
         CGEventGetIntegerValueField(event, kCGKeyboardEventKeycode));
 
-    if (process::auxiliaryEvents(self)) {
-        return nullptr;
-    }
-
+    process::auxiliaryEvents(self);
     process::groupActions(self, event);
     return event;
 }

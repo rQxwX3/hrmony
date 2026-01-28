@@ -12,8 +12,13 @@ class Group {
     std::unique_ptr<grp::types::Actions> m_actions;
     key::Keys m_leader;
 
+    bool m_isGlobalSubgroup;
+
   public:
-    Group(key::Keys leader);
+    Group(key::Keys leader, bool isGlobalSubgroup);
+
+  public:
+    [[nodiscard]] auto isGlobalSubgroup() const -> bool;
 
   public:
     [[nodiscard]] auto getLeader() const -> key::Keys;
@@ -28,9 +33,9 @@ class Group {
 
 inline auto createGlobalGroup() -> grp::Group {
     using key::Keys, comb::Combination;
-    auto group{Group{key::Keys::NULLKEY}};
+    auto group{Group{key::Keys::NULLKEY, false}};
 
-    auto rcmdGroup{std::make_unique<grp::Group>(key::Keys::RIGHT_CMD)};
+    auto rcmdGroup{std::make_unique<grp::Group>(key::Keys::RIGHT_CMD, true)};
 
     const auto combinations1{
         grp::types::Combinations{

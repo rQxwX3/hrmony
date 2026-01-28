@@ -12,7 +12,6 @@ namespace mac {
 class MacOS : public plt::Platform {
   private:
     CFRunLoopRef m_runLoopRef;
-    bool m_leaderUpProcessed;
 
   public:
     MacOS(grp::Group *groupPtr, app::App *appPtr);
@@ -22,10 +21,6 @@ class MacOS : public plt::Platform {
   public:
     [[nodiscard]] auto modifierToCGEventFlags(key::Keys modifier) const
         -> std::optional<CGEventFlags>;
-
-  public:
-    [[nodiscard]] auto isLeaderUpProcessed() const -> bool;
-    auto toggleLeaderUpProcessed() -> void;
 
   public:
     MacOS(const MacOS &other) = delete;

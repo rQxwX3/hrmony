@@ -15,8 +15,6 @@ using mac::MacOS, mac::types::Event, mac::types::NativeModifier;
     -> bool;
 
 [[nodiscard]] auto syntheticEvent(const Event &event) -> bool;
-
-[[nodiscard]] auto processingLeaderUp(const MacOS *self) -> bool;
 } // namespace mac::input::validate
 
 #endif // INPUT_VALIDATE_HPP

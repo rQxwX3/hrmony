@@ -18,20 +18,21 @@ class Platform {
     comb::Combination m_currentCombination;
     grp::Group *m_currentGroupPtr;
 
+    key::Keys m_leaderUpToBeProcessed;
+
   public:
     Platform(grp::Group *groupPtr, app::App *appPtr = nullptr);
     virtual auto run() -> void = 0;
     virtual ~Platform() = default;
 
   public:
-    auto enterGroup(const grp::Group *group) -> void;
-    auto exitToGlobalGroup() -> void;
+    auto setCurrentNativeCode(NativeCode nativeCode) -> void;
+    auto setCurrentGroup(const grp::Group *group) -> void;
+    auto resetCurrentGroup() -> void;
+    auto resetCurrentCombination() -> void;
 
   public:
-    auto setCurrentNativeCode(NativeCode nativeCode) -> void;
-    auto setCurrentGroup(grp::Group *group) -> void;
     auto addToCurrentCombination(const comb::Combination &combination) -> void;
-    auto resetCurrentCombination() -> void;
 
   public:
     [[nodiscard]] auto nativeCodeToKey(NativeCode nativeCode) const
@@ -48,6 +49,10 @@ class Platform {
 
   public:
     [[nodiscard]] auto getConfig() const -> conf::Config;
+
+  public:
+    [[nodiscard]] auto getLeaderUpToBeProcessed() const -> key::Keys;
+    auto setLeaderUpToBeProcessed(key::Keys leader) -> void;
 };
 } // namespace plt
 

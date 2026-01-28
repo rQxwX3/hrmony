@@ -5,24 +5,33 @@
 
 #include <optional>
 
-plt::Platform::Platform(grp::Group *groupPtr, app::App *appPtr)
-    : m_appPtr{appPtr}, m_currentNativeCode{0}, m_currentGroupPtr{groupPtr} {};
+namespace plt {
+Platform::Platform(grp::Group *groupPtr, app::App *appPtr)
+    : m_appPtr{appPtr}, m_currentNativeCode{0}, m_currentGroupPtr{groupPtr},
+      m_leaderUpToBeProcessed{key::Keys::NULLKEY} {};
 
 [[nodiscard]] auto
-plt::Platform::getCurrentCombination() const & -> const comb::Combination & {
+Platform::getCurrentCombination() const & -> const comb::Combination & {
     return m_currentCombination;
 }
 
-auto plt::Platform::resetCurrentCombination() -> void {
+auto Platform::resetCurrentCombination() -> void {
     m_currentCombination = comb::Combination();
 }
 
-auto plt::Platform::setCurrentGroup(grp::Group *group) -> void {
-    m_currentGroupPtr = group;
+auto Platform::setCurrentGroup(const grp::Group *group) -> void {
+    m_currentGroupPtr = const_cast<grp::Group *>(group);
+    m_leaderUpToBeProcessed = key::Keys::NULLKEY;
 }
 
-auto plt::Platform::addToCurrentCombination(
-    const comb::Combination &combination) -> void {
+auto Platform::resetCurrentGroup() -> void {
+    setCurrentGroup(m_appPtr->getGlobalGroup());
+
+    resetCurrentCombination();
+}
+
+auto Platform::addToCurrentCombination(const comb::Combination &combination)
+    -> void {
     const auto [modifiersArray, modifiersCount]{combination.getModifiers()};
 
     for (size_t i{0}; i != modifiersCount; ++i) {
@@ -36,12 +45,11 @@ auto plt::Platform::addToCurrentCombination(
     }
 }
 
-[[nodiscard]] auto plt::Platform::getCurrentGroup() const
-    -> const grp::Group * {
+[[nodiscard]] auto Platform::getCurrentGroup() const -> const grp::Group * {
     return m_currentGroupPtr;
 }
 
-[[nodiscard]] auto plt::Platform::getGroupAction() const
+[[nodiscard]] auto Platform::getGroupAction() const
     -> const grp::types::Action & {
     const auto key{nativeCodeToKey(m_currentNativeCode)};
 
@@ -53,38 +61,37 @@ auto plt::Platform::addToCurrentCombination(
     return currentGroup->getAction(key.value());
 }
 
-[[nodiscard]] auto plt::Platform::getConfig() const -> conf::Config {
+[[nodiscard]] auto Platform::getConfig() const -> conf::Config {
     return m_appPtr->getConfig();
 }
 
-[[nodiscard]] auto
-plt::Platform::nativeCodeToKey(const NativeCode nativeCode) const
+[[nodiscard]] auto Platform::nativeCodeToKey(const NativeCode nativeCode) const
     -> std::optional<key::Keys> {
     const auto config{getConfig()};
 
     return config.nativeCodeToKey.at(nativeCode);
 }
 
-[[nodiscard]] auto plt::Platform::keyToNativeCode(key::Keys key) const
+[[nodiscard]] auto Platform::keyToNativeCode(key::Keys key) const
     -> std::optional<NativeCode> {
     const auto config{getConfig()};
 
     return config.keyToNativeCode.at(key);
 }
 
-[[nodiscard]] auto plt::Platform::getCurrentNativeCode() const -> NativeCode {
+[[nodiscard]] auto Platform::getCurrentNativeCode() const -> NativeCode {
     return m_currentNativeCode;
 }
 
-auto plt::Platform::enterGroup(const grp::Group *group) -> void {
-    setCurrentGroup(const_cast<grp::Group *>(group));
-}
-
-auto plt::Platform::exitToGlobalGroup() -> void {
-    setCurrentGroup(const_cast<grp::Group *>(m_appPtr->getGlobalGroup()));
-    resetCurrentCombination();
-}
-
-auto plt::Platform::setCurrentNativeCode(NativeCode nativeCode) -> void {
+auto Platform::setCurrentNativeCode(NativeCode nativeCode) -> void {
     m_currentNativeCode = nativeCode;
 }
+
+[[nodiscard]] auto Platform::getLeaderUpToBeProcessed() const -> key::Keys {
+    return m_leaderUpToBeProcessed;
+}
+
+auto Platform::setLeaderUpToBeProcessed(const key::Keys leader) -> void {
+    m_leaderUpToBeProcessed = leader;
+}
+} // namespace plt

@@ -5,7 +5,8 @@
 
 #include <ApplicationServices/ApplicationServices.h>
 
-[[nodiscard]] auto mac::MacOS::modifierToCGEventFlags(key::Keys modifier) const
+namespace mac {
+[[nodiscard]] auto MacOS::modifierToCGEventFlags(key::Keys modifier) const
     -> std::optional<CGEventFlags> {
 
     if (!key::isModifier(modifier)) {
@@ -17,16 +18,8 @@
     return config.modifierToCGEventFlags.at(modifier);
 }
 
-[[nodiscard]] auto mac::MacOS::isLeaderUpProcessed() const -> bool {
-    return m_leaderUpProcessed;
-}
-
-auto mac::MacOS::toggleLeaderUpProcessed() -> void {
-    m_leaderUpProcessed = !m_leaderUpProcessed;
-}
-
-mac::MacOS::MacOS(grp::Group *groupPtr, app::App *appPtr)
-    : Platform(groupPtr, appPtr), m_leaderUpProcessed{false} {
+MacOS::MacOS(grp::Group *groupPtr, app::App *appPtr)
+    : Platform(groupPtr, appPtr) {
     CGEventMask eventMask{CGEventMaskBit(kCGEventKeyDown) |
                           // CGEventMaskBit(kCGEventKeyUp) |
                           CGEventMaskBit(kCGEventFlagsChanged)};
@@ -51,9 +44,10 @@ mac::MacOS::MacOS(grp::Group *groupPtr, app::App *appPtr)
     CGEventTapEnable(machPortRef, true);
 }
 
-auto mac::MacOS::run() -> void { CFRunLoopRun(); }
+auto MacOS::run() -> void { CFRunLoopRun(); }
 
-mac::MacOS::~MacOS() {
+MacOS::~MacOS() {
     CFRunLoopStop(m_runLoopRef);
     CFRelease(m_runLoopRef);
 }
+} // namespace mac
