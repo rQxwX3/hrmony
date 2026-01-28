@@ -31,6 +31,7 @@ constexpr auto createNativeCodeToKey() -> NativeCodeToKey {
     nativeCodeToKey[38] = Keys::J;
     nativeCodeToKey[40] = Keys::K;
     nativeCodeToKey[41] = Keys::SEMICOLON;
+    nativeCodeToKey[53] = Keys::ESC;
 
     nativeCodeToKey[54] = Keys::RIGHT_CMD;
     nativeCodeToKey[55] = Keys::LEFT_CMD;
@@ -54,6 +55,7 @@ constexpr auto createKeyToNativeCode() -> KeyToNativeCode {
     keyToNativeCode[Keys::I] = 34;
     keyToNativeCode[Keys::J] = 38;
     keyToNativeCode[Keys::K] = 40;
+    keyToNativeCode[Keys::ESC] = 53;
 
     keyToNativeCode[Keys::RIGHT_CMD] = 55;
     keyToNativeCode[Keys::LEFT_CTRL] = 59;

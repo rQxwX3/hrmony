@@ -13,6 +13,8 @@ Action::Action(Variant variant)
         m_type = Action::Type::BINDING;
     } else if (std::holds_alternative<std::unique_ptr<Group>>(m_variant)) {
         m_type = Action::Type::SUBGROUP;
+    } else if (std::holds_alternative<key::Keys>(m_variant)) {
+        m_type = Action::Type::EXIT;
     }
 }
 

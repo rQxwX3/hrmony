@@ -62,7 +62,7 @@ auto multipleRegularsCombination(MacOS *self, Event &event,
 
 auto singleCombinationBinding(MacOS *self, Event &event,
                               const grp::types::Combinations &binding) -> void {
-    const auto combination{binding.combinations.at(0)};
+    const auto combination{binding.array.at(0)};
 
     if (is::inputInProgress(self, combination)) {
         std::cout << "keymap in progress\n";
@@ -79,7 +79,7 @@ auto multipleCombinationsBinding(MacOS *self, Event &event,
     const auto combinationsInBinding{binding.count};
 
     for (size_t i{0}; i != combinationsInBinding; ++i) {
-        const auto combination{binding.combinations.at(i)};
+        const auto combination{binding.array.at(i)};
 
         send::multipleRegulars(self, combination);
     }
@@ -159,6 +159,14 @@ auto bindingAction(MacOS *self, Event &event, const grp::types::Action &action)
     }
 }
 
+auto exitAction(MacOS *self, Event &event) -> void {
+    std::cout << "exiting to global group\n";
+
+    self->resetCurrentGroup();
+
+    event = nullptr;
+}
+
 auto groupActions(MacOS *self, Event &event) -> void {
     const auto &action(self->getGroupAction());
     const auto actionType{action.getType()};
@@ -174,18 +182,12 @@ auto groupActions(MacOS *self, Event &event) -> void {
         process::subgroupAction(self, event, action);
         break;
 
+    case Type::EXIT:
+        process::exitAction(self, event);
+        break;
+
     case Type::EMPTY:
         process::emptyAction(self, event);
-    }
-}
-
-auto auxiliaryEvents(MacOS *self) -> void {
-    // TODO should be a subgroup action defined
-    if (is::groupExitTriggered(self)) {
-        std::cout << "exiting hrm mode\n";
-        self->resetCurrentGroup();
-
-        return;
     }
 }
 
@@ -200,7 +202,6 @@ auto keyPress(CGEventTapProxy proxy, CGEventType type, CGEventRef event,
     self->setCurrentNativeCode(
         CGEventGetIntegerValueField(event, kCGKeyboardEventKeycode));
 
-    process::auxiliaryEvents(self);
     process::groupActions(self, event);
     return event;
 }

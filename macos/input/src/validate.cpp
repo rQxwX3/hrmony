@@ -3,19 +3,6 @@
 #include <validate.hpp>
 
 namespace mac::input::validate {
-[[nodiscard]] auto groupExitTriggered(const MacOS *self) -> bool {
-    const auto exitKey{self->getConfig().exitKey};
-    const auto nativeCode{self->getCurrentNativeCode()};
-
-    const auto key{self->nativeCodeToKey(nativeCode)};
-
-    if (!key.has_value()) {
-        // TODO
-    }
-
-    return key == exitKey;
-}
-
 [[nodiscard]] auto inputInProgress(const MacOS *self,
                                    const comb::Combination &combination)
     -> bool {

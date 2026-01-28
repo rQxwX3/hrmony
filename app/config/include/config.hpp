@@ -8,8 +8,6 @@
 
 namespace conf {
 struct Config {
-    key::Keys exitKey;
-
     plt::types::NativeCodeToKey nativeCodeToKey;
     plt::types::KeyToNativeCode keyToNativeCode;
 
@@ -22,8 +20,6 @@ constexpr auto loadDefaultConfig() -> Config {
     mac::consts::createModifierToCGEventFlags();
 
     Config config{
-        .exitKey = key::Keys::ESC,
-
 #ifdef __APPLE__
         .nativeCodeToKey = mac::consts::createNativeCodeToKey(),
         .keyToNativeCode = mac::consts::createKeyToNativeCode(),
