@@ -1,5 +1,4 @@
 #include <app.hpp>
-#include <appTypes.hpp>
 #include <config.hpp>
 #include <platform.hpp>
 
@@ -51,14 +50,10 @@ auto Platform::addToCurrentCombination(const comb::Combination &combination)
 
 [[nodiscard]] auto Platform::getGroupAction() const
     -> const grp::types::Action & {
-    const auto key{nativeCodeToKey(m_currentNativeCode)};
-
-    if (!key.has_value()) {
-        // TODO
-    }
+    const auto key{getCurrentKey()};
 
     const auto *currentGroup{getCurrentGroup()};
-    return currentGroup->getAction(key.value());
+    return currentGroup->getAction(key);
 }
 
 [[nodiscard]] auto Platform::getConfig() const -> conf::Config {
@@ -79,8 +74,14 @@ auto Platform::addToCurrentCombination(const comb::Combination &combination)
     return config.keyToNativeCode.at(key);
 }
 
-[[nodiscard]] auto Platform::getCurrentNativeCode() const -> NativeCode {
-    return m_currentNativeCode;
+[[nodiscard]] auto Platform::getCurrentKey() const -> key::Keys {
+    const auto key{nativeCodeToKey(m_currentNativeCode)};
+
+    if (!key.has_value()) {
+        // TODO
+    }
+
+    return key.value();
 }
 
 auto Platform::setCurrentNativeCode(NativeCode nativeCode) -> void {

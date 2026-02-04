@@ -41,7 +41,7 @@ class Platform {
         -> std::optional<NativeCode>;
 
   public:
-    [[nodiscard]] auto getCurrentNativeCode() const -> NativeCode;
+    [[nodiscard]] auto getCurrentKey() const -> key::Keys;
     [[nodiscard]] auto
     getCurrentCombination() const & -> const comb::Combination &;
     [[nodiscard]] auto getCurrentGroup() const -> const grp::Group *;

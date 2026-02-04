@@ -1,7 +1,6 @@
 #ifndef CONFIG_HPP
 #define CONFIG_HPP
 
-#include <appTypes.hpp>
 #include <constants.hpp>
 #include <keys.hpp>
 #include <platformTypes.hpp>
@@ -15,10 +14,6 @@ struct Config {
 };
 
 constexpr auto loadDefaultConfig() -> Config {
-    mac::consts::createNativeCodeToKey();
-    mac::consts::createKeyToNativeCode();
-    mac::consts::createModifierToCGEventFlags();
-
     Config config{
 #ifdef __APPLE__
         .nativeCodeToKey = mac::consts::createNativeCodeToKey(),

@@ -88,15 +88,10 @@ auto multipleCombinationsBinding(MacOS *self, Event &event,
 }
 
 auto emptyAction(MacOS *self, Event &event) -> void {
-    const auto nativeCode{self->getCurrentNativeCode()};
-    const auto key{self->nativeCodeToKey(nativeCode)};
-
-    if (!key.has_value()) {
-        // TODO
-    }
+    const auto key{self->getCurrentKey()};
 
     const auto nativeCodeCombination{
-        comb::Combination({.array = {key.value()}, .count = 1})};
+        comb::Combination({.array = {key}, .count = 1})};
 
     self->addToCurrentCombination(nativeCodeCombination);
 
@@ -126,15 +121,10 @@ auto subgroupAction(MacOS *self, Event &event, const grp::types::Action &action)
 
         if (key::Keys::NULLKEY == leaderUpToBeProcessed) {
             self->setLeaderUpToBeProcessed(subgroup.value()->getLeader());
-
             return;
         }
 
-        const auto nativeCode{
-            CGEventGetIntegerValueField(event, kCGKeyboardEventKeycode)};
-        const auto key{self->nativeCodeToKey(nativeCode)};
-
-        if (key != leaderUpToBeProcessed) {
+        if (self->getCurrentKey() != leaderUpToBeProcessed) {
             return;
         }
     }
