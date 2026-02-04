@@ -28,6 +28,9 @@ class App {
 
     [[nodiscard]] auto getConfig() const -> conf::Config;
     [[nodiscard]] auto getGlobalGroup() const -> const grp::Group *;
+
+  public:
+    static auto loadConfig() -> void;
 };
 } // namespace app
 

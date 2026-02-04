@@ -1,0 +1,8 @@
+[groups.global]
+
+[groups.global.rcmd]
+j = 'rcmd + ralt + lctrl + lshift'
+k = ['rcmd + t', 'rcmd + w']
+a = 's'
+s = ['h', 'i']
+
